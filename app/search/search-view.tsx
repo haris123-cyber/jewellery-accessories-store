@@ -59,7 +59,6 @@ import { useCommerceStore } from "@/store/commerce-store";
 import {
   ProductVisual,
   EditorialVisual,
-  AddButton,
   WishButton,
   ProductCard,
   ProductSection,

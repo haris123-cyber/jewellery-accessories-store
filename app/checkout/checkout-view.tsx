@@ -95,10 +95,10 @@ export function Checkout() {
             <legend className="font-serif text-[24px] text-ink mb-[24px]">Payment method</legend>
             <div className="flex flex-col gap-[12px]">
               {[
-                ["card", "Credit / Debit Card", CreditCard],
-                ["upi", "UPI Transfer", Banknote],
-                ["cod", "Cash on Delivery", Banknote],
-              ].map(([v, l, Icon]) => (
+                { v: "card", l: "Credit / Debit Card", Icon: CreditCard },
+                { v: "upi", l: "UPI Transfer", Icon: Banknote },
+                { v: "cod", l: "Cash on Delivery", Icon: Banknote },
+              ].map(({ v, l, Icon }) => (
                 <label className="flex items-center gap-[16px] h-[64px] px-[24px] border border-border bg-pearl rounded-[2px] cursor-pointer hover:border-gold transition-colors group has-[:checked]:border-ink" key={v}>
                   <input type="radio" value={v} {...register("payment")} className="w-[16px] h-[16px] accent-ink" />
                   <Icon className="w-[20px] text-stone group-has-[:checked]:text-ink" />
