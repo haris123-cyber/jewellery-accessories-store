@@ -11,7 +11,8 @@ import {
   Newsletter,
   SummerOffers,
   HomeBanners,
-  HomeBanners2
+  HomeBanners2,
+  AsSeenOn
 } from "@/components/shared";
 import { Shell } from "@/components/layout";
 import { useState } from "react";
@@ -29,7 +30,7 @@ export default function HomePage() {
   return (
     <Shell>
       {/* ── Hero ── */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-ink max-[960px]:min-h-[70vh]">
+      <section className="relative w-full h-[80vh] min-h-[500px] md:h-auto md:min-h-0 md:aspect-[3/1] 2xl:max-h-[640px] overflow-hidden group">
         <Image
           src="/images/gallery-hero.png"
           alt="WOXLY new season jewellery campaign"
@@ -38,32 +39,8 @@ export default function HomePage() {
           sizes="100vw"
           className="object-cover object-center motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-105 motion-safe:duration-1000 max-[960px]:object-[60%_center]"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/20 to-transparent" />
 
-        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-[16px] md:px-[24px]">
-          <motion.div
-            className="max-w-[600px] text-ivory"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <p className="m-0 mb-[24px] uppercase tracking-[0.14em] text-[12px] font-medium text-gold">The Autumn Edit</p>
-            <h1 className="m-0 mb-[24px] text-ivory">
-              Jewellery that tells your story
-            </h1>
-            <p className="m-0 mb-[40px] text-[16px] md:text-[18px] text-ivory/90 leading-relaxed max-w-[480px]">
-              Discover our latest collection of finely crafted pieces designed for every meaningful moment.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center gap-[16px]">
-              <a className="btn-primary w-full sm:w-auto" href="/shop">
-                Shop Collection
-              </a>
-              <a className="btn-secondary !border-ivory !text-ivory hover:!bg-ivory hover:!text-ink w-full sm:w-auto" href="/category/gifting">
-                Explore Gifting
-              </a>
-            </div>
-          </motion.div>
-        </div>
+
       </section>
 
 
@@ -71,7 +48,7 @@ export default function HomePage() {
       {/* ── Shop by category ── */}
       <section className="py-[56px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto" id="collection">
         <div className="mb-[40px] md:mb-[56px] text-left">
-          <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">The Collections</p>
+          <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-center text-[12px] font-medium text-stone">The Collections</p>
           <h2 className="m-0 text-ink">Curated for every moment</h2>
         </div>
 
@@ -148,52 +125,8 @@ export default function HomePage() {
       {/* ── Summer Offers ── */}
       <SummerOffers />
 
-      {/* ── Reviews Carousel ── */}
-      <section className="py-[56px] md:py-[96px] bg-sand border-y border-border">
-        <div className="max-w-[1280px] mx-auto px-[16px] md:px-[24px]">
-          <div className="text-center mb-[48px]">
-            <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Real stories</p>
-            <h2 className="m-0 text-ink">Loved by our community</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px]">
-            {[
-              {
-                text: "The quality is outstanding. The 18k plating hasn't tarnished at all even with everyday wear. Absolutely love my new hoops.",
-                author: "Sarah M.",
-                product: "Classic Gold Hoops"
-              },
-              {
-                text: "I bought this as a gift for my wife and she was blown away by the packaging and the piece itself. Will definitely buy again.",
-                author: "James T.",
-                product: "Diamond Tennis Bracelet"
-              },
-              {
-                text: "Beautiful design and surprisingly lightweight. It feels like wearing nothing but elevates every single outfit I own.",
-                author: "Elena R.",
-                product: "Layered Pearl Necklace"
-              }
-            ].map((review, i) => (
-              <div key={i} className="bg-ivory p-[32px] md:p-[40px] rounded-[4px] border border-border flex flex-col items-center text-center">
-                <div className="flex items-center gap-1 text-gold mb-[24px]">
-                  <Star className="w-[16px] h-[16px] fill-current" />
-                  <Star className="w-[16px] h-[16px] fill-current" />
-                  <Star className="w-[16px] h-[16px] fill-current" />
-                  <Star className="w-[16px] h-[16px] fill-current" />
-                  <Star className="w-[16px] h-[16px] fill-current" />
-                </div>
-                <p className="text-ink text-[16px] leading-relaxed font-serif italic mb-[32px] flex-1">
-                  "{review.text}"
-                </p>
-                <div>
-                  <p className="uppercase tracking-[0.14em] text-[12px] font-medium text-ink mb-1">{review.author}</p>
-                  <p className="text-stone text-[12px]">Verified Buyer · {review.product}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── As Seen On Carousel ── */}
+      <AsSeenOn />
 
       <Social />
       <Newsletter />

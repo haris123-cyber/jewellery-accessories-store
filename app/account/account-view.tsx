@@ -73,47 +73,57 @@ import { Header, Footer, Shell, CartDrawer } from "@/components/layout";
 export function Account() {
   return (
     <Shell>
-      <main className="grid grid-cols-[220px_1fr] gap-[7vw] px-[8vw] py-[10vw] max-[960px]:grid-cols-1 max-[560px]:px-[18px] max-[560px]:py-[70px]">
-        <aside className="grid content-start gap-[18px] max-[960px]:flex max-[960px]:overflow-auto">
+      <main className="max-w-[1280px] mx-auto px-[16px] md:px-[24px] py-[32px] md:py-[80px] grid grid-cols-1 md:grid-cols-[240px_1fr] gap-[32px] md:gap-[80px]">
+        {/* Sidebar */}
+        <aside className="flex flex-col gap-[8px] md:gap-[16px] max-md:flex-row max-md:overflow-x-auto hide-scrollbar max-md:border-b border-border">
           {[
-            "Overview",
-            "Orders",
-            "Wishlist",
-            "Addresses",
-            "Profile",
-            "Settings",
-          ].map((x) => (
+            { label: "Overview", href: "/account" },
+            { label: "Orders", href: "/account/orders" },
+            { label: "Wishlist", href: "/wishlist" },
+            { label: "Addresses", href: "/account/addresses" },
+            { label: "Profile", href: "/account/profile" },
+            { label: "Settings", href: "/account/settings" },
+          ].map((item) => (
             <a
-              href={
-                x === "Wishlist"
-                  ? "/wishlist"
-                  : x === "Orders"
-                    ? "/account/orders"
-                    : "/account"
-              }
-              key={x}
-              className="border-b border-border pb-[14px] text-[13px] max-[960px]:whitespace-nowrap"
+              href={item.href}
+              key={item.label}
+              className={`
+                text-[13px] font-medium uppercase tracking-[0.14em] font-sans whitespace-nowrap transition-colors
+                pb-[12px] md:pb-2 border-b-[2px] md:border-b-0 md:border-l-[2px] md:pl-4
+                ${item.label === "Overview" 
+                  ? "text-ink border-ink max-md:border-ink md:border-ink" 
+                  : "text-stone border-transparent max-md:border-transparent md:border-transparent hover:text-ink"}
+              `}
             >
-              {x}
+              {item.label}
             </a>
           ))}
         </aside>
-        <div>
-          <p className="mb-[18px] text-[11px] font-semibold uppercase tracking-[.22em] text-accent">My WOXLY</p>
-          <h1 className="font-serif text-[80px] font-normal leading-[.95] tracking-[-.045em] text-foreground max-[560px]:text-[56px]">Welcome back</h1>
-          <div className="mt-10 grid grid-cols-3 gap-3 max-[960px]:grid-cols-2 max-[560px]:grid-cols-1">
+
+        {/* Main Content */}
+        <div className="flex flex-col">
+          <p className="m-0 mb-3 text-gold text-[12px] uppercase tracking-[0.14em] font-medium">My Woxly</p>
+          <h1 className="m-0 text-ink mb-10 font-serif font-normal text-[44px] md:text-[64px] tracking-[-0.02em]">Welcome back</h1>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px] md:gap-[24px]">
             {[
-              ["Recent orders", "1 active order"],
-              ["Wishlist", "Saved pieces"],
-              ["Addresses", "1 saved address"],
-            ].map(([a, b]) => (
-              <article className="min-h-[220px] border border-border p-6" key={a}>
-                <h2 className="font-serif text-[28px] font-normal tracking-[-.045em]">{a}</h2>
-                <p className="text-muted-foreground">{b}</p>
-                <a className="relative inline-flex items-center gap-2.5 text-[11px] uppercase tracking-[.12em] after:absolute after:-bottom-1.5 after:left-0 after:right-full after:h-px after:bg-current after:transition-all hover:after:right-0 [&>svg]:w-4" href="#">
-                  View <ArrowRight />
-                </a>
-              </article>
+              { title: "Recent orders", desc: "1 active order", link: "/account/orders" },
+              { title: "Wishlist", desc: "Saved pieces", link: "/wishlist" },
+              { title: "Addresses", desc: "1 saved address", link: "/account/addresses" },
+            ].map((card) => (
+              <a 
+                key={card.title}
+                href={card.link}
+                className="group flex flex-col justify-between min-h-[160px] md:min-h-[200px] border border-border p-[24px] md:p-[32px] hover:border-gold transition-colors bg-transparent rounded-[2px]"
+              >
+                <div>
+                  <h3 className="m-0 text-[24px] md:text-[28px] font-normal font-serif text-ink mb-1">{card.title}</h3>
+                  <p className="m-0 text-[15px] text-stone font-sans mb-8">{card.desc}</p>
+                </div>
+                <span className="mt-auto self-start flex items-center gap-[8px] text-[11px] uppercase tracking-[0.14em] text-ink font-medium transition-colors group-hover:text-gold">
+                  VIEW <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </a>
             ))}
           </div>
         </div>

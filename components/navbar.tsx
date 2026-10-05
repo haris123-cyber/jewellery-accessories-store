@@ -61,9 +61,7 @@ export function Navbar() {
           WOXLY
         </a>
         <div className="justify-self-end flex items-center gap-[12px] max-[960px]:gap-[8px]">
-          <a className="btn-icon" href="/search" aria-label="Search">
-            <Search />
-          </a>
+
           <a
             className="btn-icon hidden max-[960px]:inline-flex"
             href="/account"
@@ -71,13 +69,7 @@ export function Navbar() {
           >
             <UserRound />
           </a>
-          <a
-            className="btn-icon hidden max-[960px]:inline-flex"
-            href="/wishlist"
-            aria-label="Wishlist"
-          >
-            <Heart />
-          </a>
+
           <button
             className="btn-icon relative"
             onClick={() => setCartOpen(true)}
@@ -109,11 +101,11 @@ export function MobileNavbar({
   return (
     <Sheet open={menu} onOpenChange={setMenu}>
       <SheetContent side="left" className="!w-[min(90vw,430px)] !bg-ivory p-6 border-r border-border">
-        <SheetHeader className="text-left mb-8">
+        <SheetHeader className="text-left mb-8 font-sans">
           <SheetTitle className="font-serif tracking-[0.3em] text-[24px] text-ink">WOXLY</SheetTitle>
           <SheetDescription className="text-stone">Explore the collection</SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
           {[
             "Rings",
             "Necklaces",
@@ -126,12 +118,9 @@ export function MobileNavbar({
             <a
               key={item}
               href={`/category/${item.toLowerCase()}`}
-              className="min-h-[58px] grid grid-cols-[34px_1fr_auto] items-center border-b border-border group"
+              className="min-h-[58px] grid grid-cols-[1fr_auto] items-center border-b border-border group"
             >
-              <span className="text-stone text-[11px] font-medium uppercase tracking-[0.14em]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-ink font-serif text-[28px] group-hover:text-gold transition-colors">
+              <span className="text-ink font-sans mb-5 mt-5 text-[28px] group-hover:text-gold transition-colors">
                 {item}
               </span>
               <ArrowRight className="w-[18px] text-ink group-hover:text-gold transition-colors" />
