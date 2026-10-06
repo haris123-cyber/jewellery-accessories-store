@@ -122,15 +122,7 @@ export function Account() {
             const activeClasses = "bg-ink text-pearl shadow-sm";
             const inactiveClasses = "text-stone hover:bg-stone/5 hover:text-ink";
 
-            return item.href ? (
-              <a
-                href={item.href}
-                key={item.id}
-                className={`${baseClasses} ${inactiveClasses}`}
-              >
-                {item.label}
-              </a>
-            ) : (
+            return (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
@@ -173,15 +165,7 @@ export function Account() {
                     </>
                   );
 
-                  return card.href ? (
-                    <a
-                      key={card.title}
-                      href={card.href}
-                      className="flex items-center justify-between border border-border p-[20px] bg-white rounded-[2px]"
-                    >
-                      {content}
-                    </a>
-                  ) : (
+                  return (
                     <button
                       key={card.title}
                       onClick={() => setActiveTab(card.id)}
