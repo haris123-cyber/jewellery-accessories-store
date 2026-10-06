@@ -90,18 +90,21 @@ export default function HomePage() {
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "Women" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
               onClick={() => setBestSellerTab("Women")}
+              suppressHydrationWarning
             >
               Women
             </button>
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "Men" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
               onClick={() => setBestSellerTab("Men")}
+              suppressHydrationWarning
             >
               Men
             </button>
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "Gifts" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
               onClick={() => setBestSellerTab("Gifts")}
+              suppressHydrationWarning
             >
               Gifts
             </button>

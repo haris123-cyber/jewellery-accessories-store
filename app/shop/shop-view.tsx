@@ -21,11 +21,38 @@ import { Shell } from "@/components/layout";
 export function Shop({ category }: { category?: string }) {
     const [sort, setSort] = useState("featured");
     const [query, setQuery] = useState("");
-    
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(category ? [category] : []);
+    const [inStock, setInStock] = useState<boolean>(false);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
+    const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+    const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
+
+    const toggleState = (setState: React.Dispatch<React.SetStateAction<string[]>>, val: string) => {
+        setState((prev) => prev.includes(val) ? prev.filter((x) => x !== val) : [...prev, val]);
+    };
+
     const list = useMemo(() => {
-        let result = category
-            ? products.filter((p) => p.category === category)
-            : products;
+        let result = products;
+
+        if (selectedCategories.length > 0) {
+            result = result.filter((p) => selectedCategories.includes(p.category));
+        }
+        if (selectedColors.length > 0) {
+            result = result.filter((p) => selectedColors.some(c => p.colors.includes(c)));
+        }
+        if (selectedMaterials.length > 0) {
+            result = result.filter((p) => selectedMaterials.includes(p.material));
+        }
+        // Dummy filter for Size since there are no sizes in Product data
+        // if (selectedSizes.length > 0) { ... }
+
+        result = result.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
+
+        if (inStock) {
+            result = result.filter((p) => p.stock > 0);
+        }
+
         if (query)
             result = result.filter((p) =>
                 p.name.toLowerCase().includes(query.toLowerCase()),
@@ -36,16 +63,16 @@ export function Shop({ category }: { category?: string }) {
             result = [...result].sort((a, b) => b.price - a.price);
         if (sort === "newest") result = [...result].reverse();
         return result;
-    }, [category, sort, query]);
+    }, [selectedCategories, selectedColors, selectedMaterials, selectedSizes, priceRange, inStock, sort, query]);
 
     return (
         <Shell>
-            <div className="pt-[80px] pb-[70px] px-[24px] md:px-[4vw] text-center max-w-[1280px] mx-auto">
-                <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Home / Collection</p>
-                <h1 className="m-0 text-ink capitalize font-serif text-[40px] md:text-[64px] leading-[1.1] tracking-tight">{category ? category : "All Pieces"}</h1>
-                <p className="mt-[16px] text-stone text-[16px] max-w-[500px] mx-auto">Considered objects for every part of the day.</p>
+            <div className="pt-[40px] pb-[35px] px-[24px] md:px-[4vw] text-center max-w-[1280px] mx-auto">
+                <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[10px] font-medium text-stone">Home / Collection</p>
+                <h1 className="m-0 text-ink capitalize font-serif text-[35px] md:text-[64px] leading-[1.1] tracking-tight">{category ? category : "All Pieces"}</h1>
+                <p className="mt-[16px] text-stone text-[12px] max-w-[500px] mx-auto">Considered objects for every part of the day.</p>
             </div>
-            
+
             <div className="min-h-[64px] px-[16px] md:px-[4vw] flex items-center gap-[24px] border-y border-border text-[12px] uppercase tracking-[0.14em] font-medium text-ink max-w-[1400px] mx-auto w-full">
                 <span className="hidden md:inline-block text-stone">{list.length} pieces</span>
                 <label className="ml-auto flex items-center gap-2 hidden md:flex">
@@ -69,7 +96,20 @@ export function Shop({ category }: { category?: string }) {
                             </DrawerDescription>
                         </DrawerHeader>
                         <div className="p-4 max-h-[60vh] overflow-y-auto">
-                            <Filters />
+                            <Filters
+                                selectedCategories={selectedCategories}
+                                onCategoryChange={(c) => toggleState(setSelectedCategories, c)}
+                                inStock={inStock}
+                                onInStockChange={setInStock}
+                                priceRange={priceRange}
+                                onPriceRangeChange={setPriceRange}
+                                selectedColors={selectedColors}
+                                onColorChange={(c) => toggleState(setSelectedColors, c)}
+                                selectedSizes={selectedSizes}
+                                onSizeChange={(s) => toggleState(setSelectedSizes, s)}
+                                selectedMaterials={selectedMaterials}
+                                onMaterialChange={(m) => toggleState(setSelectedMaterials, m)}
+                            />
                         </div>
                     </DrawerContent>
                 </Drawer>
@@ -86,14 +126,27 @@ export function Shop({ category }: { category?: string }) {
                     </div>
                 </label>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-[48px] lg:gap-[64px] pt-[48px] pb-[96px] px-[16px] md:px-[4vw] max-w-[1400px] mx-auto">
                 <aside className="hidden lg:block sticky top-[100px] self-start h-[calc(100vh-120px)] overflow-y-auto pr-4 custom-scrollbar">
-                    <Filters />
+                    <Filters
+                        selectedCategories={selectedCategories}
+                        onCategoryChange={(c) => toggleState(setSelectedCategories, c)}
+                        inStock={inStock}
+                        onInStockChange={setInStock}
+                        priceRange={priceRange}
+                        onPriceRangeChange={setPriceRange}
+                        selectedColors={selectedColors}
+                        onColorChange={(c) => toggleState(setSelectedColors, c)}
+                        selectedSizes={selectedSizes}
+                        onSizeChange={(s) => toggleState(setSelectedSizes, s)}
+                        selectedMaterials={selectedMaterials}
+                        onMaterialChange={(m) => toggleState(setSelectedMaterials, m)}
+                    />
                 </aside>
                 <div>
                     {list.length ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-[16px] md:gap-x-[24px] gap-y-[40px] md:gap-y-[56px]">
+                        <div className="grid grid-cols-2 md:grid-cols-3  gap-x-[16px] md:gap-x-[24px] gap-y-[40px] md:gap-y-[56px]">
                             {list.map((p, i) => (
                                 <ProductCard key={p.slug} product={p} index={i} />
                             ))}
@@ -106,7 +159,7 @@ export function Shop({ category }: { category?: string }) {
                             action="View all pieces"
                         />
                     )}
-                    
+
                     {list.length > 0 && (
                         <div className="flex justify-center mt-[64px]">
                             <button className="btn-secondary min-w-[200px]">Load more</button>

@@ -30,7 +30,7 @@ export function CartPage() {
             {lines.map((l) => (
               <div className="grid grid-cols-[100px_1fr_auto] md:grid-cols-[120px_1fr_100px_100px] gap-[16px] md:gap-[24px] border-b border-border py-[24px] items-center" key={l.slug}>
                 <div className="aspect-[4/5] rounded-[2px] overflow-hidden bg-sand">
-                  <ProductVisual cell={l.product.cell} name={l.product.name} />
+                  <ProductVisual cell={l.product.cell} name={l.product.name} image={l.product.image} />
                 </div>
                 
                 <div className="flex flex-col h-full justify-center">

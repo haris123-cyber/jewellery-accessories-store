@@ -51,7 +51,7 @@ export function CartDrawer() {
                 key={l.slug}
               >
                 <div className="aspect-[4/5] overflow-hidden rounded-[2px]">
-                  <ProductVisual cell={l.product.cell} name={l.product.name} />
+                  <ProductVisual cell={l.product.cell} name={l.product.name} image={l.product.image} />
                 </div>
                 <div className="flex flex-col">
                   <h3 className="m-0 mb-1 text-[15px] font-medium text-ink leading-tight">{l.product.name}</h3>

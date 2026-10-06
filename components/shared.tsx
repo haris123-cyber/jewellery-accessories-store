@@ -25,6 +25,7 @@ import {
   type Product,
 } from "@/lib/catalog";
 import { useCommerceStore } from "@/store/commerce-store";
+import { Slider } from "@/components/ui/slider";
 
 const unsplashImages = [
   "1599643478514-462ce330f619",
@@ -50,10 +51,12 @@ const getUnsplashImage = (slug: string) => {
 export function ProductVisual({
   cell,
   name,
+  image,
   priority = false,
 }: {
   cell: number;
   name: string;
+  image?: string;
   priority?: boolean;
 }) {
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -63,7 +66,7 @@ export function ProductVisual({
       {/* Product Image */}
       <Image
         className="absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out z-10"
-        src={getUnsplashImage(slug)}
+        src={image || getUnsplashImage(slug)}
         alt={name}
         fill
         sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 300px"
@@ -144,6 +147,7 @@ export function ProductCard({
         <ProductVisual
           cell={product.cell}
           name={product.name}
+          image={product.image}
           priority={index < 2}
         />
 
@@ -261,9 +265,16 @@ export function Social() {
         <p className="m-0 text-stone text-[16px]">Follow the everyday edit.</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-[8px]">
-        {[0, 1, 2, 3, 4, 5].map((i) => (
+        {[
+          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=400&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1608042314453-ae338d80c427?q=80&w=810&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1592317295760-5c1f677dfc78?q=80&w=1915&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=400&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=400&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=400&auto=format&fit=crop"
+        ].map((imgSrc, i) => (
           <a href="#" key={i} className="relative block aspect-square overflow-hidden group rounded-[4px]">
-            <EditorialVisual cell={i} label="WOXLY social post" />
+            <img src={imgSrc} alt="WOXLY social post" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
             <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-ink/40 text-ivory text-[12px] uppercase tracking-[0.14em] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <Camera /> View post
             </span>
@@ -317,7 +328,38 @@ export function Newsletter() {
   );
 }
 
-export function Filters() {
+export function Filters({
+  selectedCategories = [],
+  onCategoryChange,
+  inStock = false,
+  onInStockChange,
+  priceRange = [0, 100000],
+  onPriceRangeChange,
+  selectedColors = [],
+  onColorChange,
+  selectedSizes = [],
+  onSizeChange,
+  selectedMaterials = [],
+  onMaterialChange,
+}: {
+  selectedCategories?: string[];
+  onCategoryChange?: (category: string) => void;
+  inStock?: boolean;
+  onInStockChange?: (inStock: boolean) => void;
+  priceRange?: [number, number];
+  onPriceRangeChange?: (range: [number, number]) => void;
+  selectedColors?: string[];
+  onColorChange?: (color: string) => void;
+  selectedSizes?: string[];
+  onSizeChange?: (size: string) => void;
+  selectedMaterials?: string[];
+  onMaterialChange?: (material: string) => void;
+} = {}) {
+  // Derive unique colors and materials from products
+  const uniqueColors = Array.from(new Set(products.flatMap((p) => p.colors)));
+  const uniqueMaterials = Array.from(new Set(products.map((p) => p.material)));
+  const uniqueSizes = ["XS", "S", "M", "L", "XL"]; // Dummy data for size
+
   return (
     <div>
       {[
@@ -328,7 +370,7 @@ export function Filters() {
         "Material",
         "Availability",
       ].map((item, i) => (
-        <details key={item} open={i === 0} className="border-b border-border group">
+        <details key={item} open={i === 0 || i === 1 || i === 5} className="border-b border-border group">
           <summary className="min-h-[56px] flex justify-between items-center list-none cursor-pointer text-[13px] uppercase tracking-[0.14em] font-medium text-ink [&::-webkit-details-marker]:hidden">
             {item}
             <ChevronDown className="w-[18px] text-stone transition-transform group-open:-rotate-180" />
@@ -337,18 +379,87 @@ export function Filters() {
             {i === 0 ? (
               categories.slice(0, 6).map((c) => (
                 <label key={c.slug} className="flex items-center gap-3 cursor-pointer">
-                  <input type="checkbox" className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]" /> {c.label}
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(c.slug)}
+                    onChange={() => onCategoryChange?.(c.slug)}
+                    className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]"
+                  />{" "}
+                  {c.label}
                 </label>
               ))
-            ) : (
+            ) : i === 1 ? (
+              <div className="flex flex-col gap-6 pt-4 pb-2 px-1">
+                <Slider 
+                  min={0} 
+                  max={100000} 
+                  step={100}
+                  value={priceRange}
+                  onValueChange={(val: any) => onPriceRangeChange?.(val as [number, number])}
+                  className="[&_[data-slot=slider-range]]:bg-[#2563EB] [&_[data-slot=slider-thumb]]:border-[#2563EB] [&_[data-slot=slider-thumb]]:bg-[#2563EB]"
+                />
+                <div className="flex items-center justify-between gap-4 mt-2">
+                   <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
+                      <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Min</span>
+                      <span className="font-medium text-ink">₹{priceRange[0]}</span>
+                   </div>
+                   <div className="text-border">-</div>
+                   <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
+                      <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Max</span>
+                      <span className="font-medium text-ink">₹{priceRange[1]}</span>
+                   </div>
+                </div>
+              </div>
+            ) : i === 2 ? (
+              <div className="flex flex-wrap gap-2 pb-2">
+                {uniqueColors.map(color => (
+                  <button
+                    key={color}
+                    onClick={() => onColorChange?.(color)}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${selectedColors.includes(color) ? "border-gold scale-110" : "border-transparent"}`}
+                    style={{ backgroundColor: color }}
+                    title={color}
+                  />
+                ))}
+              </div>
+            ) : i === 3 ? (
+              <div className="flex flex-wrap gap-2 pb-2">
+                {uniqueSizes.map(size => (
+                  <button
+                    key={size}
+                    onClick={() => onSizeChange?.(size)}
+                    className={`min-w-[40px] h-10 px-2 rounded-[2px] border text-[13px] transition-colors ${selectedSizes.includes(size) ? "bg-ink text-ivory border-ink" : "bg-white text-ink border-border hover:border-ink"}`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            ) : i === 4 ? (
+              uniqueMaterials.map(mat => (
+                <label key={mat} className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedMaterials.includes(mat)}
+                    onChange={() => onMaterialChange?.(mat)}
+                    className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]"
+                  />{" "}
+                  {mat}
+                </label>
+              ))
+            ) : i === 5 ? (
               <>
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <input type="checkbox" className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]" /> Featured
-                </label>
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input type="checkbox" className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]" /> In stock
+                  <input
+                    type="checkbox"
+                    checked={inStock}
+                    onChange={(e) => onInStockChange?.(e.target.checked)}
+                    className="w-[18px] h-[18px] accent-gold border-border rounded-[2px]"
+                  />{" "}
+                  In stock
                 </label>
               </>
+            ) : (
+              <span className="text-[13px] italic opacity-50">Filter not implemented</span>
             )}
           </div>
         </details>
@@ -450,7 +561,7 @@ export function HomeBanners() {
       {/* Type 4: Side-by-side Text & Image (Crafted to last) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 bg-sand rounded-[4px] overflow-hidden">
         <a href="/shop" className="relative w-full aspect-[4/5] md:aspect-auto h-full min-h-[300px] md:min-h-[600px] overflow-hidden group block">
-          <EditorialVisual cell={4} label="Crafted to last" />
+          <img src="https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=800&auto=format&fit=crop" alt="Crafted to last" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
         </a>
         <div className="p-[32px] md:p-[72px] flex flex-col items-start justify-center">
           <p className="m-0 mb-[16px] text-stone text-[12px] uppercase tracking-[0.14em] font-medium">The Promise</p>
@@ -491,15 +602,15 @@ export function HomeBanners2() {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-[5px] sm:mb-0 -mb-13 md:gap-[24px]">
-          <a href="/shop" className="relative aspect-[4/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
-            <EditorialVisual cell={1} label="Everyday Rings" />
+          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Everyday Rings" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-80 transition-opacity group-hover:opacity-90" />
             <div className="absolute bottom-8 left-0 right-0 flex justify-center">
               <span className="btn-text-link !text-ivory !decoration-ivory group-hover:!text-gold group-hover:!decoration-gold">Everyday Rings</span>
             </div>
           </a>
-          <a href="/shop" className="relative aspect-[4/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
-            <EditorialVisual cell={2} label="Statement Necklaces" />
+          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
+            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Statement Necklaces" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-80 transition-opacity group-hover:opacity-90" />
             <div className="absolute bottom-8 left-0 right-0 flex justify-center">
               <span className="btn-text-link !text-ivory !decoration-ivory group-hover:!text-gold group-hover:!decoration-gold">Statement Necklaces</span>
@@ -509,8 +620,8 @@ export function HomeBanners2() {
       </div>
 
       {/* Type 3: Full overlay text (The Thread style) */}
-      <a href="/shop" className="relative w-full aspect-[4/5] md:aspect-[21/9] overflow-hidden group block rounded-[4px]">
-        <EditorialVisual cell={3} label="The Thread" />
+      <a href="/shop" className="relative w-full aspect-[5/5] md:aspect-[21/9] overflow-hidden group block rounded-[4px]">
+        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop" alt="The Thread" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-ink/30 transition-colors group-hover:bg-ink/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-ivory text-center p-[24px] md:p-[48px]">
           <h2 className="text-[36px] md:text-[56px] font-serif mb-4 md:mb-6 text-ivory">The Thread</h2>
@@ -653,7 +764,7 @@ export function AsSeenOn() {
               "
             >
               {/* Fixed card wrapper */}
-              <div 
+              <div
                 className="relative h-[380px] w-[220px] cursor-pointer"
                 onClick={() => {
                   if (isActive) {
@@ -681,7 +792,7 @@ export function AsSeenOn() {
                   `}
                 >
                   <Image
-                    src={getUnsplashImage(product.slug)}
+                    src={product.image}
                     alt={product.name}
                     fill
                     sizes="220px"
