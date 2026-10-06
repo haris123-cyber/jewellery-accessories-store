@@ -16,8 +16,8 @@ const unsplashImages = [
   '1610461853106-96b17c2f62cb',
 ];
 
-const getUnsplashImage = (slug) => {
-  const hash = slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+const getUnsplashImage = (slug: string) => {
+  const hash = slug.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
   const id = unsplashImages[hash % unsplashImages.length];
   return 'https://images.unsplash.com/photo-' + id + '?w=800&q=80&auto=format&fit=crop';
 };
