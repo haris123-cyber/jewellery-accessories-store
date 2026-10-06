@@ -78,12 +78,12 @@ export function ProductPage({ slug }: { slug?: string }) {
 
         {/* Product info */}
         <div className="pt-2 flex flex-col">
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="mb-6    ">
+            <div className="flex items-center gap-3 mb-4 justify-between flex">
               <span className="inline-block px-2 py-1 bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium rounded-[2px]">Core Collection</span>
               {product.stock > 0 ? (
                 <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] font-medium text-[#16A34A]">
-                  <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse"></span>
+                  <span className="w-2 h-2   rounded-full bg-[#16A34A] animate-pulse"></span>
                   In Stock
                 </span>
               ) : (
