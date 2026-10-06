@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CreditCard, Banknote, ShieldCheck } from "lucide-react";
+import { Banknote, ShieldCheck } from "lucide-react";
 import { getProduct } from "@/lib/catalog";
 import { useCommerceStore } from "@/store/commerce-store";
 import { OrderSummary } from "@/components/shared";
@@ -32,9 +32,9 @@ export function Checkout() {
     formState: { errors },
   } = useForm<CheckoutData>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: { payment: "card" },
+    defaultValues: { payment: "upi" },
   });
-  
+
   return (
     <main className="min-h-screen bg-ivory px-[16px] md:px-[4vw] py-[32px] md:py-[48px]">
       <div className="max-w-[1280px] mx-auto mb-[48px] md:mb-[64px] flex items-center justify-between">
@@ -45,7 +45,7 @@ export function Checkout() {
           <ShieldCheck className="w-[16px]" /> Secure Checkout
         </div>
       </div>
-      
+
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 lg:grid-cols-[1fr_400px] gap-[48px] lg:gap-[96px]">
         <form
           onSubmit={handleSubmit(() => {
@@ -57,13 +57,13 @@ export function Checkout() {
             <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Step 1 of 3</p>
             <h1 className="m-0 font-serif text-[40px] md:text-[48px] leading-[1.1] text-ink">Delivery details</h1>
           </div>
-          
+
           <div className="flex gap-[16px] md:gap-[32px] border-b border-border pb-[24px] text-[12px] uppercase tracking-[0.14em] font-medium text-stone mb-[40px] overflow-auto hide-scrollbar whitespace-nowrap">
             <span className="text-ink border-b-2 border-gold pb-[22px] -mb-[26px]">1 Contact & Delivery</span>
             <span>2 Payment</span>
             <span>3 Review</span>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[24px] gap-y-[24px] mb-[48px]">
             {[
               ["email", "Email", "email", "col-span-1 md:col-span-2"],
@@ -78,11 +78,11 @@ export function Checkout() {
                 <span className="absolute left-[16px] top-[10px] text-[11px] uppercase tracking-[0.1em] font-medium text-stone">
                   {label}
                 </span>
-                <input 
+                <input
                   className={`w-full h-[64px] pt-[24px] pb-[8px] px-[16px] border ${errors[name as keyof CheckoutData] ? 'border-error' : 'border-border'} bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold rounded-[2px] placeholder:text-transparent`}
-                  type={type} 
+                  type={type}
                   placeholder={label}
-                  {...register(name as keyof CheckoutData)} 
+                  {...register(name as keyof CheckoutData)}
                 />
                 {errors[name as keyof CheckoutData] && (
                   <span className="absolute -bottom-[20px] left-0 text-error text-[11px] font-medium">Please enter a valid {label.toLowerCase()}.</span>
@@ -90,12 +90,12 @@ export function Checkout() {
               </label>
             ))}
           </div>
-          
+
           <fieldset className="border-0 p-0 m-0 mb-[48px]">
             <legend className="font-serif text-[24px] text-ink mb-[24px]">Payment method</legend>
             <div className="flex flex-col gap-[12px]">
               {[
-                { v: "card", l: "Credit / Debit Card", Icon: CreditCard },
+
                 { v: "upi", l: "UPI Transfer", Icon: Banknote },
                 { v: "cod", l: "Cash on Delivery", Icon: Banknote },
               ].map(({ v, l, Icon }) => (
@@ -107,7 +107,7 @@ export function Checkout() {
               ))}
             </div>
           </fieldset>
-          
+
           <button className="btn-primary w-full h-[64px] text-[14px]" type="submit">
             Place secure order
           </button>
@@ -116,7 +116,7 @@ export function Checkout() {
             Your payment information is encrypted and secure.
           </div>
         </form>
-        
+
         <div className="lg:sticky lg:top-[48px] lg:self-start">
           <OrderSummary subtotal={subtotal} />
         </div>
