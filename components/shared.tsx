@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -86,9 +86,9 @@ export function EditorialVisual({
   const slug = label.replace(/ collection$/i, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   return (
-    <div className="relative w-full h-full min-h-[240px] overflow-hidden bg-sand">
+    <div className="relative w-full h-full min-h-[240px] rounded-2xl overflow-hidden bg-sand">
       <Image
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+        className="absolute inset-0 w-full h-full rounded-2xl object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
         src={getUnsplashImage(slug)}
         alt={label}
         fill
@@ -391,24 +391,24 @@ export function Filters({
               ))
             ) : i === 1 ? (
               <div className="flex flex-col gap-6 pt-4 pb-2 px-1">
-                <Slider 
-                  min={0} 
-                  max={100000} 
+                <Slider
+                  min={0}
+                  max={100000}
                   step={100}
                   value={priceRange}
                   onValueChange={(val: any) => onPriceRangeChange?.(val as [number, number])}
                   className="[&_[data-slot=slider-range]]:bg-[#2563EB] [&_[data-slot=slider-thumb]]:border-[#2563EB] [&_[data-slot=slider-thumb]]:bg-[#2563EB]"
                 />
                 <div className="flex items-center justify-between gap-4 mt-2">
-                   <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
-                      <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Min</span>
-                      <span className="font-medium text-ink">₹{priceRange[0]}</span>
-                   </div>
-                   <div className="text-border">-</div>
-                   <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
-                      <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Max</span>
-                      <span className="font-medium text-ink">₹{priceRange[1]}</span>
-                   </div>
+                  <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
+                    <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Min</span>
+                    <span className="font-medium text-ink">₹{priceRange[0]}</span>
+                  </div>
+                  <div className="text-border">-</div>
+                  <div className="flex-1 border border-border rounded-[4px] p-2 text-center relative bg-white">
+                    <span className="text-[11px] text-stone absolute -top-2.5 left-1/2 -translate-x-1/2 bg-ivory px-1 leading-none">Max</span>
+                    <span className="font-medium text-ink">₹{priceRange[1]}</span>
+                  </div>
                 </div>
               </div>
             ) : i === 2 ? (
@@ -469,8 +469,10 @@ export function Filters({
   );
 }
 
-export function OrderSummary({ subtotal }: { subtotal: number }) {
+export function OrderSummary({ subtotal, hideCheckoutButton = false }: { subtotal: number; hideCheckoutButton?: boolean }) {
   const shipping = subtotal >= 2999 ? 0 : 149;
+  const pathname = usePathname();
+  const isCheckout = pathname === '/checkout';
   return (
     <aside className="p-[24px] md:p-[32px] bg-pearl border border-border rounded-[4px] shadow-[0_8px_30px_rgba(27,26,23,0.06)]">
       <h2 className="m-0 mb-6 text-[18px] font-serif">Order summary</h2>
@@ -484,13 +486,15 @@ export function OrderSummary({ subtotal }: { subtotal: number }) {
           <strong className="text-ink font-medium tabular-nums">{shipping === 0 ? "Complimentary" : money(shipping)}</strong>
         </p>
       </div>
-      <p className="m-0 flex justify-between pt-4 border-t border-border text-[18px] text-ink font-serif">
+      <p className="m-0 flex justify-between pt-4 border-t border-border text-[18px] text-ink font-sans">
         <span>Total</span>
         <strong className="tabular-nums">{money(subtotal + shipping)}</strong>
       </p>
-      <a className="btn-primary w-full mt-8" href="/checkout">
-        Proceed to checkout
-      </a>
+      {!isCheckout && !hideCheckoutButton && (
+        <a className="btn-primary w-full mt-8" href="/checkout">
+          Proceed to checkout
+        </a>
+      )}
       <p className="mt-4 text-center text-stone text-[12px] flex items-center justify-center gap-2">
         Secure checkout · Easy returns
       </p>
@@ -603,15 +607,15 @@ export function HomeBanners2() {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-[5px] sm:mb-0 -mb-13 md:gap-[24px]">
-          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
-            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Everyday Rings" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
+          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block ">
+            <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=1175&auto=format&fit=crop" alt="Everyday Rings" className="absolute inset-0 w-full h-full object-cover  rounded-tl-2xl transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-80 transition-opacity group-hover:opacity-90" />
             <div className="absolute bottom-8 left-0 right-0 flex justify-center">
               <span className="btn-text-link !text-ivory !decoration-ivory group-hover:!text-gold group-hover:!decoration-gold">Everyday Rings</span>
             </div>
           </a>
-          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block rounded-[4px]">
-            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Statement Necklaces" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
+          <a href="/shop" className="relative aspect-[3/5] md:aspect-[4/5] overflow-hidden group block ">
+            <img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?q=80&w=688&auto=format&fit=crop" alt="Statement Necklaces" className="absolute inset-0 w-full h-full object-cover rounded-tr-2xl transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-80 transition-opacity group-hover:opacity-90" />
             <div className="absolute bottom-8 left-0 right-0 flex justify-center">
               <span className="btn-text-link !text-ivory !decoration-ivory group-hover:!text-gold group-hover:!decoration-gold">Statement Necklaces</span>
@@ -621,8 +625,8 @@ export function HomeBanners2() {
       </div>
 
       {/* Type 3: Full overlay text (The Thread style) */}
-      <a href="/shop" className="relative w-full aspect-[5/5] md:aspect-[21/9] overflow-hidden group block rounded-[4px]">
-        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop" alt="The Thread" className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]" />
+      <a href="/shop" className="relative w-full aspect-[5/5] md:aspect-[21/9] overflow-hidden group block rounded-b-2xl ">
+        <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop" alt="The Thread" className="absolute inset-0 w-full h-full object-cover transition-transform rounded-b-2xl duration-300 ease-out group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-ink/30 transition-colors group-hover:bg-ink/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-ivory text-center p-[24px] md:p-[48px]">
           <h2 className="text-[36px] md:text-[56px] font-serif mb-4 md:mb-6 text-ivory">The Thread</h2>

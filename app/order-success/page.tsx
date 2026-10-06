@@ -5,6 +5,8 @@ export const metadata: Metadata = {
   description: "Refined accessories designed for modern everyday life.",
 };
 
-export default function Page() {
-  return <Success />;
+export default async function Page({ searchParams }: { searchParams: Promise<{ subtotal?: string }> }) {
+  const params = await searchParams;
+  const subtotal = Number(params.subtotal) || 0;
+  return <Success subtotal={subtotal} />;
 }

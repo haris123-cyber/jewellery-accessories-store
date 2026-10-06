@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Menu,
   Search,
@@ -24,6 +25,7 @@ export function Navbar() {
   const [menu, setMenu] = useState(false);
   const cart = useCommerceStore((s) => s.cart);
   const setCartOpen = useCommerceStore((s) => s.setCartOpen);
+  const router = useRouter();
   const count = mounted ? cart.reduce((n, l) => n + l.quantity, 0) : 0;
 
   return (
@@ -72,7 +74,13 @@ export function Navbar() {
 
           <button
             className="btn-icon relative"
-            onClick={() => setCartOpen(true)}
+            onClick={() => {
+              if (typeof window !== 'undefined' && window.innerWidth <= 560) {
+                router.push('/cart');
+              } else {
+                setCartOpen(true);
+              }
+            }}
             aria-label={`Cart with ${count} items`}
             suppressHydrationWarning
           >

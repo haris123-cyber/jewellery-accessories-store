@@ -18,6 +18,16 @@ import { Shell } from "@/components/layout";
 import { useState } from "react";
 
 export default function HomePage() {
+  const banners = [
+    "/images/banners/image copy 4.png",
+    "/images/banners/image copy 5.png",
+    "/images/banners/image copy 2.png",
+    "/images/banners/image copy 6.png",
+  ];
+
+  // Repeat the banners array multiple times so the user can scroll continuously
+  const loopedBanners = [...banners, ...banners, ...banners, ...banners, ...banners];
+
   const [bestSellerTab, setBestSellerTab] = useState("Women");
 
   const filteredBestSellers = products.filter(p => {
@@ -30,20 +40,37 @@ export default function HomePage() {
   return (
     <Shell>
       {/* ── Hero ── */}
-      <section className="relative w-full h-[80vh] min-h-[500px] md:h-auto md:min-h-0 md:aspect-[3/1] 2xl:max-h-[640px] overflow-hidden group">
+      <section className="w-full flex flex-col items-center justify-center gap-1 overflow-hidden group py-0 md:py-8 mt-2 md:mt-0">
         <Image
-          src="/images/gallery-hero.png"
+          src="/images/banners/image.png"
           alt="WOXLY new season jewellery campaign"
-          fill
+          width={425}
+          height={260}
           priority
-          sizes="100vw"
-          className="object-cover object-center motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-105 motion-safe:duration-1000 max-[960px]:object-[60%_center]"
+          className="object-cover object-center rounded-2xl px-2 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-105 motion-safe:duration-1000 max-[960px]:object-[60%_center]"
         />
 
 
       </section>
-
-
+      {/* ── Banner Carousel ── */}
+      <section className="w-full py-5 px-5 md:py-8">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-4 md:px-8 hide-scrollbar">
+          {loopedBanners.map((src, i) => (
+            <div
+              key={i}
+              className="flex-none w-[90vw] md:w-[600px] snap-center overflow-hidden rounded-2xl"
+            >
+              <Image
+                src={src}
+                alt={`Banner ${i + 1}`}
+                width={600}
+                height={350}
+                className="w-full h-auto object-cover rounded-2xl"
+              />
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── Shop by category ── */}
       <section className="py-[56px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto" id="collection">
@@ -52,15 +79,15 @@ export default function HomePage() {
           <h2 className="m-0 text-ink">Curated for every moment</h2>
         </div>
 
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-[16px] md:gap-[24px] pb-[16px] -mx-[16px] px-[16px] md:mx-0 md:px-0 hide-scrollbar">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-[8px] md:gap-[24px] pb-[16px] -mx-[16px] px-[16px] md:mx-0 md:px-0 hide-scrollbar">
           {categories.slice(0, 6).map((c) => (
             <a
               href={`/category/${c.slug}`}
               key={c.slug}
-              className="group relative flex-none w-[70vw] md:w-[calc(33.333%-16px)] aspect-[3/4] overflow-hidden rounded-[4px] snap-center"
+              className="group relative flex-none w-[70vw] md:w-[calc(33.333%-16px)] aspect-[3/4] overflow-hidden rounded-2xl snap-center"
             >
               <EditorialVisual cell={c.cell} label={`${c.label} collection`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-80" />
+              <div className="absolute  inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-80" />
               <div className="absolute left-6 right-6 bottom-6 flex justify-between items-end">
                 <span className="font-serif text-[28px] text-ivory leading-none group-hover:text-gold transition-colors">
                   {c.label}

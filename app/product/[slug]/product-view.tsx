@@ -89,6 +89,7 @@ export function ProductPage({ slug }: { slug?: string }) {
   const [hasPurchased, setHasPurchased] = useState(false);
   const [rating, setRating] = useState(0);
   const [isStickyVisible, setIsStickyVisible] = useState(false);
+  const [pincode, setPincode] = useState("");
   const addToBagRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -122,7 +123,7 @@ export function ProductPage({ slug }: { slug?: string }) {
               <Search className="w-[18px] text-ink" />
             </button>
           </div>
-          <div className="flex gap-[16px] overflow-x-auto snap-x pb-2 hide-scrollbar hidden sm:block">
+          <div className="flex gap-[16px] overflow-x-auto snap-x pb-2 hide-scrollbar hidden sm:flex">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className={`flex-none w-[20%] aspect-square rounded-[2px] overflow-hidden bg-sand cursor-pointer snap-start border-2 transition-colors ${i === 0 ? 'border-gold' : 'border-transparent hover:border-border'}`}>
                 <ProductVisual cell={(product.cell + i) % 12} name={`${product.name} view ${i}`} image={product.image} />
@@ -274,6 +275,37 @@ export function ProductPage({ slug }: { slug?: string }) {
             </div>
           </div>
 
+          {/* Pincode Check */}
+          <div className="mb-[32px] bg-sand/30 p-4 px-4 rounded-[4px] border rounded-xl border-border/50">
+            <label className="text-[10px] uppercase tracking-[0.14em] font-medium text-ink mb-1 block flex items-center gap-2">
+              Check Delivery Availability
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="Enter Pincode"
+                className="flex-1 h-[48px] border border-border bg-white rounded-[2px] px-4 text-[14px] outline-none focus:border-ink transition-colors"
+              />
+              <button
+                className="btn-secondary h-[48px] px-6 text-[10px] whitespace-nowrap bg-white"
+                onClick={() => {
+                  if (pincode.length === 6) {
+                    toast.success("Delivery available to " + pincode + "!");
+                  } else {
+                    toast.error("Please enter a valid 6-digit pincode.");
+                  }
+                }}
+              >
+                Check
+              </button>
+            </div>
+            <p className="text-[12px] text-stone mt-1 flex items-center gap-1.5">
+              <Truck className="w-[14px]" /> Usually dispatches in 24 hours.
+            </p>
+          </div>
+
           {/* Actions */}
           <div className="flex flex-col gap-[12px] mb-[40px]">
             <div className="flex gap-[16px]">
@@ -283,6 +315,9 @@ export function ProductPage({ slug }: { slug?: string }) {
                 onClick={() => {
                   add(product.slug);
                   toast.success(`${product.name} added to your bag`);
+                  if (typeof window !== 'undefined' && window.innerWidth <= 560) {
+                    router.push('/cart');
+                  }
                 }}
                 disabled={!product.stock}
               >
@@ -437,7 +472,7 @@ export function ProductPage({ slug }: { slug?: string }) {
       </main>
 
       {/* Reviews Section */}
-      <section className="bg-[#F9F9F9] border-y border-border py-[64px] md:py-[96px]">
+      <section className="bg-[#F9F9F9] border-y border-border px-5 py-[64px] md:py-[96px]">
         <div className="max-w-[1280px] mx-auto px-[16px] md:px-[24px]">
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-[48px] lg:gap-[96px]">
             {/* Left Column: Summary */}
@@ -478,9 +513,9 @@ export function ProductPage({ slug }: { slug?: string }) {
                 ))}
               </div>
 
-              <div className="border border-border p-6 text-center bg-white shadow-sm flex flex-col items-center gap-4 relative">
+              <div className="border border-border rounded-xl p-6 text-center bg-white shadow-sm flex flex-col items-center gap-0 relative">
                 {!hasPurchased && (
-                  <button onClick={() => setHasPurchased(true)} className="absolute top-2 right-2 text-[10px] text-stone underline hover:text-ink">
+                  <button onClick={() => setHasPurchased(true)} className="absolute top-2 right-2 mb-1 text-[10px] text-stone underline hover:text-ink">
                     Demo: Simulate Purchase
                   </button>
                 )}
@@ -614,9 +649,9 @@ export function ProductPage({ slug }: { slug?: string }) {
       />
 
       {/* FAQ Section */}
-      <section className="py-[64px] md:py-[96px] max-w-[800px] mx-auto px-[16px] md:px-[24px]">
+      <section className="py-[64px] md:py-[96px] max-w-[800px] mx-auto px-10 md:px-[24px]">
         <h2 className="text-[28px] md:text-[32px] font-serif text-ink text-center mb-10 tracking-wide">FAQS</h2>
-        <Accordion type="single" collapsible className="w-full border-t border-border/60">
+        <Accordion type="single" collapsible className="w-full border-t  border-border/60">
           {[
             {
               q: "How to handle or take care of the product?",

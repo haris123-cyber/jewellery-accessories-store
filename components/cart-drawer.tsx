@@ -56,7 +56,7 @@ export function CartDrawer() {
                 <div className="flex flex-col">
                   <h3 className="m-0 mb-1 text-[15px] font-medium text-ink leading-tight">{l.product.name}</h3>
                   <p className="m-0 text-stone text-[14px] tabular-nums">{money(l.product.price)}</p>
-                  
+
                   {/* Quantity control */}
                   <div className="w-[104px] grid grid-cols-[34px_1fr_34px] items-center border border-border mt-auto h-[36px]">
                     <button

@@ -48,13 +48,14 @@ export function Checkout() {
 
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 lg:grid-cols-[1fr_400px] gap-[48px] lg:gap-[96px]">
         <form
+          id="checkout-form"
           onSubmit={handleSubmit(() => {
             clearCart();
             window.location.href = "/order-success";
           })}
         >
           <div className="mb-[40px]">
-            <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Step 1 of 3</p>
+            <p className="m-0 mb-[6px] uppercase tracking-[0.14em] text-[10px] font-medium text-stone">Step 1 of 3</p>
             <h1 className="m-0 font-serif text-[40px] md:text-[48px] leading-[1.1] text-ink">Delivery details</h1>
           </div>
 
@@ -108,9 +109,7 @@ export function Checkout() {
             </div>
           </fieldset>
 
-          <button className="btn-primary w-full h-[64px] text-[14px]" type="submit">
-            Place secure order
-          </button>
+
           <div className="mt-[16px] text-center text-stone text-[12px] flex items-center justify-center gap-1.5">
             <ShieldCheck className="w-[14px]" />
             Your payment information is encrypted and secure.
@@ -118,7 +117,14 @@ export function Checkout() {
         </form>
 
         <div className="lg:sticky lg:top-[48px] lg:self-start">
-          <OrderSummary subtotal={subtotal} />
+          <OrderSummary subtotal={subtotal} hideCheckoutButton />
+          <button
+            className="btn-primary w-full h-[64px] text-[14px] mt-6"
+            type="submit"
+            form="checkout-form"
+          >
+            Place secure order
+          </button>
         </div>
       </div>
     </main>

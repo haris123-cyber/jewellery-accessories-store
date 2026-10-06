@@ -10,14 +10,14 @@ export function CartPage() {
   const { cart, remove, setQuantity } = useCommerceStore();
   const lines = cart.map((l) => ({ ...l, product: getProduct(l.slug) }));
   const subtotal = lines.reduce((n, l) => n + l.product.price * l.quantity, 0);
-  
+
   return (
     <Shell>
-      <div className="px-[16px] md:px-[4vw] pb-[40px] md:pb-[64px] pt-[80px] md:pt-[100px] text-center">
-        <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Your selection</p>
-        <h1 className="m-0 font-serif text-[48px] md:text-[64px] leading-[1.1] text-ink">Shopping Bag</h1>
+      <div className="px-[16px] md:px-[4vw] pb-[40px] md:pb-[64px] pt-[40px] md:pt-[100px] text-center">
+        <p className="m-0 mb-[6px] uppercase tracking-[0.14em] text-[10px] font-medium text-stone">Your selection</p>
+        <h1 className="m-0 font-serif text-[40px] md:text-[64px] leading-[1.1] text-ink">Shopping Bag</h1>
       </div>
-      
+
       {lines.length ? (
         <main className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-[48px] lg:gap-[64px] px-[16px] md:px-[4vw] pb-[96px] max-w-[1400px] mx-auto">
           <div className="overflow-auto custom-scrollbar pr-2 lg:pr-6">
@@ -26,19 +26,19 @@ export function CartPage() {
               <span className="text-center">Quantity</span>
               <span className="text-right">Total</span>
             </div>
-            
+
             {lines.map((l) => (
               <div className="grid grid-cols-[100px_1fr_auto] md:grid-cols-[120px_1fr_100px_100px] gap-[16px] md:gap-[24px] border-b border-border py-[24px] items-center" key={l.slug}>
                 <div className="aspect-[4/5] rounded-[2px] overflow-hidden bg-sand">
                   <ProductVisual cell={l.product.cell} name={l.product.name} image={l.product.image} />
                 </div>
-                
+
                 <div className="flex flex-col h-full justify-center">
                   <h3 className="m-0 font-serif text-[20px] md:text-[24px] text-ink">{l.product.name}</h3>
                   <p className="m-0 mt-1 text-[14px] text-stone">
                     {l.product.category} · {l.product.material || "18k Gold"}
                   </p>
-                  
+
                   {/* Mobile price and quantity */}
                   <div className="md:hidden mt-auto pt-4 flex flex-col gap-3">
                     <strong className="font-medium text-ink tabular-nums">{money(l.product.price)}</strong>
@@ -58,7 +58,7 @@ export function CartPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Desktop quantity */}
                 <div className="hidden md:flex flex-col items-center gap-[16px]">
                   <div className="grid grid-cols-[32px_32px_32px] items-center border border-border h-[36px]">
@@ -74,7 +74,7 @@ export function CartPage() {
                     Remove
                   </button>
                 </div>
-                
+
                 {/* Desktop total */}
                 <div className="hidden md:block text-right">
                   <strong className="font-medium text-ink text-[16px] tabular-nums">{money(l.product.price * l.quantity)}</strong>

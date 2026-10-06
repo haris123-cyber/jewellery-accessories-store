@@ -70,7 +70,7 @@ import {
 } from "@/components/shared";
 import { Header, Footer, Shell, CartDrawer } from "@/components/layout";
 
-export function Success() {
+export function Success({ subtotal = 0 }: { subtotal?: number }) {
   return (
     <Shell>
       <main className="mx-auto min-h-[70vh] max-w-[760px] px-6 py-[12vw] text-center">
@@ -89,6 +89,12 @@ export function Success() {
             Continue shopping
           </a>
         </div>
+
+        {subtotal > 0 && (
+          <div className="mt-[48px] block lg:hidden text-left bg-pearl rounded-xl overflow-hidden p-[24px]">
+            <OrderSummary subtotal={subtotal} />
+          </div>
+        )}
       </main>
     </Shell>
   );
