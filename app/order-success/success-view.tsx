@@ -70,7 +70,7 @@ import {
 } from "@/components/shared";
 import { Header, Footer, Shell, CartDrawer } from "@/components/layout";
 
-export function Success({ subtotal = 0 }: { subtotal?: number }) {
+export function Success({ subtotal = 0, orderId }: { subtotal?: number, orderId?: string }) {
   return (
     <Shell>
       <main className="mx-auto min-h-[70vh] max-w-[760px] px-6 py-[12vw] text-center">
@@ -78,23 +78,19 @@ export function Success({ subtotal = 0 }: { subtotal?: number }) {
         <p className="mb-[18px] text-[11px] font-semibold uppercase tracking-[.22em] text-accent">Thank you</p>
         <h1 className="font-serif text-[clamp(58px,8vw,100px)] font-normal leading-[.95] tracking-[-.045em] text-foreground">Order confirmed</h1>
         <p className="leading-[1.8] text-muted-foreground">
-          Your order <strong>#GLR-26091</strong> is being prepared. Estimated
+          Your order <strong>#{orderId || "GLR-26091"}</strong> is being prepared. Estimated
           delivery: 30 Sep–2 Oct.
         </p>
         <div className="mt-[35px] flex justify-center gap-2.5 max-[560px]:flex-col">
-          <a className="inline-flex min-h-12 items-center justify-center border border-foreground bg-foreground px-6 text-[11px] uppercase tracking-[.12em] text-white transition hover:border-accent hover:bg-accent" href="/track-order">
+          <a className="inline-flex min-h-12 items-center rounded-xl justify-center border border-foreground bg-foreground px-6 text-[11px] uppercase tracking-[.12em] text-white transition hover:border-accent hover:bg-accent" href={`/account?tab=order-details${orderId ? `&id=${orderId}` : ''}`}>
             Track order
           </a>
-          <a className="inline-flex min-h-12 items-center justify-center border border-foreground px-6 text-[11px] uppercase tracking-[.12em] transition hover:border-accent hover:bg-accent hover:text-white" href="/shop">
+          <a className="inline-flex min-h-12 items-center rounded-xl justify-center border border-foreground px-6 text-[11px] uppercase tracking-[.12em] transition hover:border-accent hover:bg-accent hover:text-white" href="/shop">
             Continue shopping
           </a>
         </div>
 
-        {subtotal > 0 && (
-          <div className="mt-[48px] block lg:hidden text-left bg-pearl rounded-xl overflow-hidden p-[24px]">
-            <OrderSummary subtotal={subtotal} />
-          </div>
-        )}
+
       </main>
     </Shell>
   );

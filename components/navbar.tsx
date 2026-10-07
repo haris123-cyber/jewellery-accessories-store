@@ -43,21 +43,7 @@ export function Navbar() {
           >
             <Menu />
           </button>
-          <nav className="flex gap-[24px] uppercase tracking-[0.14em] text-[12px] font-medium text-ink max-[960px]:hidden">
-            {[
-              "Rings",
-              "Necklaces",
-              "Earrings",
-              "Bracelets",
-              "Watches",
-              "Bags",
-              "Gifting",
-            ].map((item) => (
-              <a key={item} href={`/category/${item.toLowerCase()}`} className="relative after:absolute after:left-0 after:right-full after:-bottom-[4px] after:h-[1px] after:bg-gold hover:after:right-0 after:transition-all after:duration-300 hover:text-gold transition-colors">
-                {item}
-              </a>
-            ))}
-          </nav>
+
         </div>
         <a className="font-serif text-[28px] font-medium leading-none tracking-[0.3em] text-ink max-[960px]:justify-self-center max-[960px]:text-[24px]" href="/">
           WOXLY

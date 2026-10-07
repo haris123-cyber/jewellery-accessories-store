@@ -47,38 +47,7 @@ import {
 import { Shell } from "@/components/layout";
 import { DropdownMenu } from "radix-ui";
 
-const SIZE_GUIDE_DATA = [
-  { size: "1", circ: "41.01mm / 4.10cm", diam: "13.10mm / 1.31cm" },
-  { size: "2", circ: "42.70mm / 4.27cm", diam: "13.30mm / 1.33cm" },
-  { size: "3", circ: "42.90mm / 4.29cm", diam: "13.70mm / 1.37cm" },
-  { size: "4", circ: "43.60mm / 4.36cm", diam: "13.90mm / 1.39cm" },
-  { size: "5", circ: "44.80mm / 4.48cm", diam: "14.30mm / 1.43cm" },
-  { size: "6", circ: "46.10mm / 4.61cm", diam: "14.70mm / 1.47cm" },
-  { size: "7", circ: "47.40mm / 4.74cm", diam: "15.10mm / 1.51cm" },
-  { size: "8", circ: "48.00mm / 4.80cm", diam: "15.30mm / 1.53cm" },
-  { size: "9", circ: "48.70mm / 4.87cm", diam: "15.50mm / 1.55cm" },
-  { size: "10", circ: "50.00mm / 5.00cm", diam: "15.90mm / 1.59cm" },
-  { size: "11", circ: "51.20mm / 5.12cm", diam: "16.30mm / 1.63cm" },
-  { size: "12", circ: "51.90mm / 5.19cm", diam: "16.50mm / 1.65cm" },
-  { size: "13", circ: "53.10mm / 5.31cm", diam: "16.90mm / 1.69cm" },
-  { size: "14", circ: "54.40mm / 5.44cm", diam: "17.30mm / 1.73cm" },
-  { size: "15", circ: "55.10mm / 5.51cm", diam: "17.50mm / 1.75cm" },
-  { size: "16", circ: "56.30mm / 5.63cm", diam: "17.90mm / 1.79cm" },
-  { size: "17", circ: "57.00mm / 5.70cm", diam: "18.10mm / 1.81cm" },
-  { size: "18", circ: "58.30mm / 5.83cm", diam: "18.50mm / 1.85cm" },
-  { size: "19", circ: "58.90mm / 5.89cm", diam: "18.80mm / 1.88cm" },
-  { size: "20", circ: "60.20mm / 6.02cm", diam: "19.20mm / 1.92cm" },
-  { size: "21", circ: "60.80mm / 6.08cm", diam: "19.40mm / 1.94cm" },
-  { size: "22", circ: "62.10mm / 6.21cm", diam: "19.80mm / 1.98cm" },
-  { size: "23", circ: "62.70mm / 6.27cm", diam: "20.00mm / 2.00cm" },
-  { size: "24", circ: "64.00mm / 6.40cm", diam: "20.40mm / 2.04cm" },
-  { size: "25", circ: "64.60mm / 6.46cm", diam: "20.06mm / 2.06cm" },
-  { size: "26", circ: "65.90mm / 6.59cm", diam: "21.00mm / 2.10cm" },
-  { size: "27", circ: "67.20mm / 6.72cm", diam: "21.10mm / 2.11cm" },
-  { size: "28", circ: "67.80mm / 6.78cm", diam: "21.60mm / 2.16cm" },
-  { size: "29", circ: "69.10mm / 6.91cm", diam: "22.00mm / 2.20cm" },
-  { size: "30", circ: "71.00mm / 7.10cm", diam: "22.30mm / 2.23cm" },
-];
+
 
 export function ProductPage({ slug }: { slug?: string }) {
   const router = useRouter();
@@ -107,7 +76,7 @@ export function ProductPage({ slug }: { slug?: string }) {
   return (
     <Shell>
       {/* Breadcrumbs */}
-      <div className="px-[16px] md:px-[24px] py-[24px] md:py-[32px] text-stone text-[12px] uppercase tracking-[0.14em] font-medium max-w-[1280px] mx-auto">
+      <div className="px-[16px] md:px-[24px] py-[24px] md:py-[32px] text-stone text-[10px] uppercase tracking-[0.14em] font-medium max-w-[1280px] mx-auto">
         <a href="/" className="hover:text-gold transition-colors">Home</a> <span className="mx-2">/</span>
         <a href={`/category/${product.category}`} className="hover:text-gold transition-colors">{product.category}</a> <span className="mx-2">/</span>
         <span className="text-ink">{product.name}</span>
@@ -472,14 +441,14 @@ export function ProductPage({ slug }: { slug?: string }) {
       </main>
 
       {/* Reviews Section */}
-      <section className="bg-[#F9F9F9] border-y border-border px-5 py-[64px] md:py-[96px]">
+      <section className="bg-[#F9F9F9] border-y border-border px-5 py-[24px] md:py-[96px]">
         <div className="max-w-[1280px] mx-auto px-[16px] md:px-[24px]">
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-[48px] lg:gap-[96px]">
             {/* Left Column: Summary */}
             <div className="flex flex-col">
-              <h2 className="text-[28px] font-serif text-ink mb-6">Customer Reviews</h2>
+              <h2 className="text-[28px] font-serif text-ink mb-4">Customer Reviews</h2>
 
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex items-center gap-4 mb-1">
                 <div className="flex items-center gap-1 text-[#D4AF37]">
                   <Star className="w-[18px] fill-current" />
                   <Star className="w-[18px] fill-current" />
@@ -494,7 +463,7 @@ export function ProductPage({ slug }: { slug?: string }) {
                 Based on 128 reviews
               </div>
 
-              <div className="space-y-[12px] text-[12px] text-stone font-medium mb-10">
+              <div className="space-y-[1px] text-[12px] text-stone font-medium mb-10">
                 {[
                   { s: 5, p: 82, c: 105 },
                   { s: 4, p: 12, c: 15 },
@@ -514,16 +483,11 @@ export function ProductPage({ slug }: { slug?: string }) {
               </div>
 
               <div className="border border-border rounded-xl p-6 text-center bg-white shadow-sm flex flex-col items-center gap-0 relative">
-                {!hasPurchased && (
-                  <button onClick={() => setHasPurchased(true)} className="absolute top-2 right-2 mb-1 text-[10px] text-stone underline hover:text-ink">
-                    Demo: Simulate Purchase
-                  </button>
-                )}
-                <h4 className="text-[14px] font-serif text-ink">Have you purchased this item?</h4>
-                <p className="text-[12px] text-stone">Share your thoughts with other customers</p>
+
+
                 <Dialog>
                   <DialogTrigger asChild>
-                    <button disabled={!hasPurchased} className="btn-secondary w-full md:w-auto mt-2 text-[12px] uppercase tracking-[0.14em] disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button disabled={!hasPurchased} className="btn-secondary bg-black text-white w-full md:w-auto mt-2 text-[12px] uppercase tracking-[0.14em] disabled:opacity-50 disabled:cursor-not-allowed">
                       {hasPurchased ? "WRITE A REVIEW" : "ONLY BUYERS CAN REVIEW"}
                     </button>
                   </DialogTrigger>
@@ -564,27 +528,32 @@ export function ProductPage({ slug }: { slug?: string }) {
                     </div>
                   </DialogContent>
                 </Dialog>
+                {!hasPurchased && (
+                  <button onClick={() => setHasPurchased(true)} className="mt-2 right-2 mb-0 text-[10px] text-stone underline hover:text-ink">
+                    Demo: Simulate Purchase
+                  </button>
+                )}
               </div>
+
             </div>
 
             {/* Right Column: Reviews */}
             <div className="flex flex-col">
               <div className="flex flex-col border-t border-border mt-2">
                 {/* Review 1 */}
-                <div className="py-8 border-b border-border flex flex-col">
+                <div className="py-4 border-b border-border flex flex-col">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">ARPAN S.</span>
                     <span className="text-[12px] text-stone">21/07/26</span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] mb-4">
+                  <div className="flex items-center gap-1 text-[#D4AF37] mb-1">
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                   </div>
-                  <h4 className="text-[14px] font-semibold text-ink mb-2">Title</h4>
-                  <p className="text-[13px] text-ink/80 mb-6">
+                  <p className="text-[13px] text-ink/80 mb-3">
                     Njjj
                   </p>
 
@@ -610,15 +579,14 @@ export function ProductPage({ slug }: { slug?: string }) {
                     <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">MALVIKA D.</span>
                     <span className="text-[12px] text-stone">16/07/26</span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] mb-4">
+                  <div className="flex items-center gap-1 text-[#D4AF37] mb-1">
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px]" />
                     <Star className="w-[14px]" />
                     <Star className="w-[14px]" />
                     <Star className="w-[14px]" />
                   </div>
-                  <h4 className="text-[14px] font-semibold text-ink mb-2">wrong</h4>
-                  <p className="text-[13px] text-ink/80 mb-6">
+                  <p className="text-[13px] text-ink/80 mb-2">
                     wrong
                   </p>
 
@@ -631,9 +599,12 @@ export function ProductPage({ slug }: { slug?: string }) {
 
               </div>
             </div>
+
           </div>
         </div>
       </section>
+
+
 
 
 
@@ -647,6 +618,25 @@ export function ProductPage({ slug }: { slug?: string }) {
           )
           .slice(0, 4)}
       />
+
+      {/* Promotional Banner */}
+      <section className="relative w-full h-[50vh] min-h-[400px] bg-sand overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="relative z-10 text-center px-4 max-w-2xl text-white">
+          <h2 className="text-[32px] md:text-[48px] font-serif mb-4 leading-tight capitalize text-white">
+            Discover More {product.category}
+          </h2>
+          <p className="text-[14px] md:text-[16px] mb-8 font-medium text-white/90">
+            Explore our curated collection of fine {product.category}, designed for everyday elegance.
+          </p>
+          <a href={`/category/${product.category}`} className="inline-block border border-white text-white bg-transparent px-8 py-3 text-[12px] uppercase tracking-[0.14em] hover:bg-white hover:text-ink transition-colors font-medium">
+            Shop the Collection
+          </a>
+        </div>
+      </section>
 
       {/* FAQ Section */}
       <section className="py-[64px] md:py-[96px] max-w-[800px] mx-auto px-10 md:px-[24px]">
@@ -681,6 +671,8 @@ export function ProductPage({ slug }: { slug?: string }) {
           ))}
         </Accordion>
       </section>
+
+
 
       {/* Sticky Add to Bag Bar */}
       {isStickyVisible && (
