@@ -5,6 +5,12 @@ export const metadata: Metadata = {
   description: "Refined accessories designed for modern everyday life.",
 };
 
+import { Suspense } from "react";
+
 export default function Page() {
-  return <Account />;
+  return (
+    <Suspense fallback={null}>
+      <Account />
+    </Suspense>
+  );
 }

@@ -73,37 +73,83 @@ import { Header, Footer, Shell, CartDrawer } from "@/components/layout";
 export function Auth({ signup = false }: { signup?: boolean }) {
   return (
     <Shell>
-      <main className="min-h-[80vh] grid place-items-center py-[70px] px-5">
-        <form
-          className="w-[min(100%,500px)] grid gap-[14px]"
-          onSubmit={(e) => {
-            e.preventDefault();
-            toast.success(signup ? "Account created" : "Welcome back");
-          }}
-        >
-          <p className="m-0 mb-[18px] text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">Your WOXLY</p>
-          <h1 className="text-foreground text-[64px] max-[560px]:text-[48px]">{signup ? "Create account" : "Welcome back"}</h1>
-          {signup && (
-            <div className="grid grid-cols-2 gap-[10px]">
-              <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required placeholder="First name" />
-              <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required placeholder="Last name" />
+      <main className="min-h-screen bg-ivory flex items-center justify-center py-[64px] px-[24px]">
+        <div className="w-full max-w-[440px] bg-white border border-border p-[40px] md:p-[56px] rounded-[24px] shadow-[0_8px_30px_rgba(27,26,23,0.04)]">
+          
+          <div className="text-center mb-[40px]">
+            <h1 className="font-serif text-[40px] md:text-[48px] text-ink leading-tight mb-2">
+              {signup ? "Create Account" : "Welcome Back"}
+            </h1>
+            <p className="text-[14px] text-stone">
+              {signup ? "Join Woxly to experience premium jewelry." : "Sign in to access your Woxly account."}
+            </p>
+          </div>
+
+          <form
+            className="flex flex-col gap-[20px]"
+            onSubmit={(e) => {
+              e.preventDefault();
+              toast.success(signup ? "Account created" : "Welcome back");
+            }}
+          >
+            {signup && (
+              <div className="grid grid-cols-2 gap-[16px]">
+                <label className="relative block">
+                  <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">First name</span>
+                  <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required placeholder="First name" />
+                </label>
+                <label className="relative block">
+                  <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">Last name</span>
+                  <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required placeholder="Last name" />
+                </label>
+              </div>
+            )}
+            
+            <label className="relative block">
+              <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">Email</span>
+              <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required type="email" placeholder="Email" />
+            </label>
+
+            {signup && (
+              <label className="relative block">
+                <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">Phone</span>
+                <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required type="tel" placeholder="Phone" />
+              </label>
+            )}
+
+            <label className="relative block">
+              <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">Password</span>
+              <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required type="password" placeholder="Password" />
+            </label>
+
+            {signup && (
+              <label className="relative block">
+                <span className="absolute left-[16px] top-[10px] text-[10px] uppercase tracking-[0.1em] font-medium text-stone">Confirm Password</span>
+                <input className="w-full h-[64px] pt-[24px] pb-[8px] rounded-[12px] px-[16px] border border-border bg-pearl text-ink text-[15px] outline-none transition-colors focus:border-gold placeholder:text-transparent" required type="password" placeholder="Confirm password" />
+              </label>
+            )}
+
+            {!signup && (
+              <div className="flex justify-end -mt-[8px]">
+                <a href="#" className="text-[12px] text-stone hover:text-ink underline-offset-4 hover:underline transition-colors">
+                  Forgot password?
+                </a>
+              </div>
+            )}
+
+            <button className="btn-primary w-full h-[64px] text-[14px] mt-[8px] rounded-full">
+              {signup ? "Create account" : "Sign In"}
+            </button>
+            
+            <div className="text-center mt-[16px]">
+              <a className="text-[13px] text-stone hover:text-ink underline-offset-4 hover:underline transition-colors" href={signup ? "/login" : "/signup"}>
+                {signup
+                  ? "Already have an account? Sign In"
+                  : "New to Woxly? Create an account"}
+              </a>
             </div>
-          )}
-          <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required type="email" placeholder="Email" />
-          {signup && <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required type="tel" placeholder="Phone" />}
-          <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required type="password" placeholder="Password" />
-          {signup && (
-            <input className="min-h-[52px] px-[14px] border border-border bg-white text-[15px] normal-case tracking-normal" required type="password" placeholder="Confirm password" />
-          )}
-          <button className="inline-flex min-h-12 items-center justify-center border border-foreground bg-foreground px-6 text-[11px] uppercase tracking-[0.12em] text-background transition-colors hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:opacity-45">
-            {signup ? "Create account" : "Login"}
-          </button>
-          <a className="text-center text-muted-foreground text-[13px] mt-3" href={signup ? "/login" : "/signup"}>
-            {signup
-              ? "Already have an account? Login"
-              : "New here? Create account"}
-          </a>
-        </form>
+          </form>
+        </div>
       </main>
     </Shell>
   );
