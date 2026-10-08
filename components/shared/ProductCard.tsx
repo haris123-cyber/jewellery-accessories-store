@@ -30,6 +30,11 @@ export function ProductCard({
       viewport={{ once: true }}
       transition={{ delay: Math.min(index * 0.035, 0.2) }}
     >
+      {product.limitedEdition && (
+       <span className="absolute left-1/2 -top-2 z-20 -translate-x-1/2 -translate-y-[25%] whitespace-nowrap rounded-[6px] border border-ink/10 bg-gold-soft px-4 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-ink shadow-[0_4px_12px_rgba(27,26,23,.12)]">
+  Limited Edition
+</span>
+      )}
       <a href={`/product/${product.slug}`} className="block mb-4 font-sans relative overflow-hidden rounded-[4px]">
         <ProductVisual
           cell={product.cell}
@@ -39,9 +44,11 @@ export function ProductCard({
         />
 
         {/* Badges */}
-        <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
-          {index === 0 && (
-            <span className="bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">New</span>
+        <div className="absolute left-3 top-6 z-10 flex flex-col gap-2">
+          {product.badge && (
+            <span className="bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">
+              {product.badge}
+            </span>
           )}
           {discount > 0 && (
             <span className="bg-blush text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">{discount}% OFF</span>

@@ -19,8 +19,7 @@ import {
   RotateCcw,
   LogOut,
   ArrowLeft,
-  PackageCheck,
-  Link
+  PackageCheck
 } from "lucide-react";
 import { Shell } from "@/components/layout";
 import { useCommerceStore } from "@/store/commerce-store";
@@ -203,9 +202,14 @@ export function Account() {
             </div>
 
             {/* Sign Out */}
-            <button className="w-full h-[52px] border border-border bg-transparent rounded-full flex items-center justify-center gap-3 hover:bg-white hover:shadow-sm transition-all text-ink mt-4">
+            <button
+              onClick={() => router.replace("/login")}
+              className="w-full h-[52px] border border-border bg-transparent rounded-full flex items-center justify-center gap-3 hover:bg-white hover:shadow-sm transition-all text-ink mt-4"
+            >
               <LogOut className="w-[15px] h-[15px]" strokeWidth={2} />
-              <span className="text-[10px] uppercase tracking-[0.18em] font-bold">Sign Out</span>
+              <span className="text-[10px] uppercase tracking-[0.18em] font-bold">
+                Sign Out
+              </span>
             </button>
           </div>
 

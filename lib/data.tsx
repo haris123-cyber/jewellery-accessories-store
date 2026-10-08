@@ -2,6 +2,114 @@ import { Product } from "./catalog";
 
 export const productsData: Product[] = [
   {
+    "id": "jewelry-1",
+    "slug": "sculpted-drop-earrings",
+    "name": "Sculpted Drop Earrings",
+    "category": "earrings",
+    "price": 1579,
+    "compareAtPrice": 1899,
+    "description": "A quietly distinctive sculpted drop earrings shaped for modern everyday life, finished with considered details and lasting materials.",
+    "colors": [
+      "#171717",
+      "#1c3a32",
+      "#c4a57a"
+    ],
+    "material": "18k gold-plated brass",
+    "rating": 4.5,
+    "reviewCount": 18,
+    "badge": "NEW",
+    "bestSellerGroup": "women",
+    "stock": 5,
+    "cell": 5,
+    "image": "https://images.unsplash.com/photo-1629224316810-9d8805b95e76?w=800&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "jewelry-3",
+    "slug": "molten-signet-ring",
+    "name": "Molten Signet Ring",
+    "category": "rings",
+    "price": 2199,
+    "limitedEdition": true,
+
+    "description": "A quietly distinctive molten signet ring shaped for modern everyday life, finished with considered details and lasting materials.",
+    "colors": [
+      "#171717",
+      "#1c3a32",
+      "#c4a57a"
+    ],
+    "material": "18k gold-plated brass",
+    "rating": 4.7,
+    "reviewCount": 40,
+    "badge": "BEST SELLER",
+    "bestSellerGroup": "women",
+    "stock": 11,
+    "cell": 5,
+    "image": "https://images.unsplash.com/photo-1727060664699-d760290208b1?q=80&w=687&auto=format&fit=crop"
+  },
+  {
+    "id": "jewelry-4",
+    "slug": "fine-line-necklace",
+    "name": "Fine Line Necklace",
+    "category": "necklaces",
+    "price": 2509,
+    "compareAtPrice": 3099,
+    "description": "A quietly distinctive fine line necklace shaped for modern everyday life, finished with considered details and lasting materials.",
+    "colors": [
+      "#171717",
+      "#6a4331",
+      "#c4a57a"
+    ],
+    "material": "18k gold-plated brass",
+    "rating": 4.8,
+    "reviewCount": 51,
+    "stock": 14,
+    "cell": 6,
+    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80&auto=format&fit=crop"
+  },
+  {
+    "id": "jewelry-5",
+    "slug": "orbit-cuff",
+    "name": "Orbit Cuff",
+    "category": "bracelets",
+    "price": 2819,
+    "limitedEdition": true,
+
+    "description": "A quietly distinctive orbit cuff shaped for modern everyday life, finished with considered details and lasting materials.",
+    "colors": [
+      "#171717",
+      "#1c3a32",
+      "#c4a57a"
+    ],
+    "material": "18k gold-plated brass",
+    "rating": 4.9,
+    "reviewCount": 62,
+    "stock": 17,
+    "cell": 5,
+    "image": "https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=1170&auto=format&fit=crop"
+  },
+  {
+    "id": "watches-1",
+    "slug": "meridian-leather-watch",
+    "name": "Meridian Leather Watch",
+    "category": "watches",
+    "price": 1859,
+    "compareAtPrice": 2299,
+    "limitedEdition": true,
+    "description": "A quietly distinctive meridian leather watch shaped for modern everyday life, finished with considered details and lasting materials.",
+    "colors": [
+      "#171717",
+      "#1c3a32",
+      "#c4a57a"
+    ],
+    "material": "Stainless steel and leather",
+    "rating": 4.5,
+    "reviewCount": 18,
+    "badge": "NEW",
+    "stock": 5,
+    "cell": 4,
+    "image": "https://images.unsplash.com/photo-1612817159623-0399784fd0ce?q=80&w=1025&auto=format&fit=crop"
+  },
+  {
     "id": "bags-1",
     "slug": "structured-leather-crossbody",
     "name": "Structured Leather Crossbody",
@@ -57,6 +165,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "women",
     "stock": 11,
     "cell": 10,
     "image": "https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop"
@@ -68,6 +177,7 @@ export const productsData: Product[] = [
     "category": "bags",
     "price": 2229,
     "compareAtPrice": 2699,
+    "limitedEdition": true,
     "description": "A quietly distinctive atelier mini satchel shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -126,6 +236,7 @@ export const productsData: Product[] = [
     "category": "bags",
     "price": 3159,
     "compareAtPrice": 3899,
+    "limitedEdition": true,
     "description": "A quietly distinctive portofino woven bag shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -158,27 +269,7 @@ export const productsData: Product[] = [
     "cell": 1,
     "image": "https://plus.unsplash.com/premium_photo-1724862978805-e9d41f90c815?q=80&w=687&auto=format&fit=crop"
   },
-  {
-    "id": "jewelry-1",
-    "slug": "sculpted-drop-earrings",
-    "name": "Sculpted Drop Earrings",
-    "category": "earrings",
-    "price": 1579,
-    "compareAtPrice": 1899,
-    "description": "A quietly distinctive sculpted drop earrings shaped for modern everyday life, finished with considered details and lasting materials.",
-    "colors": [
-      "#171717",
-      "#1c3a32",
-      "#c4a57a"
-    ],
-    "material": "18k gold-plated brass",
-    "rating": 4.5,
-    "reviewCount": 18,
-    "badge": "NEW",
-    "stock": 5,
-    "cell": 5,
-    "image": "https://images.unsplash.com/photo-1629224316810-9d8805b95e76?w=800&q=80&auto=format&fit=crop"
-  },
+  
   {
     "id": "jewelry-2",
     "slug": "form-chain-bracelet",
@@ -196,94 +287,17 @@ export const productsData: Product[] = [
     "reviewCount": 29,
     "stock": 8,
     "cell": 6,
-    "image": "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=800&q=80&auto=format&fit=crop"
+    "image": "https://images.unsplash.com/photo-1633810543462-77c4a3b13f07?q=80&w=764&auto=format&fit=crop"
   },
-  {
-    "id": "jewelry-3",
-    "slug": "molten-signet-ring",
-    "name": "Molten Signet Ring",
-    "category": "rings",
-    "price": 2199,
-    "description": "A quietly distinctive molten signet ring shaped for modern everyday life, finished with considered details and lasting materials.",
-    "colors": [
-      "#171717",
-      "#1c3a32",
-      "#c4a57a"
-    ],
-    "material": "18k gold-plated brass",
-    "rating": 4.7,
-    "reviewCount": 40,
-    "badge": "BEST SELLER",
-    "stock": 11,
-    "cell": 5,
-    "image": "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=800&q=80&auto=format&fit=crop"
-  },
-  {
-    "id": "jewelry-4",
-    "slug": "fine-line-necklace",
-    "name": "Fine Line Necklace",
-    "category": "necklaces",
-    "price": 2509,
-    "compareAtPrice": 3099,
-    "description": "A quietly distinctive fine line necklace shaped for modern everyday life, finished with considered details and lasting materials.",
-    "colors": [
-      "#171717",
-      "#6a4331",
-      "#c4a57a"
-    ],
-    "material": "18k gold-plated brass",
-    "rating": 4.8,
-    "reviewCount": 51,
-    "stock": 14,
-    "cell": 6,
-    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80&auto=format&fit=crop"
-  },
-  {
-    "id": "jewelry-5",
-    "slug": "orbit-cuff",
-    "name": "Orbit Cuff",
-    "category": "bracelets",
-    "price": 2819,
-    "description": "A quietly distinctive orbit cuff shaped for modern everyday life, finished with considered details and lasting materials.",
-    "colors": [
-      "#171717",
-      "#1c3a32",
-      "#c4a57a"
-    ],
-    "material": "18k gold-plated brass",
-    "rating": 4.9,
-    "reviewCount": 62,
-    "stock": 17,
-    "cell": 5,
-    "image": "https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=1170&auto=format&fit=crop"
-  },
-  {
-    "id": "watches-1",
-    "slug": "meridian-leather-watch",
-    "name": "Meridian Leather Watch",
-    "category": "watches",
-    "price": 1859,
-    "compareAtPrice": 2299,
-    "description": "A quietly distinctive meridian leather watch shaped for modern everyday life, finished with considered details and lasting materials.",
-    "colors": [
-      "#171717",
-      "#1c3a32",
-      "#c4a57a"
-    ],
-    "material": "Stainless steel and leather",
-    "rating": 4.5,
-    "reviewCount": 18,
-    "badge": "NEW",
-    "stock": 5,
-    "cell": 4,
-    "image": "https://images.unsplash.com/photo-1612817159623-0399784fd0ce?q=80&w=1025&auto=format&fit=crop"
-  },
+  
   {
     "id": "watches-2",
     "slug": "index-steel-watch",
     "name": "Index Steel Watch",
     "category": "watches",
     "price": 2169,
+    "limitedEdition": true,
+
     "description": "A quietly distinctive index steel watch shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -313,6 +327,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "men",
     "stock": 11,
     "cell": 4,
     "image": "https://images.unsplash.com/photo-1758887952896-8491d393afe2?q=80&w=874&auto=format&fit=crop"
@@ -324,6 +339,7 @@ export const productsData: Product[] = [
     "category": "watches",
     "price": 2789,
     "compareAtPrice": 3399,
+    "limitedEdition": true,
     "description": "A quietly distinctive contour gold watch shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -344,6 +360,7 @@ export const productsData: Product[] = [
     "category": "sunglasses",
     "price": 2139,
     "compareAtPrice": 2599,
+    "limitedEdition": true,
     "description": "A quietly distinctive caro tortoise frames shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -393,6 +410,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "women",
     "stock": 11,
     "cell": 3,
     "image": "https://images.unsplash.com/photo-1610136649349-0f646f318053?q=80&w=1170&auto=format&fit=crop"
@@ -404,6 +422,7 @@ export const productsData: Product[] = [
     "category": "sunglasses",
     "price": 3069,
     "compareAtPrice": 3699,
+    "limitedEdition": true,
     "description": "A quietly distinctive riva metal sunglasses shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -424,6 +443,7 @@ export const productsData: Product[] = [
     "category": "wallets",
     "price": 2419,
     "compareAtPrice": 2999,
+    "limitedEdition": true,
     "description": "A quietly distinctive archive slim wallet shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -473,6 +493,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "men",
     "stock": 11,
     "cell": 11,
     "image": "https://images.unsplash.com/photo-1601592996763-f05c9c80a7f1?q=80&w=880&auto=format&fit=crop"
@@ -484,6 +505,7 @@ export const productsData: Product[] = [
     "category": "belts",
     "price": 2699,
     "compareAtPrice": 3299,
+    "limitedEdition": true,
     "description": "A quietly distinctive classic oxblood belt shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -533,6 +555,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "men",
     "stock": 11,
     "cell": 7,
     "image": "https://images.unsplash.com/photo-1664286022075-8e997e95bd17?q=80&w=1170&auto=format&fit=crop"
@@ -544,6 +567,7 @@ export const productsData: Product[] = [
     "category": "travel",
     "price": 2979,
     "compareAtPrice": 3599,
+    "limitedEdition": true,
     "description": "A quietly distinctive voyage leather pouch shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -593,6 +617,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "gifts",
     "stock": 11,
     "cell": 8,
     "image": "https://plus.unsplash.com/premium_photo-1684407617236-9baf926474ad?q=80&w=1170&auto=format&fit=crop"
@@ -604,6 +629,7 @@ export const productsData: Product[] = [
     "category": "gifts",
     "price": 3259,
     "compareAtPrice": 3999,
+    "limitedEdition": true,
     "description": "A quietly distinctive the everyday edit shaped for modern everyday life, finished with considered details and lasting materials.",
     "colors": [
       "#171717",
@@ -653,6 +679,7 @@ export const productsData: Product[] = [
     "rating": 4.7,
     "reviewCount": 40,
     "badge": "BEST SELLER",
+    "bestSellerGroup": "gifts",
     "stock": 11,
     "cell": 6,
     "image": "https://images.unsplash.com/photo-1697713465161-d872b22723a2?q=80&w=1170&auto=format&fit=crop"

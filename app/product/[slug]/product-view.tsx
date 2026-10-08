@@ -323,7 +323,7 @@ export function ProductPage({ slug }: { slug?: string }) {
                     Check Value
                   </button>
                   <div className="absolute right-4 bottom-4 w-[60px] h-[60px] flex items-center justify-center opacity-70 border border-[#B07B2D] rounded-full pointer-events-none">
-                    <div className="text-[8px] font-bold uppercase text-center text-[#B07B2D] tracking-widest leading-tight">
+                    <div className="text-[7px] font-bold uppercase text-center text-[#B07B2D] tracking-widest leading-tight">
                       Festival<br />Of<br />Exchange
                     </div>
                   </div>
