@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
 import { tenantConfig } from "@/lib/tenant";
+import { Toaster } from "@/components/ui/sonner";
+import { WhatsAppWidget } from "@/components/whatsapp-widget";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -29,7 +31,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html className={`scroll-smooth ${cormorant.variable} ${montserrat.variable}`} lang="en" suppressHydrationWarning>
-      <body className="bg-background font-sans text-base text-foreground antialiased" suppressHydrationWarning>{children}</body>
+      <body className="bg-background font-sans text-base text-foreground antialiased" suppressHydrationWarning>
+        {children}
+        <Toaster />
+        <WhatsAppWidget />
+      </body>
     </html>
   );
 }

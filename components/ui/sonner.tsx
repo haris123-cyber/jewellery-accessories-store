@@ -1,37 +1,39 @@
 "use client";
 
 import {
-  CircleCheckIcon,
-  InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
-  TriangleAlertIcon,
+  CircleCheck,
+  Info,
+  Loader2,
+  XCircle,
+  AlertTriangle,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
-
   return (
     <Sonner
-      theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      position="top-center"
       icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <Loader2Icon className="size-4 animate-spin" />,
+        success: <CircleCheck className="size-4 text-emerald-700 shrink-0" />,
+        info: <Info className="size-4 text-stone shrink-0" />,
+        warning: <AlertTriangle className="size-4 text-amber-700 shrink-0" />,
+        error: <XCircle className="size-4 text-red-700 shrink-0" />,
+        loading: <Loader2 className="size-4 animate-spin text-stone shrink-0" />,
       }}
-      style={
-        {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
-        } as React.CSSProperties
-      }
+      toastOptions={{
+        classNames: {
+          toast:
+            "group toast bg-ivory text-ink border border-border/80 shadow-[0_8px_30px_rgba(27,26,23,0.12)] rounded-[4px] font-sans text-[13px] py-3 px-4 flex items-center gap-3 tracking-normal z-[99999]",
+          description: "text-stone text-[12px]",
+          actionButton:
+            "bg-ink text-ivory text-[11px] uppercase tracking-wider font-medium px-3 py-1.5 rounded-[2px] hover:bg-gold transition-colors",
+          cancelButton:
+            "bg-sand text-ink text-[11px] uppercase tracking-wider font-medium px-3 py-1.5 rounded-[2px] transition-colors",
+          success: "!bg-ivory !text-ink !border-emerald-800/30",
+          error: "!bg-ivory !text-ink !border-red-800/30",
+        },
+      }}
       {...props}
     />
   );

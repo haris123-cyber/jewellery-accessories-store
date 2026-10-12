@@ -8,7 +8,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <Navbar />
       {children}
       <Footer />
-      <Toaster position="bottom-center" richColors />
     </>
   );
 }

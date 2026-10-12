@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sheet";
 import { useCommerceStore } from "@/store/commerce-store";
 import { CartDrawer } from "./cart-drawer";
+import { AnnouncementBar } from "./announcement-bar";
 
 export function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -30,9 +31,7 @@ export function Navbar() {
 
   return (
     <>
-      <div className="h-[40px] flex items-center justify-center bg-emerald text-ivory uppercase tracking-[0.14em] text-[12px] font-medium max-[560px]:text-[10px]">
-        Certified hallmark jewellery
-      </div>
+      <AnnouncementBar />
       <header className="sticky top-0 z-50 h-[80px] grid grid-cols-[1fr_auto_1fr] items-center px-[24px] border-b border-border bg-ivory/95 backdrop-blur-md max-[960px]:grid-cols-[auto_1fr_auto] max-[960px]:px-[16px] max-[960px]:h-[64px]">
         <div className="flex items-center gap-6">
           <button
@@ -85,6 +84,7 @@ export function Navbar() {
   );
 }
 
+
 export function MobileNavbar({
   menu,
   setMenu,
@@ -92,36 +92,67 @@ export function MobileNavbar({
   menu: boolean;
   setMenu: (v: boolean) => void;
 }) {
+  const navItems = [
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/shop" },
+    { label: "Collections", href: "/collections" },
+    { label: "New Arrivals", href: "/new-arrivals" },
+    { label: "About Us", href: "/about" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
+  ];
+
   return (
     <Sheet open={menu} onOpenChange={setMenu}>
-      <SheetContent side="left" className="!w-[min(90vw,430px)] !bg-ivory p-6 border-r border-border">
-        <SheetHeader className="text-left mb-8 font-sans">
-          <SheetTitle className="font-serif tracking-[0.3em] text-[24px] text-ink">WOXLY</SheetTitle>
-          <SheetDescription className="text-stone">Explore the collection</SheetDescription>
+      <SheetContent
+        side="left"
+        className="!w-[min(88vw,400px)] !bg-ivory p-0 border-r border-border flex flex-col"
+      >
+        {/* Header */}
+        <SheetHeader className="text-left px-6 pt-8 pb-6 border-b border-border">
+          <SheetTitle className="font-serif tracking-[0.3em] text-[25px] text-ink">
+            WOXLY
+          </SheetTitle>
+          <SheetDescription className="text-stone text-xs tracking-wide">
+            Discover your style
+          </SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col ">
-          {[
-            "Rings",
-            "Necklaces",
-            "Earrings",
-            "Bracelets",
-            "Watches",
-            "Bags",
-            "Gifting",
-          ].map((item, i) => (
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto px-6 py-4">
+          {navItems.map((item, index) => (
             <a
-              key={item}
-              href={`/category/${item.toLowerCase()}`}
-              className="min-h-[58px] grid grid-cols-[1fr_auto] items-center border-b border-border group"
+              key={item.label}
+              href={item.href}
+              onClick={() => setMenu(false)}
+              className="group flex min-h-[58px] items-center justify-between border-b border-border/70 transition-colors duration-200"
             >
-              <span className="text-ink font-sans mb-5 mt-5 text-[28px] group-hover:text-gold transition-colors">
-                {item}
+              <span className="font-sans text-[17px] tracking-wide text-ink transition-colors group-hover:text-gold">
+                {item.label}
               </span>
-              <ArrowRight className="w-[18px] text-ink group-hover:text-gold transition-colors" />
+
+              <ArrowRight className="h-4 w-4 text-stone transition-all duration-200 group-hover:translate-x-1 group-hover:text-gold" />
             </a>
           ))}
+        </nav>
+
+        {/* Bottom section */}
+        <div className="border-t border-border px-6 py-5">
+          <a
+            href="/account"
+            onClick={() => setMenu(false)}
+            className="flex items-center gap-3 text-sm text-ink transition-colors hover:text-gold"
+          >
+            <UserRound className="h-4 w-4" />
+            My Account
+          </a>
+
+          <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-stone">
+            Timeless pieces. Everyday elegance.
+          </p>
         </div>
       </SheetContent>
     </Sheet>
+
   );
 }

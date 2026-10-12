@@ -19,10 +19,10 @@ export function Newsletter() {
     <section className="py-[56px] md:py-[96px] px-[16px] md:px-[24px] bg-sand text-center flex flex-col items-center">
       <div className="max-w-[500px] w-full">
         <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-[12px] font-medium text-stone">Private notes</p>
-        <h2 className="m-0 mb-4 text-ink">10% off your first order</h2>
-        <p className="mb-8 text-stone">
-          Be the first to discover new collections, limited drops and private offers.
-        </p>
+        <h1 className="m-0 mb-4 text-ink">The Art of Adornment</h1>
+        <p className="mb-8 text-stone text-sm">
+          Subscribe to our newsletter for exclusive offers, new arrivals, styling inspiration, and a first look at our latest collections.</p>
+
 
         <form
           className="relative w-full flex"

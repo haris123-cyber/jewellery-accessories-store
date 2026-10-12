@@ -2,10 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { products } from "@/lib/catalog";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
 
 export function AsSeenOn() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(101);
+
+  useAutoScroll({ externalRef: containerRef, speed: 3000 });
 
   const displayItems = Array.from({ length: 40 }).flatMap(() => products.slice(0, 5));
 
@@ -105,7 +108,7 @@ export function AsSeenOn() {
           items-center
           gap-[16px]
           overflow-x-auto
-          scrollbar-none
+          no-scrollbar
           snap-x
           snap-mandatory
           md:gap-[24px]

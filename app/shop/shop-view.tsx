@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, ChevronDown, X, Check } from "lucide-react";
 import {
     Drawer,
     DrawerContent,
@@ -9,7 +9,14 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
+    DrawerClose,
 } from "@/components/ui/drawer";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { products } from "@/lib/catalog";
 import {
     ProductCard,
@@ -65,6 +72,30 @@ export function Shop({ category }: { category?: string }) {
         return result;
     }, [selectedCategories, selectedColors, selectedMaterials, selectedSizes, priceRange, inStock, sort, query]);
 
+    const sortOptions = [
+        { value: "featured", label: "Featured" },
+        { value: "newest", label: "Newest" },
+        { value: "price-low", label: "Price: Low to High" },
+        { value: "price-high", label: "Price: High to Low" },
+    ];
+
+    const activeFilterCount =
+        selectedCategories.length +
+        selectedColors.length +
+        selectedMaterials.length +
+        selectedSizes.length +
+        (inStock ? 1 : 0) +
+        (priceRange[0] > 0 || priceRange[1] < 100000 ? 1 : 0);
+
+    const clearAllFilters = () => {
+        setSelectedCategories([]);
+        setSelectedColors([]);
+        setSelectedMaterials([]);
+        setSelectedSizes([]);
+        setInStock(false);
+        setPriceRange([0, 100000]);
+    };
+
     return (
         <Shell>
             <div className="pt-[40px] pb-[35px] px-[24px] md:px-[4vw] text-center max-w-[1280px] mx-auto">
@@ -73,58 +104,174 @@ export function Shop({ category }: { category?: string }) {
                 <p className="mt-[16px] text-stone text-[12px] max-w-[500px] mx-auto">Considered objects for every part of the day.</p>
             </div>
 
-            <div className="min-h-[64px] px-[16px] md:px-[4vw] flex items-center gap-[24px] border-y border-border text-[12px] uppercase tracking-[0.14em] font-medium text-ink max-w-[1400px] mx-auto w-full">
-                <span className="hidden md:inline-block text-stone">{list.length} pieces</span>
-                <label className="ml-auto flex items-center gap-2 hidden md:flex">
-                    <Search className="w-[18px] text-stone" />
-                    <input
-                        className="w-[180px] border-0 border-b border-border bg-transparent py-2 outline-none focus:border-gold transition-colors placeholder:text-stone/60"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search collection"
-                    />
-                </label>
-                <Drawer>
-                    <DrawerTrigger className="md:hidden flex-1 min-h-[48px] flex justify-center items-center gap-2 border-r border-border bg-transparent uppercase tracking-[0.14em] text-[12px] font-medium text-ink cursor-pointer hover:text-gold transition-colors">
-                        <SlidersHorizontal className="w-[18px]" /> Filters
-                    </DrawerTrigger>
-                    <DrawerContent className="bg-ivory border-t border-border">
-                        <DrawerHeader className="border-b border-border pb-4">
-                            <DrawerTitle className="font-serif text-[24px] text-ink">Filter collection</DrawerTitle>
-                            <DrawerDescription className="text-stone">
-                                Refine by category, material and availability.
-                            </DrawerDescription>
-                        </DrawerHeader>
-                        <div className="p-4 max-h-[60vh] overflow-y-auto">
-                            <Filters
-                                selectedCategories={selectedCategories}
-                                onCategoryChange={(c) => toggleState(setSelectedCategories, c)}
-                                inStock={inStock}
-                                onInStockChange={setInStock}
-                                priceRange={priceRange}
-                                onPriceRangeChange={setPriceRange}
-                                selectedColors={selectedColors}
-                                onColorChange={(c) => toggleState(setSelectedColors, c)}
-                                selectedSizes={selectedSizes}
-                                onSizeChange={(s) => toggleState(setSelectedSizes, s)}
-                                selectedMaterials={selectedMaterials}
-                                onMaterialChange={(m) => toggleState(setSelectedMaterials, m)}
-                            />
-                        </div>
-                    </DrawerContent>
-                </Drawer>
-                <label className="ml-auto md:ml-0 flex items-center gap-3 uppercase tracking-[0.14em] text-[12px] flex-1 md:flex-none justify-center md:justify-start">
-                    Sort{" "}
-                    <div className="relative">
-                        <select className="appearance-none border border-border bg-pearl rounded-[2px] h-[40px] px-4 pr-10 outline-none tracking-normal normal-case text-[14px] cursor-pointer text-ink hover:border-gold transition-colors focus:ring-1 focus:ring-gold focus:border-gold" value={sort} onChange={(e) => setSort(e.target.value)}>
-                            <option value="featured">Featured</option>
-                            <option value="newest">Newest</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                        </select>
-                        <ChevronDownIcon className="w-[16px] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone" />
+            {/* Mobile / Tablet Filter & Sort Bar (50/50 balanced luxury toolbar) */}
+            <div className="lg:hidden sticky top-[64px] z-30 bg-ivory/95 backdrop-blur-md border-y border-border">
+                <div className="grid grid-cols-2 divide-x divide-border">
+                    {/* Filter Trigger */}
+                    <Drawer>
+                        <DrawerTrigger className="h-[50px] flex items-center justify-center gap-2 px-3 uppercase tracking-[0.16em] text-[11px] font-medium text-ink hover:text-gold active:bg-sand/30 transition-colors select-none focus:outline-none">
+                            <SlidersHorizontal className="w-3.5 h-3.5 text-stone" />
+                            <span>Filters</span>
+                            {activeFilterCount > 0 && (
+                                <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-gold text-ivory text-[10px] font-bold flex items-center justify-center leading-none">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </DrawerTrigger>
+                        <DrawerContent className="bg-ivory border-t border-border flex flex-col max-h-[85vh]">
+                            <DrawerHeader className="border-b border-border px-5 py-4 flex flex-row items-center justify-between text-left">
+                                <div>
+                                    <DrawerTitle className="font-serif text-[22px] text-ink">Filters</DrawerTitle>
+                                    <DrawerDescription className="text-stone text-xs">
+                                        {list.length} {list.length === 1 ? "piece" : "pieces"} available
+                                    </DrawerDescription>
+                                </div>
+                                {activeFilterCount > 0 && (
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className="text-xs uppercase tracking-wider text-stone hover:text-gold underline underline-offset-4"
+                                    >
+                                        Reset
+                                    </button>
+                                )}
+                            </DrawerHeader>
+                            <div className="p-5 flex-1 overflow-y-auto">
+                                <Filters
+                                    selectedCategories={selectedCategories}
+                                    onCategoryChange={(c) => toggleState(setSelectedCategories, c)}
+                                    inStock={inStock}
+                                    onInStockChange={setInStock}
+                                    priceRange={priceRange}
+                                    onPriceRangeChange={setPriceRange}
+                                    selectedColors={selectedColors}
+                                    onColorChange={(c) => toggleState(setSelectedColors, c)}
+                                    selectedSizes={selectedSizes}
+                                    onSizeChange={(s) => toggleState(setSelectedSizes, s)}
+                                    selectedMaterials={selectedMaterials}
+                                    onMaterialChange={(m) => toggleState(setSelectedMaterials, m)}
+                                />
+                            </div>
+                            <div className="p-4 border-t border-border bg-ivory">
+                                <DrawerClose asChild>
+                                    <button className="w-full h-[46px] bg-ink text-ivory uppercase tracking-[0.16em] text-[12px] font-medium hover:bg-gold transition-colors flex items-center justify-center">
+                                        View {list.length} {list.length === 1 ? "Piece" : "Pieces"}
+                                    </button>
+                                </DrawerClose>
+                            </div>
+                        </DrawerContent>
+                    </Drawer>
+
+                    {/* Sort Trigger */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <button
+                                className="h-[50px] w-full flex items-center justify-center gap-1.5 px-3 select-none active:bg-sand/30 transition-colors focus:outline-none"
+                                aria-label="Sort options"
+                            >
+                                <span className="uppercase tracking-[0.16em] text-[11px] font-medium text-ink">Sort:</span>
+                                <span className="text-stone text-[11px] font-normal tracking-wide uppercase truncate max-w-[90px]">
+                                    {sortOptions.find((o) => o.value === sort)?.label}
+                                </span>
+                                <ChevronDown className="w-3.5 h-3.5 text-stone shrink-0 ml-0.5" />
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="end"
+                            sideOffset={4}
+                            className="w-[220px] bg-pearl border border-border shadow-xl rounded-[2px] p-1.5 z-50 text-ink"
+                        >
+                            {sortOptions.map((opt) => (
+                                <DropdownMenuItem
+                                    key={opt.value}
+                                    onClick={() => setSort(opt.value)}
+                                    className={`flex items-center justify-between px-3 py-2.5 text-[13px] font-sans tracking-normal rounded-[2px] cursor-pointer transition-colors ${
+                                        sort === opt.value
+                                            ? "bg-sand/40 text-gold font-medium"
+                                            : "text-ink hover:text-gold hover:bg-sand/20"
+                                    }`}
+                                >
+                                    <span>{opt.label}</span>
+                                    {sort === opt.value && <Check className="w-4 h-4 text-gold ml-2 shrink-0" />}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                {/* Mobile Active Filters bar */}
+                {activeFilterCount > 0 && (
+                    <div className="px-4 py-2 bg-sand/20 border-t border-border/70 flex items-center justify-between text-[11px]">
+                        <span className="text-stone">
+                            {activeFilterCount} {activeFilterCount === 1 ? "filter" : "filters"} applied
+                        </span>
+                        <button
+                            onClick={clearAllFilters}
+                            className="text-ink font-medium hover:text-gold uppercase tracking-[0.14em] text-[10px] underline underline-offset-2"
+                        >
+                            Clear all
+                        </button>
                     </div>
-                </label>
+                )}
+            </div>
+
+            {/* Desktop Filter & Sort Bar */}
+            <div className="hidden lg:flex min-h-[64px] px-[4vw] items-center justify-between border-y border-border text-[12px] uppercase tracking-[0.14em] font-medium text-ink max-w-[1400px] mx-auto w-full">
+                <div className="flex items-center gap-6">
+                    <span className="text-stone">{list.length} pieces</span>
+                    {activeFilterCount > 0 && (
+                        <button
+                            onClick={clearAllFilters}
+                            className="text-[11px] text-stone hover:text-gold flex items-center gap-1.5 underline underline-offset-4 normal-case tracking-normal"
+                        >
+                            <X className="w-3 h-3" />
+                            Clear all filters ({activeFilterCount})
+                        </button>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-6 ml-auto">
+                    <label className="flex items-center gap-2">
+                        <Search className="w-4 h-4 text-stone" />
+                        <input
+                            className="w-[180px] xl:w-[220px] border-0 border-b border-border bg-transparent py-1.5 outline-none focus:border-gold transition-colors placeholder:text-stone/60 text-[13px] tracking-normal normal-case"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            placeholder="Search collection"
+                        />
+                    </label>
+
+                    <div className="flex items-center gap-3">
+                        <span className="text-stone text-[11px] uppercase tracking-[0.16em]">Sort by</span>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className="h-[38px] px-3.5 bg-pearl/60 border border-border/80 rounded-[3px] flex items-center gap-2.5 text-[13px] font-normal text-ink hover:border-gold transition-colors focus:outline-none focus:border-gold cursor-pointer">
+                                    <span>{sortOptions.find((o) => o.value === sort)?.label}</span>
+                                    <ChevronDown className="w-3.5 h-3.5 text-stone" />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align="end"
+                                sideOffset={6}
+                                className="w-[200px] bg-pearl border border-border/80 shadow-xl rounded-[3px] p-1.5 z-50 text-ink"
+                            >
+                                {sortOptions.map((opt) => (
+                                    <DropdownMenuItem
+                                        key={opt.value}
+                                        onClick={() => setSort(opt.value)}
+                                        className={`flex items-center justify-between px-3 py-2.5 text-[13px] rounded-[2px] cursor-pointer transition-colors ${
+                                            sort === opt.value
+                                                ? "bg-sand/40 text-gold font-medium"
+                                                : "text-ink hover:text-gold hover:bg-sand/20"
+                                        }`}
+                                    >
+                                        <span>{opt.label}</span>
+                                        {sort === opt.value && <Check className="w-4 h-4 text-gold ml-2 shrink-0" />}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-[48px] lg:gap-[64px] pt-[48px] pb-[96px] px-[16px] md:px-[4vw] max-w-[1400px] mx-auto">
@@ -160,32 +307,10 @@ export function Shop({ category }: { category?: string }) {
                         />
                     )}
 
-                    {list.length > 0 && (
-                        <div className="flex justify-center mt-[64px]">
-                            <button className="btn-secondary min-w-[200px]">Load more</button>
-                        </div>
-                    )}
+
                 </div>
             </div>
         </Shell>
     );
 }
 
-function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="m6 9 6 6 6-6" />
-        </svg>
-    );
-}

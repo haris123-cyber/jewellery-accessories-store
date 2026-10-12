@@ -116,27 +116,8 @@ export function StoryPage({ kind = "about" }: { kind?: string }) {
             </form>
           )}
         </div>
-        <div className="h-[700px] max-[960px]:h-[560px] max-[560px]:h-[460px]">
-          <EditorialVisual cell={kind === "about" ? 0 : 4} label={title} />
-        </div>
-        <Accordion className="col-span-full" type="single" collapsible>
-          {[
-            "Orders",
-            "Shipping",
-            "Returns",
-            "Payments",
-            "Products",
-            "Account",
-          ].map((x) => (
-            <AccordionItem value={x} key={x}>
-              <AccordionTrigger>{x}</AccordionTrigger>
-              <AccordionContent>
-                We keep this simple: clear updates, careful handling and support
-                whenever you need it.
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+
+
       </main>
     </Shell>
   );

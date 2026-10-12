@@ -11,7 +11,7 @@ type CommerceState = {
   wishlist: string[]; 
   orders: Order[];
   cartOpen: boolean; 
-  add: (slug: string) => void; 
+  add: (slug: string, quantity?: number) => void; 
   remove: (slug: string) => void; 
   setQuantity: (slug: string, quantity: number) => void; 
   toggleWishlist: (slug: string) => void; 
@@ -22,10 +22,12 @@ type CommerceState = {
 
 export const useCommerceStore = create<CommerceState>()(persist((set) => ({
   cart: [], wishlist: [], orders: [], cartOpen: false,
-  add: (slug) => set((state) => {
+  add: (slug, qty = 1) => set((state) => {
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 560;
     return {
-      cart: state.cart.some((line) => line.slug === slug) ? state.cart.map((line) => line.slug === slug ? { ...line, quantity: line.quantity + 1 } : line) : [...state.cart, { slug, quantity: 1 }],
+      cart: state.cart.some((line) => line.slug === slug) 
+        ? state.cart.map((line) => line.slug === slug ? { ...line, quantity: line.quantity + qty } : line) 
+        : [...state.cart, { slug, quantity: qty }],
       cartOpen: isMobile ? state.cartOpen : true
     };
   }),

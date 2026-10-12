@@ -8,6 +8,7 @@ import {
   ArrowRight,
   CircleCheck,
   Clock,
+  Flame,
   Heart,
   Lock,
   Search,
@@ -18,6 +19,9 @@ import {
   ThumbsDown,
   Truck,
   Sparkles,
+  UserRound,
+  Minus,
+  Plus,
 } from "lucide-react";
 import {
   Accordion,
@@ -46,8 +50,11 @@ import {
 } from "@/components/shared";
 import { Shell } from "@/components/layout";
 import { DropdownMenu } from "radix-ui";
+import { FaWhatsapp } from "react-icons/fa";
 
-
+const phoneNumber = "917306347297";
+const defaultMessage = encodeURIComponent("Hi WOXLY, I have a query about your collection!");
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
 export function ProductPage({ slug }: { slug?: string }) {
   const router = useRouter();
@@ -59,6 +66,31 @@ export function ProductPage({ slug }: { slug?: string }) {
   const [rating, setRating] = useState(0);
   const [isStickyVisible, setIsStickyVisible] = useState(false);
   const [pincode, setPincode] = useState("");
+  const [deliveryChecked, setDeliveryChecked] = useState(false);
+  const [deliveryError, setDeliveryError] = useState("");
+  const [quantity, setQuantity] = useState(1);
+
+  const handlePincodeCheck = () => {
+    if (pincode.trim().length === 6) {
+      setDeliveryChecked(true);
+      setDeliveryError("");
+      toast.success(`Delivery available to ${pincode}!`);
+    } else {
+      setDeliveryChecked(false);
+      setDeliveryError("Please enter a valid 6-digit pincode.");
+      toast.error("Please enter a valid 6-digit pincode.");
+    }
+  };
+
+  const getDeliveryDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 3);
+    return date.toLocaleDateString("en-IN", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+  };
   const addToBagRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -75,20 +107,20 @@ export function ProductPage({ slug }: { slug?: string }) {
 
   return (
     <Shell>
-      {/* Breadcrumbs */}
-      <div className="px-[16px] md:px-[24px] py-[24px] md:py-[32px] text-stone text-[10px] uppercase tracking-[0.14em] font-medium max-w-[1280px] mx-auto">
-        <a href="/" className="hover:text-gold transition-colors">Home</a> <span className="mx-2">/</span>
-        <a href={`/category/${product.category}`} className="hover:text-gold transition-colors">{product.category}</a> <span className="mx-2">/</span>
-        <span className="text-ink">{product.name}</span>
-      </div>
+
 
       {/* PDP grid */}
       <main className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-[40px] md:gap-[64px] px-[16px] md:px-[24px] pb-[64px] md:pb-[120px] max-w-[1280px] mx-auto">
         {/* Image gallery */}
         <div className="flex flex-col gap-[16px] ">
           <div className="aspect-[4/5] w-full rounded-[4px] overflow-hidden relative bg-sand group">
+            <WishButton
+              product={product}
+              className="absolute top-4 right-4 z-20 w-11 h-11 bg-ivory/90 hover:bg-ivory backdrop-blur-md border border-black/5 shadow-[0_4px_12px_rgba(0,0,0,0.08)] flex items-center justify-center rounded-full hover:scale-105 active:scale-95 transition-all"
+            />
+
             <ProductVisual cell={product.cell} name={product.name} image={product.image} priority />
-            <button className="absolute top-4 right-4 btn-icon bg-ivory/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity z-20">
+            <button className="absolute bottom-4 right-4 btn-icon bg-ivory/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity z-10">
               <Search className="w-[18px] text-ink" />
             </button>
           </div>
@@ -128,17 +160,19 @@ export function ProductPage({ slug }: { slug?: string }) {
                 <>
                   <del className="text-[16px] text-stone tabular-nums">{money(product.compareAtPrice)}</del>
                   <span className="text-[11px] font-medium text-error inline-flex items-center gap-1 bg-error/10 px-2 py-1 rounded-[2px] uppercase tracking-[0.14em]">
-                    <ArrowDown className="w-[14px]" /> {Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}% Off
+                    <ArrowDown className="w-[14px]" /> {Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}% Drop
                   </span>
                 </>
               )}
             </div>
 
-            {/* Hurry Up Card */}
-            {product.stock > 0 && product.stock <= 15 && (
-              <div className="bg-[#FEF2F2] border border-[#FCA5A5] text-[#DC2626] px-[16px] py-[12px] rounded-[2px] mb-6 flex items-center gap-2 text-[14px] font-medium">
-                <Clock className="w-[16px]" />
-                Hurry up! Only {product.stock} pieces left in stock.
+            {/* Hurry Up / Selling Fast Pill Badge */}
+            {(product.stock ?? 5) > 0 && (
+              <div className="mb-6">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-600 text-white text-[11px] font-semibold uppercase tracking-[0.14em] shadow-sm select-none">
+                  <Flame className="w-3.5 h-3.5 text-white shrink-0 animate-pulse" />
+                  <span>SELLING FAST · {product.stock || 5} LEFT</span>
+                </div>
               </div>
             )}
 
@@ -245,34 +279,132 @@ export function ProductPage({ slug }: { slug?: string }) {
           </div>
 
           {/* Pincode Check */}
-          <div className="mb-[32px] bg-sand/30 p-4 px-4 rounded-[4px] border rounded-xl border-border/50">
-            <label className="text-[10px] uppercase tracking-[0.14em] font-medium text-ink mb-1 block flex items-center gap-2">
+          <div className="mb-[32px] bg-sand/30 p-4 rounded-xl border border-border/60 transition-all">
+            <label className="text-[10px] uppercase tracking-[0.14em] font-medium text-ink mb-2 block flex items-center gap-2">
+              <Truck className="w-3.5 h-3.5 text-stone" />
               Check Delivery Availability
             </label>
             <div className="flex gap-2">
               <input
                 type="text"
                 value={pincode}
-                onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                placeholder="Enter Pincode"
-                className="flex-1 h-[48px] border border-border bg-white rounded-[2px] px-4 text-[14px] outline-none focus:border-ink transition-colors"
-              />
-              <button
-                className="btn-secondary h-[48px] px-6 text-[10px] whitespace-nowrap bg-white"
-                onClick={() => {
-                  if (pincode.length === 6) {
-                    toast.success("Delivery available to " + pincode + "!");
-                  } else {
-                    toast.error("Please enter a valid 6-digit pincode.");
+                onChange={(e) => {
+                  setPincode(e.target.value.replace(/\D/g, "").slice(0, 6));
+                  if (deliveryError) setDeliveryError("");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handlePincodeCheck();
                   }
                 }}
+                placeholder="Enter 6-digit pincode"
+                className={`flex-1 h-[46px] border bg-white rounded-[4px] px-4 text-[14px] outline-none transition-colors ${deliveryError ? "border-red-400 focus:border-red-600" : "border-border focus:border-ink"
+                  }`}
+              />
+              <button
+                type="button"
+                className="btn-secondary h-[46px] px-6 text-[11px] uppercase tracking-[0.12em] font-medium whitespace-nowrap bg-white border border-border hover:border-ink transition-colors"
+                onClick={handlePincodeCheck}
               >
                 Check
               </button>
             </div>
-            <p className="text-[12px] text-stone mt-1 flex items-center gap-1.5">
-              <Truck className="w-[14px]" /> Usually dispatches in 24 hours.
-            </p>
+
+            {/* Error Message */}
+            {deliveryError && (
+              <p className="text-[12px] text-red-600 mt-2 font-medium flex items-center gap-1.5">
+                {deliveryError}
+              </p>
+            )}
+
+            {/* Delivery Details shown below section when checked */}
+            {deliveryChecked ? (
+              <div className="mt-4 pt-3.5 border-t border-border/60 space-y-2.5 animate-in fade-in duration-300">
+                <div className="flex items-center justify-between text-emerald-800  py-2 rounded-[4px]">
+                  <div className="flex items-center gap-2 text-[12px] font-medium">
+                    <CircleCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Delivery available to <strong className="font-semibold text-emerald-950">{pincode}</strong></span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDeliveryChecked(false);
+                      setPincode("");
+                    }}
+                    className="text-[11px] text-emerald-900/70 hover:text-emerald-950 underline uppercase tracking-wider font-semibold ml-2"
+                  >
+                    Change
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-[12px]">
+                  <div className="flex items-center gap-2 text-ink">
+                    <Truck className="w-3.5 h-3.5 text-stone shrink-0" />
+                    <span>Est. Delivery by <strong className="font-medium text-ink">{getDeliveryDate()}</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2 text-ink">
+                    <ShieldCheck className="w-3.5 h-3.5 text-stone shrink-0" />
+                    <span>Free Express Shipping</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-ink">
+                    <Clock className="w-3.5 h-3.5 text-stone shrink-0" />
+                    <span>Dispatched in 24 hours</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-ink">
+                    <Sparkles className="w-3.5 h-3.5 text-gold shrink-0" />
+                    <span>Cash on Delivery (COD) available</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-[12px] text-stone mt-2.5 flex items-center gap-1.5">
+                <Truck className="w-[14px]" /> Usually dispatches in 24 hours.
+              </p>
+            )}
+          </div>
+
+          {/* Quantity Selector & Subtotal */}
+          <div className="mb-[24px]">
+            <label className="text-[11px] uppercase tracking-[0.14em] font-semibold text-ink mb-2.5 block">
+              Quantity
+            </label>
+            <div className="flex items-center justify-between gap-4">
+              {/* Stepper */}
+              <div className="inline-flex items-center justify-between w-[124px] sm:w-[130px] h-[46px] border border-border/80 bg-white rounded-lg px-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  disabled={quantity <= 1 || !product.stock}
+                  className="w-8 h-8 flex items-center justify-center text-ink/75 hover:text-ink disabled:opacity-25 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="w-3.5 h-3.5 stroke-[2.2]" />
+                </button>
+                <span className="text-[15px] font-semibold text-ink tabular-nums select-none min-w-[20px] text-center">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.min(product.stock || 10, q + 1))}
+                  disabled={quantity >= (product.stock || 10) || !product.stock}
+                  className="w-8 h-8 flex items-center justify-center text-ink/75 hover:text-ink disabled:opacity-25 transition-colors cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="w-3.5 h-3.5 stroke-[2.2]" />
+                </button>
+              </div>
+
+              {/* Stock Alert & Dynamic Subtotal */}
+              <div className="text-right">
+                <p className="text-[11px] sm:text-[12px] font-semibold text-[#b91c1c] leading-tight mb-1">
+                  Only {product.stock || 5} in stock
+                </p>
+                <p className="text-[14px] text-ink">
+                  Subtotal <span className="font-semibold">{money(product.price * quantity)}</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Actions */}
@@ -282,24 +414,36 @@ export function ProductPage({ slug }: { slug?: string }) {
                 ref={addToBagRef}
                 className="btn-secondary flex-1 h-[54px] text-[13px] border border-ink"
                 onClick={() => {
-                  add(product.slug);
-                  toast.success(`${product.name} added to your bag`);
-                  if (typeof window !== 'undefined' && window.innerWidth <= 560) {
-                    router.push('/cart');
-                  }
+                  add(product.slug, quantity);
+                  toast.success(`${quantity > 1 ? `${quantity}x ` : ""}${product.name} added to your bag`, {
+                    action: {
+                      label: "View Bag",
+                      onClick: () => router.push("/cart"),
+                    },
+                  });
                 }}
                 disabled={!product.stock}
               >
                 {product.stock ? "Add to Bag" : "Out of Stock"}
               </button>
-              <div className="w-[54px] h-[54px] border border-border rounded-[2px] flex items-center justify-center bg-pearl relative shrink-0">
-                <WishButton product={product} />
-              </div>
+              {/* WhatsApp Action Button */}
+              <a
+                href={`https://wa.me/917306347297?text=${encodeURIComponent(
+                  `Hi WOXLY, I have a query about ${product.name} (${money(product.price)}).`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Chat with WOXLY on WhatsApp"
+                title="Chat with us on WhatsApp"
+                className="w-[54px] h-[54px] border border-border rounded-[2px] flex items-center justify-center bg-pearl hover:border-green-500 hover:bg-stone-50 transition-colors shrink-0"
+              >
+                <FaWhatsapp className="w-6 h-6 text-gold" />
+              </a>
             </div>
             <button
               className="btn-primary w-full h-[54px] text-[13px]"
               onClick={() => {
-                add(product.slug);
+                add(product.slug, quantity);
                 router.push('/checkout');
               }}
               disabled={!product.stock}
@@ -471,7 +615,7 @@ export function ProductPage({ slug }: { slug?: string }) {
                   { s: 2, p: 1, c: 2 },
                   { s: 1, p: 1, c: 1 },
                 ].map((row) => (
-                  <div key={row.s} className="flex items-center gap-[12px]">
+                  <div key={row.s} className="flex items-center gap-[8px]">
                     <span className="w-2">{row.s}</span>
                     <Star className="w-[12px] text-[#D4AF37] fill-current" />
                     <div className="flex-1 h-[4px] bg-[#E5E5E5] rounded-full overflow-hidden">
@@ -482,91 +626,61 @@ export function ProductPage({ slug }: { slug?: string }) {
                 ))}
               </div>
 
-              <div className="border border-border rounded-xl p-6 text-center bg-white shadow-sm flex flex-col items-center gap-0 relative">
 
 
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button disabled={!hasPurchased} className="btn-secondary bg-black text-white w-full md:w-auto mt-2 text-[12px] uppercase tracking-[0.14em] disabled:opacity-50 disabled:cursor-not-allowed">
-                      {hasPurchased ? "WRITE A REVIEW" : "ONLY BUYERS CAN REVIEW"}
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                      <DialogTitle className="text-xl font-serif text-center">Write a Review</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col gap-5 py-4">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[12px] font-medium uppercase tracking-[0.1em] text-ink">Rating</label>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <Star
-                              key={i}
-                              onClick={() => setRating(i)}
-                              className={`w-6 h-6 text-[#D4AF37] cursor-pointer transition-colors ${rating >= i ? 'fill-current' : 'hover:fill-current'}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[12px] font-medium uppercase tracking-[0.1em] text-ink">Review Title</label>
-                        <input type="text" placeholder="Summary of your experience" className="border border-border p-3 text-[14px] rounded-[2px] focus:outline-none focus:border-ink transition-colors bg-white text-ink" />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[12px] font-medium uppercase tracking-[0.1em] text-ink">Review Body</label>
-                        <textarea rows={4} placeholder="What did you like or dislike?" className="border border-border p-3 text-[14px] rounded-[2px] focus:outline-none focus:border-ink transition-colors resize-none bg-white text-ink"></textarea>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[12px] font-medium uppercase tracking-[0.1em] text-ink">Add Photos</label>
-                        <input type="file" multiple accept="image/*" className="text-[12px] text-stone file:mr-4 file:py-2 file:px-4 file:rounded-[2px] file:border-0 file:text-[12px] file:font-semibold file:bg-sand file:text-ink hover:file:bg-border transition-colors cursor-pointer" />
-                      </div>
-                      <DialogClose asChild>
-                        <button className="btn-primary w-full mt-2" onClick={() => toast.success("Review submitted for moderation")}>
-                          SUBMIT REVIEW
-                        </button>
-                      </DialogClose>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-                {!hasPurchased && (
-                  <button onClick={() => setHasPurchased(true)} className="mt-2 right-2 mb-0 text-[10px] text-stone underline hover:text-ink">
-                    Demo: Simulate Purchase
-                  </button>
-                )}
-              </div>
 
             </div>
 
             {/* Right Column: Reviews */}
             <div className="flex flex-col">
-              <div className="flex flex-col border-t border-border mt-2">
+              <div className="flex flex-col border-t border-border -mt-10">
                 {/* Review 1 */}
-                <div className="py-4 border-b border-border flex flex-col">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">ARPAN S.</span>
-                    <span className="text-[12px] text-stone">21/07/26</span>
+                <div className="py-5 border-b border-border flex flex-col">
+
+                  <div className="flex justify-between items-start mb-2.5">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-sand/60 border border-border/70 flex items-center justify-center shrink-0">
+                        <UserRound className="w-4 h-4 text-stone" />
+                      </div>
+
+                      <div className="flex flex-col items-start gap-1.5">
+                        <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">
+                          ARPAN S.
+                        </span>
+
+                        <span className="inline-flex items-center gap-1 text-[8px] font-medium text-emerald-800 bg-emerald-50  rounded-full uppercase tracking-wider">
+                          <CircleCheck className="w-2 h-2 text-emerald-600 shrink-0" />
+                          Verified Buyer
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-[12px] text-stone shrink-0">
+                      21/07/26
+                    </span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] mb-1">
+
+                  <div className="flex items-center gap-1 text-[#D4AF37] mb-2 sm:ml-10">
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                     <Star className="w-[14px] fill-current" />
                   </div>
-                  <p className="text-[13px] text-ink/80 mb-3">
-                    Njjj
+                  <p className="text-[13px] text-ink/80 mb-3 sm:ml-10">
+                    Stunning craftsmanship and weight. It looks even better in person than on the site.
                   </p>
 
-                  <div className="flex gap-2 mb-6">
-                    <div className="w-[60px] h-[60px] relative bg-sand overflow-hidden rounded-[2px]">
+                  <div className="flex gap-2 mb-4 sm:ml-10">
+                    <div className="w-[60px] h-[60px] relative bg-sand overflow-hidden rounded-[2px] border border-border/40">
                       <ProductVisual cell={(product.cell + 1) % 12} name={`${product.name} review photo 1`} image={product.image} />
                     </div>
-                    <div className="w-[60px] h-[60px] relative bg-sand overflow-hidden rounded-[2px]">
+                    <div className="w-[60px] h-[60px] relative bg-sand overflow-hidden rounded-[2px] border border-border/40">
                       <ProductVisual cell={(product.cell + 2) % 12} name={`${product.name} review photo 2`} image={product.image} />
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-[12px] text-stone mt-auto">
+                  <div className="flex items-center gap-3 text-[12px] text-stone mt-auto sm:ml-10">
                     <span>Was this review helpful?</span>
                     <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsUp className="w-[14px]" /> 3</button>
                     <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsDown className="w-[14px]" /> 1</button>
@@ -574,26 +688,44 @@ export function ProductPage({ slug }: { slug?: string }) {
                 </div>
 
                 {/* Review 2 */}
-                <div className="py-8 border-b border-border flex flex-col">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">MALVIKA D.</span>
-                    <span className="text-[12px] text-stone">16/07/26</span>
+                <div className="py-5 border-b border-border flex flex-col">
+                  <div className="flex justify-between items-start mb-2.5">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-sand/60 border border-border/70 flex items-center justify-center shrink-0">
+                        <UserRound className="w-4 h-4 text-stone" />
+                      </div>
+
+                      <div className="flex flex-col items-start gap-1.5">
+                        <span className="font-serif text-[15px] md:text-[16px] text-ink font-medium">
+                          MALVIKA D.
+                        </span>
+
+                        <span className="inline-flex items-center gap-1 text-[8px] font-medium text-emerald-800 bg-emerald-50  rounded-full uppercase tracking-wider">
+                          <CircleCheck className="w-2 h-2 text-emerald-600 shrink-0" />
+                          Verified Buyer
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-[12px] text-stone shrink-0">
+                      16/07/26
+                    </span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] mb-1">
+                  <div className="flex items-center gap-1 text-[#D4AF37] mb-2 sm:ml-10">
                     <Star className="w-[14px] fill-current" />
-                    <Star className="w-[14px]" />
-                    <Star className="w-[14px]" />
-                    <Star className="w-[14px]" />
-                    <Star className="w-[14px]" />
+                    <Star className="w-[14px] fill-current" />
+                    <Star className="w-[14px] fill-current" />
+                    <Star className="w-[14px] fill-current" />
+                    <Star className="w-[14px] fill-current" />
                   </div>
-                  <p className="text-[13px] text-ink/80 mb-2">
-                    wrong
+                  <p className="text-[13px] text-ink/80 mb-3 sm:ml-10">
+                    Ordered this as a gift and the packaging was immaculate. Premium finish and fast delivery.
                   </p>
 
-                  <div className="flex items-center gap-3 text-[12px] text-stone mt-auto">
+                  <div className="flex items-center gap-3 text-[12px] text-stone mt-auto sm:ml-10">
                     <span>Was this review helpful?</span>
-                    <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsUp className="w-[14px]" /> 3</button>
-                    <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsDown className="w-[14px]" /> 2</button>
+                    <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsUp className="w-[14px]" /> 5</button>
+                    <button className="flex items-center gap-1 hover:text-ink transition-colors"><ThumbsDown className="w-[14px]" /> 0</button>
                   </div>
                 </div>
 
@@ -676,32 +808,51 @@ export function ProductPage({ slug }: { slug?: string }) {
 
       {/* Sticky Add to Bag Bar */}
       {isStickyVisible && (
-        <div className="fixed bottom-0 left-0 right-0 bg-transparent backdrop-blur-md border-t border-border p-4 z-50 flex items-center justify-between gap-6 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] animate-in slide-in-from-bottom-full duration-300">
-          <div className="hidden sm:flex flex-col flex-1 ml-4 lg:ml-8">
-            <span className="text-[15px] font-medium text-ink truncate">{product.name}</span>
-            <span className="text-[14px] text-stone">{money(product.price)}</span>
-          </div>
-          <div className="flex gap-2 w-full sm:w-auto mr-0 sm:mr-4 lg:mr-8">
-            <button
-              className="btn-secondary flex-1 sm:w-auto sm:px-6 md:px-8 h-[48px] text-[13px] whitespace-nowrap border border-ink"
-              onClick={() => {
-                add(product.slug);
-                toast.success(`${product.name} added to your bag`);
-              }}
-              disabled={!product.stock}
-            >
-              {product.stock ? "ADD TO BAG" : "OUT OF STOCK"}
-            </button>
-            <button
-              className="btn-primary flex-1 sm:w-auto sm:px-6 md:px-8 h-[48px] text-[13px] whitespace-nowrap"
-              onClick={() => {
-                add(product.slug);
-                router.push('/checkout');
-              }}
-              disabled={!product.stock}
-            >
-              BUY IT NOW
-            </button>
+        <div className="fixed bottom-0 left-0 right-0 bg-[#FFFDF9]/95 backdrop-blur-md border-t border-border/80 px-4 py-3 sm:px-8 sm:py-3.5 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] animate-in slide-in-from-bottom-full duration-300">
+          <div className="max-w-[1280px] mx-auto flex items-center justify-between gap-3 sm:gap-6">
+            {/* Price & Quantity summary */}
+            <div className="flex flex-col justify-center min-w-0">
+              <span className="text-[11px] sm:text-[12px] text-stone leading-tight font-normal">
+                {quantity} {quantity === 1 ? "item" : "items"}
+              </span>
+              <span className="text-[17px] sm:text-[20px] font-bold text-ink leading-tight tabular-nums">
+                {money(product.price * quantity)}
+              </span>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <button
+                type="button"
+                className="h-[46px] px-4 sm:px-7 rounded-[8px] border border-ink bg-white hover:bg-stone-50 text-ink text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.12em] transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer active:scale-95"
+                onClick={() => {
+                  add(product.slug, quantity);
+                  toast.success(
+                    `${quantity > 1 ? `${quantity}x ` : ""}${product.name} added to your bag`,
+                    {
+                      action: {
+                        label: "View Bag",
+                        onClick: () => router.push("/cart"),
+                      },
+                    }
+                  );
+                }}
+                disabled={!product.stock}
+              >
+                {product.stock ? "ADD TO BAG" : "OUT OF STOCK"}
+              </button>
+              <button
+                type="button"
+                className="h-[46px] px-4 sm:px-7 rounded-[8px] bg-ink hover:bg-stone-900 text-ivory text-[11px] sm:text-[12px] font-semibold uppercase tracking-[0.12em] transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer active:scale-95 shadow-sm"
+                onClick={() => {
+                  add(product.slug, quantity);
+                  router.push("/checkout");
+                }}
+                disabled={!product.stock}
+              >
+                BUY NOW
+              </button>
+            </div>
           </div>
         </div>
       )}

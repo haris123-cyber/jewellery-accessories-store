@@ -16,6 +16,7 @@ import {
 } from "@/components/shared";
 import { Shell } from "@/components/layout";
 import { useEffect, useRef, useState } from "react";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
 
 export default function HomePage() {
   const banners = [
@@ -28,6 +29,9 @@ export default function HomePage() {
   // A leading and trailing set lets the carousel reset invisibly after banner four.
   const loopedBanners = [...banners, ...banners, ...banners];
   const bannerRailRef = useRef<HTMLDivElement>(null);
+
+  const categoriesScrollRef = useAutoScroll({ speed: 3000 });
+  const bestSellersScrollRef = useAutoScroll({ speed: 3000 });
 
   const [bestSellerTab, setBestSellerTab] = useState<BestSellerGroup>("women");
 
@@ -94,7 +98,7 @@ export default function HomePage() {
       {/* ── Banner Carousel ── */}
       <section aria-label="Featured collections" className="w-full py-5 md:py-8">
         <div className="mb-3 flex items-center justify-between px-5 md:px-8">
-        
+
         </div>
         <div
           className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-5 md:px-8 hide-scrollbar"
@@ -111,6 +115,7 @@ export default function HomePage() {
                 alt={`Featured WOXLY collection ${(i % banners.length) + 1}`}
                 width={600}
                 height={350}
+                priority={i === 0}
                 className="w-full h-auto object-cover rounded-2xl"
               />
             </div>
@@ -119,13 +124,13 @@ export default function HomePage() {
       </section>
 
       {/* ── Shop by category ── */}
-      <section className="py-[56px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto" id="collection">
+      <section className="py-[26px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto" id="collection">
         <div className="mb-[40px] md:mb-[56px] text-left">
-          <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-center text-[12px] font-medium text-stone">The Collections</p>
+          <p className="m-0 mb-[16px] uppercase tracking-[0.14em] text-center text-[12px] font-medium text-stone">The Categories</p>
           <h2 className="m-0 text-ink">Curated for every moment</h2>
         </div>
 
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-[8px] md:gap-[24px] pb-[16px] -mx-[16px] px-[16px] md:mx-0 md:px-0 hide-scrollbar">
+        <div ref={categoriesScrollRef} className="flex overflow-x-auto snap-x snap-mandatory gap-[8px] md:gap-[24px] pb-[16px] -mx-[16px] px-[16px] md:mx-0 md:px-0 no-scrollbar">
           {categories.slice(0, 8).map((c) => (
             <a
               href={`/category/${c.slug}`}
@@ -183,7 +188,7 @@ export default function HomePage() {
             </button>
           </div>
         </div>
-        <div className="flex overflow-x-auto ml-1 snap-x snap-mandatory gap-[16px] md:gap-[24px] pb-[16px] pt-4 -mx-[16px] px-[16px] md:mx-0 md:px-0 hide-scrollbar">
+        <div ref={bestSellersScrollRef} className="flex overflow-x-auto ml-1 snap-x snap-mandatory gap-[16px] md:gap-[24px] pb-[16px] pt-4 -mx-[16px] px-[16px] md:mx-0 md:px-0 no-scrollbar">
           {filteredBestSellers.map((p, i) => (
             <div key={p.slug} className="flex-none w-[55vw] md:w-[calc(25%-18px)] snap-start">
               <ProductCard product={p} index={i} />
@@ -204,7 +209,7 @@ export default function HomePage() {
       {/* ── As Seen On Carousel ── */}
       <AsSeenOn />
 
-      <Social />
+
       <Newsletter />
     </Shell>
   );
