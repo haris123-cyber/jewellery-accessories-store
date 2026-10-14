@@ -8,6 +8,15 @@ import {
   Heart,
   ShoppingBag,
   ArrowRight,
+  Gem,
+  House,
+  LayoutGrid,
+  Sparkles,
+  Crown,
+  Package,
+  Headset,
+  LogOut,
+  X
 } from "lucide-react";
 import {
   Sheet,
@@ -93,66 +102,205 @@ export function MobileNavbar({
   setMenu: (v: boolean) => void;
 }) {
   const navItems = [
-    { label: "Home", href: "/" },
-    { label: "Shop", href: "/shop" },
-    { label: "Collections", href: "/collections" },
-    { label: "New Arrivals", href: "/new-arrivals" },
-    { label: "About Us", href: "/about" },
-    { label: "Blog", href: "/blog" },
-    { label: "Contact", href: "/contact" },
+    { label: "Home", href: "/", icon: House },
+    { label: "Shop ", href: "/shop", icon: Gem },
+    { label: "Collections", href: "/collections", icon: LayoutGrid },
+    { label: "New Arrivals", href: "/new-arrivals", icon: Sparkles },
+    { label: "Bestsellers", href: "/bestsellers", icon: Crown },
+  ];
+
+  const profileItems = [
+    { label: "My Account", href: "/account", icon: UserRound },
+    { label: "Wishlist", href: "/wishlist", icon: Heart },
+    { label: "Orders", href: "/account/orders", icon: Package },
+    { label: "Contact", href: "/contact", icon: Headset },
   ];
 
   return (
     <Sheet open={menu} onOpenChange={setMenu}>
       <SheetContent
         side="left"
-        className="!w-[min(88vw,400px)] !bg-ivory p-0 border-r border-border flex flex-col"
+        showCloseButton={false}
+        className="!w-[min(88vw,390px)] !max-w-none !bg-[#FAF7F1] p-0
+          border-r border-[#E6D8C5] flex flex-col overflow-hidden
+          rounded-r-[26px] shadow-2xl"
       >
-        {/* Header */}
-        <SheetHeader className="text-left px-6 pt-8 pb-6 border-b border-border">
-          <SheetTitle className="font-serif tracking-[0.3em] text-[25px] text-ink">
-            WOXLY
-          </SheetTitle>
-          <SheetDescription className="text-stone text-xs tracking-wide">
+        {/* Luxury header */}
+        <div className="relative shrink-0 overflow-hidden bg-[#946344] px-6 pb-7 pt-7 text-[#FFF9EF]">
+          {/* Custom Luxury Close Button */}
+          <button
+            type="button"
+            onClick={() => setMenu(false)}
+            aria-label="Close menu"
+            suppressHydrationWarning
+            className="absolute top-5 right-5 z-20 w-8 h-8 rounded-full bg-black/20 hover:bg-black/35 active:scale-95 text-[#FFF9EF] flex items-center justify-center transition-all cursor-pointer"
+          >
+            <X className="w-4 h-4" strokeWidth={2} />
+          </button>
+
+          <SheetHeader className="relative z-10 flex ">
+            <div className="flex items-center justify-between pr-0">
+              <SheetTitle className="font-serif text-[25px] text-center font-normal tracking-[0.34em] text-[#FFF9EF]">
+                WOXLY
+              </SheetTitle>
+            </div>
+
+            <SheetDescription className="mt-1 text-[8px] uppercase tracking-[0.25em] text-[#F0DCC5]">
+              Timeless jewellery, made for you
+            </SheetDescription>
+          </SheetHeader>
+
+          {/* Decorative detail */}
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <span className="h-px w-10 bg-[#D8B47C]/70" />
+            <Gem className="h-4 w-4 text-[#E8C58D]" />
+            <span className="h-px w-10 bg-[#D8B47C]/70" />
+          </div>
+
+          <p className="mt-2 text-center font-serif text-[21px] tracking-wide">
             Discover your style
-          </SheetDescription>
-        </SheetHeader>
+          </p>
 
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-6 py-4">
-          {navItems.map((item, index) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setMenu(false)}
-              className="group flex min-h-[58px] items-center justify-between border-b border-border/70 transition-colors duration-200"
-            >
-              <span className="font-sans text-[17px] tracking-wide text-ink transition-colors group-hover:text-gold">
-                {item.label}
-              </span>
+          {/* Soft curved bottom edge */}
+          <div className="pointer-events-none absolute -bottom-7 left-0 h-12 w-full rounded-[50%] bg-[#FAF7F1]" />
+        </div>
 
-              <ArrowRight className="h-4 w-4 text-stone transition-all duration-200 group-hover:translate-x-1 group-hover:text-gold" />
-            </a>
-          ))}
-        </nav>
+        {/* Scrollable navigation */}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain no-scrollbar px-5 pb-5 pt-5">
+          <p className="mb-3 px-2 text-[10px] font-medium uppercase tracking-[0.25em] text-[#65736A]">
+            General
+          </p>
 
-        {/* Bottom section */}
-        <div className="border-t border-border px-6 py-5">
+          <nav className="space-y-1">
+            {navItems.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMenu(false)}
+                  className={`group flex min-h-[58px] items-center gap-4 rounded-full
+                    px-4 transition-all duration-200
+                  `}
+                >
+                  <Icon
+                    className={`h-[21px] w-[21px] shrink-0 transition-colors
+                      ${index === 1
+                        ? "text-[#946344]"
+                        : "text-[#294238] group-hover:text-[#946344]"
+                      }`}
+                    strokeWidth={1.6}
+                  />
+
+                  <span className="flex-1 font-serif text-[17px] tracking-wide">
+                    {item.label}
+                  </span>
+
+                  {item.label === "New Arrivals" && (
+                    <span className="rounded-full bg-[#946344] px-2.5 py-1 text-[8px] uppercase tracking-[0.15em] text-white">
+                      New
+                    </span>
+                  )}
+
+
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className="my-5 h-px bg-[#E8DDCF]" />
+
+          <p className="mb-3 px-2 text-[10px] font-medium uppercase tracking-[0.25em] text-[#65736A]">
+            Profile
+          </p>
+
+          <nav className="space-y-1">
+            {profileItems.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMenu(false)}
+                  className="group flex min-h-[52px] items-center gap-4 rounded-full
+                    px-4 text-[#20382F] transition-colors duration-200
+                    hover:bg-[#F2E9DD]"
+                >
+                  <Icon
+                    className={`h-[21px] w-[21px] shrink-0 transition-colors
+                       "text-[#294238] group-hover:text-[#946344]"
+                      }`}
+                    strokeWidth={1.6}
+                  />
+
+
+                  <span className="flex-1 font-serif text-[16px]">
+                    {item.label}
+                  </span>
+
+
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className="my-5 h-px bg-[#E8DDCF]" />
+
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={() => {
+              localStorage.removeItem("token");
+              setMenu(false);
+              window.location.href = "/login";
+            }}
+            className="flex min-h-[52px] w-full items-center gap-4 rounded-full px-4 text-[#A95F43] transition-colors hover:bg-[#F2E9DD]"
+          >
+            <LogOut className="h-5 w-5" strokeWidth={1.6} />
+            <span className="flex-1 text-left font-serif text-[16px]">
+              Sign Out
+            </span>
+            <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+          </button>
+        </div>
+
+        {/* Fixed footer */}
+        <div className="shrink-0 border-t border-[#E6D8C5] bg-[#FAF7F1] px-5 pb-5 pt-4">
           <a
             href="/account"
             onClick={() => setMenu(false)}
-            className="flex items-center gap-3 text-sm text-ink transition-colors hover:text-gold"
+            className="flex items-center gap-3 rounded-2xl bg-[#946344] px-2 py-2 text-[#FFF9EF]
+              transition-colors hover:bg-[#214536]"
           >
-            <UserRound className="h-4 w-4" />
-            My Account
+            <div className="flex ml-2 h-8 w-8 items-center justify-center rounded-full border border-white">
+              <UserRound className="h-4 w-4 text-white" strokeWidth={1.5} />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <p className="font-serif text-[16px] text-white">My Account</p>
+              <p className="mt-1 text-[10px] tracking-wide text-white">
+                Orders · Wishlist · Profile
+              </p>
+            </div>
+
+            <ArrowRight className="h-4 w-4 text-[#E8C58D]" />
           </a>
 
-          <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-stone">
+          <div className="mt-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-[#B08A55]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#B08A55]" />
+            <span className="h-px w-8 bg-[#B08A55]" />
+          </div>
+
+          <p className="mt-2 text-center text-[9px] uppercase tracking-[0.19em] text-[#65736A]">
             Timeless pieces. Everyday elegance.
           </p>
         </div>
       </SheetContent>
     </Sheet>
-
   );
 }
+
+

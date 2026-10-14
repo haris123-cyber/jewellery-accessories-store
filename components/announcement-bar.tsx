@@ -59,19 +59,22 @@ export function AnnouncementBar() {
       onMouseLeave={() => setIsPaused(false)}
       role="region"
       aria-label="Announcement"
+      suppressHydrationWarning
     >
-      <div className="max-w-7xl mx-auto h-[38px] px-3 sm:px-6 flex items-center justify-between text-xs tracking-wider">
+      <div className="max-w-7xl mx-auto h-[38px] px-3 sm:px-6 flex items-center justify-between text-xs tracking-wider" suppressHydrationWarning>
         {/* Left Arrow Button */}
         <button
+          type="button"
           onClick={prevSlide}
           className="p-1 rounded-full text-emerald-200/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-1 focus:ring-emerald-300"
           aria-label="Previous announcement"
+          suppressHydrationWarning
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
 
         {/* Animated Text Container */}
-        <div className="flex-1 overflow-hidden relative h-[26px] flex items-center justify-center mx-2 text-center">
+        <div className="flex-1 overflow-hidden relative h-[26px] flex items-center justify-center mx-2 text-center" suppressHydrationWarning>
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={current.id}
@@ -89,9 +92,11 @@ export function AnnouncementBar() {
 
         {/* Right Arrow Button */}
         <button
+          type="button"
           onClick={nextSlide}
           className="p-1 rounded-full text-emerald-200/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-1 focus:ring-emerald-300"
           aria-label="Next announcement"
+          suppressHydrationWarning
         >
           <ChevronRight className="w-4 h-4" />
         </button>

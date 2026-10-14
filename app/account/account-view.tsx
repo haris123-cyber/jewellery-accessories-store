@@ -1194,8 +1194,8 @@ export function Account() {
                               On Schedule · Processing
                             </span>
                           </div>
-                          <h3 className="text-[18px] sm:text-[20px] font-serif text-ink mt-1.5">
-                            Est. Delivery by <span className="font-semibold text-emerald-950">{getDeliveryDate()}</span>
+                          <h3 className="text-[18px] sm:text-[20px] font-sans text-ink mt-1.5">
+                            Est. Delivery by   <span className="font-sans text-emerald-950">{getDeliveryDate()}</span>
                           </h3>
                         </div>
                         <div className="flex flex-col sm:items-end text-[12px] text-stone">
@@ -1328,7 +1328,7 @@ export function Account() {
                               {/* Step Content */}
                               <div className="pb-3 pt-0.5 min-w-0 flex-1">
                                 <div className="flex items-center justify-between gap-2">
-                                  <h4 className={`text-[13px] leading-tight ${isCurrent ? "font-bold text-ink" : isCompleted ? "font-semibold text-ink" : "font-medium text-stone"}`}>
+                                  <h4 className={`text-[13px] leading-tight ${isCurrent ? "font-sans text-ink" : isCompleted ? "font-sans text-ink" : "font-sans text-stone"}`}>
                                     {item.title}
                                   </h4>
                                   <span className={`text-[10px] font-medium shrink-0 ${isCurrent ? "text-gold font-semibold" : "text-stone"}`}>
