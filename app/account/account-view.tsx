@@ -26,6 +26,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { showAddedToBagToast, showWishlistToast } from "@/components/ui/app-toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -68,7 +69,7 @@ function WishlistTabContent() {
   const handleConfirmDelete = () => {
     if (!productToDelete) return;
     toggleWishlist(productToDelete.slug);
-    toast.success(`${productToDelete.name} removed from wishlist`);
+    showWishlistToast(productToDelete, "removed");
     setProductToDelete(null);
   };
 
@@ -111,7 +112,7 @@ function WishlistTabContent() {
                   type="button"
                   onClick={() => {
                     add(p.slug);
-                    toast.success(`${p.name} added to your bag`);
+                    showAddedToBagToast(p);
                   }}
                   className="btn-primary gap-0 flex-1 h-[34px]  text-[8px] sm:text-[10px] uppercase tracking-wider whitespace-nowrap font-semibold rounded-[4px]"
                 >

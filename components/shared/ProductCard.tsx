@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { showAddedToBagToast } from "@/components/ui/added-to-bag-toast";
 import { Plus, PlusSquare, ShoppingBag, Star, StarHalf } from "lucide-react";
 import { money, type Product } from "@/lib/catalog";
 import { useCommerceStore } from "@/store/commerce-store";
@@ -34,10 +35,6 @@ export function ProductCard({
         <span className="absolute left-1/2 -top-2 z-20 -translate-x-1/2 bg-red-700 text-white -translate-y-[25%] whitespace-nowrap rounded-[6px] border border-ink/10 bg-blush px-4 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-ink shadow-[0_4px_12px_rgba(27,26,23,.12)]">
           Limited Offer
         </span>
-      ) : product.limitedEdition ? (
-        <span className="absolute left-1/2 -top-2 z-20 -translate-x-1/2 -translate-y-[25%] whitespace-nowrap rounded-[6px] border border-ink/10 bg-gold-soft px-4 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-ink shadow-[0_4px_12px_rgba(27,26,23,.12)]">
-          Limited Edition
-        </span>
       ) : null}
       <a href={`/product/${product.slug}`} className="block mb-4 font-sans relative overflow-hidden rounded-[4px]">
         <ProductVisual
@@ -48,13 +45,17 @@ export function ProductCard({
         />
 
         {/* Badges */}
-        <div className="absolute left-3 top-6 z-10 flex flex-col gap-2">
+        <div className="absolute left-3 top-3 z-10 flex flex-col gap-1.5 items-start">
           {product.badge && (
             <span className="bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">
               {product.badge}
             </span>
           )}
-
+          {product.limitedEdition && product.badge?.toLowerCase() !== "limited edition" && (
+            <span className="bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">
+              Limited Edition
+            </span>
+          )}
         </div>
 
         <div className="absolute right-3 top-3 z-10">
@@ -69,7 +70,7 @@ export function ProductCard({
             onClick={(e) => {
               e.preventDefault();
               add(product.slug);
-              toast.success(`${product.name} added to your bag`);
+              showAddedToBagToast(product);
             }}
           >
             {product.stock ? "Add to bag" : "Out of stock"}
@@ -111,12 +112,7 @@ export function ProductCard({
             onClick={(e) => {
               e.preventDefault();
               add(product.slug);
-              toast.success(`${product.name} added to your bag`, {
-                action: {
-                  label: "View Bag",
-                  onClick: () => router.push("/cart"),
-                },
-              });
+              showAddedToBagToast(product);
             }}
           >
             <Plus className="w-5 h-5 text-white " />

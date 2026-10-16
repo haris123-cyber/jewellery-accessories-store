@@ -2,11 +2,9 @@
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
 
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "../vendor/shadcn-tailwind-4.13.0.css";
-
 :root {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --ivory: #FAF7F2;
   --pearl: #FFFFFF;
   --sand: #EFE8DC;
@@ -80,6 +78,10 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-ivory text-ink font-sans;
   }
@@ -134,4 +136,40 @@
   .stepper-btn {
     @apply flex items-center justify-center w-[36px] h-[36px] rounded-xl text-ink hover:text-gold transition-colors duration-300 ease-out;
   }
+}
+
+@keyframes announcement-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-announcement-marquee {
+  display: inline-flex;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+  animation-name: announcement-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-announcement-marquee {
+    animation: none;
+  }
+}
+
+/* Ensure Sonner toast wrapper has zero background/border for custom toasts */
+[data-sonner-toast][data-unstyled="true"],
+[data-sonner-toast]:has([data-custom-toast]),
+[data-sonner-toast]:has(.added-to-bag-toast) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }

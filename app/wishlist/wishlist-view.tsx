@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { showAddedToBagToast, showWishlistToast, showNotificationToast } from "@/components/ui/app-toast";
 import {
   ArrowRight,
   Camera,
@@ -92,13 +93,19 @@ export function Wishlist() {
   const handleConfirmDelete = () => {
     if (!productToDelete) return;
     toggleWishlist(productToDelete.slug);
-    toast.success(`${productToDelete.name} removed from wishlist`);
+    showWishlistToast(productToDelete, "removed");
     setProductToDelete(null);
   };
 
   const handleConfirmClearAll = () => {
     list.forEach((p) => toggleWishlist(p.slug));
-    toast.success("Wishlist cleared");
+    showNotificationToast({
+      title: "Wishlist Cleared",
+      description: "All saved items have been removed from your wishlist",
+      iconType: "trash",
+      actionText: "EXPLORE SHOP",
+      actionUrl: "/shop",
+    });
     setIsClearingAll(false);
   };
 
@@ -187,12 +194,7 @@ export function Wishlist() {
                         onClick={(e) => {
                           e.preventDefault();
                           add(p.slug);
-                          toast.success(`${p.name} added to your bag`, {
-                            action: {
-                              label: "View Bag",
-                              onClick: () => router.push("/cart"),
-                            },
-                          });
+                          showAddedToBagToast(p);
                         }}
                         className="w-full bg-ivory/95 backdrop-blur-sm border border-ink text-ink uppercase tracking-[0.14em] text-[11px] font-medium py-2.5 rounded-md hover:bg-ink hover:text-ivory transition-colors shadow-sm cursor-pointer"
                       >
@@ -230,12 +232,7 @@ export function Wishlist() {
                         type="button"
                         onClick={() => {
                           add(p.slug);
-                          toast.success(`${p.name} added to your bag`, {
-                            action: {
-                              label: "View Bag",
-                              onClick: () => router.push("/cart"),
-                            },
-                          });
+                          showAddedToBagToast(p);
                         }}
                         className="btn-primary flex-1 h-[36px] text-[11px] uppercase tracking-[0.12em] font-medium rounded-[4px]"
                       >

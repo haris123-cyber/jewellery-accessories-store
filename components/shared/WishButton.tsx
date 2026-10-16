@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
-import { toast } from "sonner";
+import { showWishlistToast } from "@/components/ui/app-toast";
 import { type Product } from "@/lib/catalog";
 import { useCommerceStore } from "@/store/commerce-store";
 
@@ -30,9 +30,9 @@ export function WishButton({
         e.stopPropagation();
         toggleWishlist(product.slug);
         if (active) {
-          toast("Removed from wishlist");
+          showWishlistToast(product, "removed");
         } else {
-          toast.success(`${product.name} saved to wishlist`);
+          showWishlistToast(product, "added");
         }
       }}
     >

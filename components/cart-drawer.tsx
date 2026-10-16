@@ -11,6 +11,7 @@ import {
 import { useCommerceStore } from "@/store/commerce-store";
 import { getProduct, money } from "@/lib/catalog";
 import { ProductVisual, Empty } from "./shared";
+import { showNotificationToast } from "@/components/ui/app-toast";
 
 export function CartDrawer() {
   const { cart, cartOpen, setCartOpen, remove, setQuantity } =
@@ -76,7 +77,14 @@ export function CartDrawer() {
                 </div>
                 <button
                   className="border-0 bg-transparent self-start cursor-pointer p-0 text-stone hover:text-error transition-colors"
-                  onClick={() => remove(l.slug)}
+                  onClick={() => {
+                    remove(l.slug);
+                    showNotificationToast({
+                      title: "Removed from bag",
+                      description: l.product.name,
+                      iconType: "trash",
+                    });
+                  }}
                   aria-label={`Remove ${l.product.name}`}
                 >
                   <Trash2 className="w-[18px]" />

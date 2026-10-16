@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast } from "sonner";
+import { showNotificationToast } from "@/components/ui/app-toast";
 
 export const emailSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -27,7 +27,13 @@ export function Newsletter() {
         <form
           className="relative w-full flex"
           onSubmit={handleSubmit(() => {
-            toast.success("Welcome to WOXLY");
+            showNotificationToast({
+              title: "Welcome to WOXLY",
+              description: "You are now subscribed to private previews & offers",
+              iconType: "sparkles",
+              actionText: "EXPLORE",
+              actionUrl: "/shop",
+            });
             reset();
           })}
         >

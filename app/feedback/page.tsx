@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
+import { showNotificationToast } from "@/components/ui/app-toast";
 import { Shell } from "@/components/layout";
 
 export default function FeedbackPage() {
@@ -15,7 +15,11 @@ export default function FeedbackPage() {
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
-      toast.success("Thank you for your feedback!");
+      showNotificationToast({
+        title: "Feedback Received",
+        description: "Thank you for helping us refine the WOXLY experience",
+        iconType: "check",
+      });
       (e.target as HTMLFormElement).reset();
       setCategory("General Feedback");
     }, 1000);

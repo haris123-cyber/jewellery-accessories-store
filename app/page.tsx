@@ -167,21 +167,30 @@ export default function HomePage() {
           <div className="flex items-center justify-center gap-[24px] border-b border-border w-full max-w-[400px]">
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "women" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
-              onClick={() => setBestSellerTab("women")}
+              onClick={() => {
+                setBestSellerTab("women");
+                bestSellersScrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+              }}
               suppressHydrationWarning
             >
               Women
             </button>
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "men" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
-              onClick={() => setBestSellerTab("men")}
+              onClick={() => {
+                setBestSellerTab("men");
+                bestSellersScrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+              }}
               suppressHydrationWarning
             >
               Men
             </button>
             <button
               className={`uppercase tracking-[0.14em] text-[13px] font-medium pb-[12px] px-2 transition-colors border-b-2 ${bestSellerTab === "gifts" ? "text-ink border-gold" : "text-stone border-transparent hover:text-ink"}`}
-              onClick={() => setBestSellerTab("gifts")}
+              onClick={() => {
+                setBestSellerTab("gifts");
+                bestSellersScrollRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+              }}
               suppressHydrationWarning
             >
               Gifts

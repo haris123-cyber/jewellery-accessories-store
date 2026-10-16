@@ -21,7 +21,7 @@ export const productsData: Product[] = [
     "bestSellerGroup": "women",
     "stock": 5,
     "cell": 5,
-    "image": "https://images.unsplash.com/photo-1629224316810-9d8805b95e76?w=800&q=80&auto=format&fit=crop"
+    "image": "/images/sculpted-drop-earrings.jpg"
   },
   {
     "id": "jewelry-3",
@@ -683,5 +683,46 @@ export const productsData: Product[] = [
     "stock": 11,
     "cell": 6,
     "image": "https://images.unsplash.com/photo-1697713465161-d872b22723a2?q=80&w=1170&auto=format&fit=crop"
+  },
+  {
+    "id": "addon-1",
+    "slug": "anti-tarnish-polishing-cloth",
+    "name": "Anti-Tarnish Jewellery Polishing Cloth",
+    "category": "gifts",
+    "price": 199,
+    "compareAtPrice": 299,
+    "description": "Ultra-soft micro-weave polishing cloth infused with gentle protective formula to restore shine and prevent tarnishing.",
+    "colors": [
+      "#c4a57a",
+      "#FAF7F2"
+    ],
+    "material": "Microfiber & Anti-Tarnish Agent",
+    "rating": 4.9,
+    "reviewCount": 142,
+    "badge": "ESSENTIAL CARE",
+    "stock": 50,
+    "cell": 9,
+    "image": "/images/jewellery-polishing-cloth.jpg"
+  },
+  {
+    "id": "addon-2",
+    "slug": "velvet-travel-jewellery-box",
+    "name": "Plush Velvet Travel Jewellery Box",
+    "category": "gifts",
+    "price": 499,
+    "compareAtPrice": 799,
+    "description": "Compact zippered velvet case with specialized ring rolls and necklace hooks to keep your collection scratch-free.",
+    "colors": [
+      "#1c3a32",
+      "#c4a57a",
+      "#FAF7F2"
+    ],
+    "material": "Crushed Velvet & Brass Zip",
+    "rating": 4.9,
+    "reviewCount": 98,
+    "badge": "POPULAR PAIR",
+    "stock": 35,
+    "cell": 9,
+    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80&auto=format&fit=crop"
   }
 ];

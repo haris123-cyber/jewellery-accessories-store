@@ -11,10 +11,11 @@ export function ProductSection({
   subtitle?: string;
   items: Product[];
 }) {
-  const scrollRef = useAutoScroll({ speed: 3000 });
+  const scrollRef = useAutoScroll({ speed: 3000, initialDelay: 1200 });
+  const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   return (
-    <section id="collection" className="py-[36px]  md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto">
+    <section id={sectionId} className="py-[36px]  md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto">
       <div className="mb-[32px] md:mb-[48px] flex flex-col md:flex-row md:items-end  justify-between gap-4">
         <div>
           {subtitle && <p className="m-0 mb-2 text-stone text-[12px] uppercase text-center tracking-[0.14em] font-medium">{subtitle}</p>}
