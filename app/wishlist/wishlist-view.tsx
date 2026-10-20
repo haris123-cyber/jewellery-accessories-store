@@ -146,11 +146,11 @@ export function Wishlist() {
             </div>
 
             {/* Wishlist Items Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-[18px]">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-[18px]">
               {list.map((p, i) => (
                 <article
                   key={p.slug}
-                  className="group/product flex flex-col relative w-full h-full bg-white border border-border/70 rounded-[8px] p-3 shadow-xs hover:shadow-md transition-all duration-300"
+                  className="group/product flex flex-col relative w-full min-w-0 h-full bg-white border border-border/70 rounded-[8px] p-2.5 sm:p-3 shadow-xs hover:shadow-md transition-all duration-300"
                 >
                   {/* Image container */}
                   <div className="relative aspect-[3/4] w-full rounded-[4px] overflow-hidden bg-sand mb-3">
@@ -204,48 +204,49 @@ export function Wishlist() {
                   </div>
 
                   {/* Product Details */}
-                  <div className="flex flex-col flex-1">
-                    <h3 className="m-0 text-[14px] font-medium font-sans text-ink leading-snug line-clamp-2 mb-1">
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <h3 className="m-0 text-[13px] sm:text-[14px] font-medium font-sans text-ink leading-snug line-clamp-2 mb-1">
                       <a href={`/product/${p.slug}`} className="hover:text-gold transition-colors">
                         {p.name}
                       </a>
                     </h3>
 
-                    <p className="text-[12px] text-stone capitalize mb-2">
+                    <p className="text-[11px] sm:text-[12px] text-stone capitalize mb-2">
                       {p.category}
                     </p>
 
                     <div className="flex items-center gap-2 mb-3 mt-auto">
-                      <span className="text-[14px] font-semibold text-ink">
+                      <span className="text-[13px] sm:text-[14px] font-semibold text-ink">
                         {money(p.price)}
                       </span>
                       {p.compareAtPrice && (
-                        <del className="text-[12px] text-stone">
+                        <del className="text-[11px] sm:text-[12px] text-stone">
                           {money(p.compareAtPrice)}
                         </del>
                       )}
                     </div>
 
                     {/* Actions Row */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-border/60">
+                    <div className="flex items-center gap-1.5 sm:gap-2 pt-2 border-t border-border/60 w-full min-w-0">
                       <button
                         type="button"
                         onClick={() => {
                           add(p.slug);
                           showAddedToBagToast(p);
                         }}
-                        className="btn-primary flex-1 h-[36px] text-[11px] uppercase tracking-[0.12em] font-medium rounded-[4px]"
+                        className="flex-1 min-w-0 h-[34px] sm:h-[36px] px-1 sm:px-2 bg-ink hover:bg-gold text-ivory text-[9.5px] sm:text-[11px] uppercase tracking-[0.06em] sm:tracking-[0.1em] font-medium rounded-[4px] transition-colors duration-200 flex items-center justify-center whitespace-nowrap cursor-pointer shadow-xs"
                       >
                         Add to Bag
                       </button>
+
                       <button
                         type="button"
                         onClick={() => setProductToDelete(p)}
                         aria-label={`Delete ${p.name}`}
                         title="Delete from wishlist"
-                        className="w-[36px] h-[36px] border border-border/80 hover:border-red-400 hover:bg-red-50 text-stone hover:text-red-600 rounded-[4px] flex items-center justify-center transition-colors shrink-0 cursor-pointer"
+                        className="w-[32px] sm:w-[36px] h-[34px] sm:h-[36px] border border-border/80 hover:border-red-400 hover:bg-red-50 text-stone hover:text-red-600 rounded-[4px] flex items-center justify-center transition-colors shrink-0 cursor-pointer"
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Trash2 className="w-3.5 h-3.5 shrink-0" />
                       </button>
                     </div>
                   </div>
@@ -268,17 +269,16 @@ export function Wishlist() {
         open={!!productToDelete}
         onOpenChange={(open) => !open && setProductToDelete(null)}
       >
-        <AlertDialogContent className="sm:max-w-[420px] rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
-          <AlertDialogHeader className="flex flex-col items-center text-center">
-            <div className="w-13 h-13 rounded-full bg-sand/80 border border-[#DDD5C7] text-ink flex items-center justify-center mb-2.5 shadow-2xs">
-              <Trash2 className="w-5 h-5 text-ink/80 stroke-[1.75]" />
-            </div>
-            <AlertDialogTitle className="font-serif text-[22px] sm:text-[24px] text-ink font-normal tracking-tight">
-              Remove from Wishlist?
+        <AlertDialogContent className="w-[calc(100%-24px)] max-w-[400px] sm:max-w-[420px] rounded-[20px] sm:rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-5 sm:p-7 shadow-2xl">
+          <AlertDialogHeader className="flex flex-col items-center text-center sm:items-center sm:text-center sm:place-items-center w-full">
+            <AlertDialogTitle className="flex items-center justify-center gap-2 sm:gap-2.5 font-serif text-[19px] sm:text-[24px] text-ink font-normal tracking-tight text-center">
+              <Trash2 className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-ink/80 stroke-[1.75] shrink-0" />
+              <span>Remove from Wishlist?</span>
             </AlertDialogTitle>
+
             {productToDelete && (
-              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[16px] p-3 flex items-center gap-3.5 text-left shadow-2xs">
-                <div className="w-14 h-14 rounded-[10px] overflow-hidden bg-sand shrink-0 border border-border/70">
+              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[14px] sm:rounded-[16px] p-2.5 sm:p-3 flex items-center gap-3 text-left shadow-2xs">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[8px] sm:rounded-[10px] overflow-hidden bg-sand shrink-0 border border-border/70">
                   <img
                     src={productToDelete.image}
                     alt={productToDelete.name}
@@ -295,48 +295,48 @@ export function Wishlist() {
                 </div>
               </div>
             )}
-            <AlertDialogDescription className="text-[13px] text-stone mt-2.5 leading-relaxed text-center">
+            <AlertDialogDescription className="text-[12px] sm:text-[13px] text-stone mt-2.5 leading-relaxed text-center sm:text-center">
               Are you sure you want to remove this piece from your saved wishlist?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex flex-col-reverse gap-2.5 mt-5 w-full shrink-0">
-            <AlertDialogCancel className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full border border-border/90 bg-transparent hover:bg-sand/50 text-ink text-[11px] uppercase tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center">
-              Cancel
-            </AlertDialogCancel>
+
+          <AlertDialogFooter className="mt-5 flex w-full flex-row gap-2.5 sm:gap-3 sm:flex-row sm:justify-stretch">
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center"
+              className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md bg-ink text-ivory hover:bg-black text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Remove
             </AlertDialogAction>
+
+            <AlertDialogCancel className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md border border-[#DDD5C7] bg-transparent text-ink hover:bg-[#F0EBE3] text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center whitespace-nowrap">
+              Cancel
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       {/* Clear All Confirmation Dialog */}
       <AlertDialog open={isClearingAll} onOpenChange={setIsClearingAll}>
-        <AlertDialogContent className="sm:max-w-[420px] rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
-          <AlertDialogHeader className="flex flex-col items-center text-center">
-            <div className="w-13 h-13 rounded-full bg-sand/80 border border-[#DDD5C7] text-ink flex items-center justify-center mb-2.5 shadow-2xs">
-              <Trash2 className="w-5 h-5 text-ink/80 stroke-[1.75]" />
-            </div>
-            <AlertDialogTitle className="font-serif text-[22px] sm:text-[24px] text-ink font-normal tracking-tight">
-              Clear Entire Wishlist?
+        <AlertDialogContent className="w-[calc(100%-24px)] max-w-[400px] sm:max-w-[420px] rounded-[20px] sm:rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-5 sm:p-7 shadow-2xl">
+          <AlertDialogHeader className="flex flex-col items-center text-center sm:items-center sm:text-center sm:place-items-center w-full">
+            <AlertDialogTitle className="flex items-center justify-center gap-2 sm:gap-2.5 font-serif text-[19px] sm:text-[24px] text-ink font-normal tracking-tight text-center">
+              <Trash2 className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-ink/80 stroke-[1.75] shrink-0" />
+              <span>Clear Entire Wishlist?</span>
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[13px] text-stone mt-2.5 leading-relaxed text-center">
+            <AlertDialogDescription className="text-[12px] sm:text-[13px] text-stone mt-2.5 leading-relaxed text-center sm:text-center">
               Are you sure you want to remove all {list.length} saved pieces from your wishlist? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex flex-col-reverse gap-2.5 mt-5 w-full shrink-0">
-            <AlertDialogCancel className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full border border-border/90 bg-transparent hover:bg-sand/50 text-ink text-[11px] uppercase tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center">
-              Cancel
-            </AlertDialogCancel>
+          <AlertDialogFooter className="mt-5 flex w-full flex-row gap-2.5 sm:gap-3 sm:flex-row sm:justify-stretch">
             <AlertDialogAction
               onClick={handleConfirmClearAll}
-              className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center"
+              className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Clear All Items
             </AlertDialogAction>
+            <AlertDialogCancel className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md border border-[#DDD5C7] bg-transparent hover:bg-[#F0EBE3] text-ink text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center whitespace-nowrap">
+              Cancel
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

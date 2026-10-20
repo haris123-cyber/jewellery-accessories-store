@@ -9,6 +9,7 @@ import Image from "next/image";
 import GooglePay from "@/public/payments/gpay.svg";
 import PhonePe from "@/public/payments/phonepe.png";
 import RuPay from "@/public/payments/rupay.png";
+import { toast } from "sonner";
 
 import {
   ShieldCheck,
@@ -116,6 +117,167 @@ const indianStates = [
   "Jammu and Kashmir",
 ];
 
+interface SlideToPayProps {
+  amount: number;
+  onSuccess: () => void;
+  isSubmitting?: boolean;
+}
+
+function SlideToPayButton({ amount, onSuccess, isSubmitting = false }: SlideToPayProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const startXRef = useRef(0);
+  const maxDragRef = useRef(0);
+
+  const updateMaxDrag = () => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const knobWidth = containerWidth < 360 ? 44 : 48;
+      const padding = 12;
+      maxDragRef.current = Math.max(0, containerWidth - knobWidth - padding);
+    }
+  };
+
+  useEffect(() => {
+    updateMaxDrag();
+    window.addEventListener("resize", updateMaxDrag);
+    return () => window.removeEventListener("resize", updateMaxDrag);
+  }, []);
+
+  useEffect(() => {
+    if (!isSubmitting && isCompleted) {
+      const timer = setTimeout(() => {
+        setIsCompleted(false);
+        setDragX(0);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitting, isCompleted]);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (isCompleted || isSubmitting) return;
+    updateMaxDrag();
+    setIsDragging(true);
+    startXRef.current = e.clientX - dragX;
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch { }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging || isCompleted || isSubmitting) return;
+    const currentX = e.clientX - startXRef.current;
+    const clamped = Math.max(0, Math.min(currentX, maxDragRef.current));
+    setDragX(clamped);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDragging || isCompleted || isSubmitting) return;
+    setIsDragging(false);
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch { }
+
+    const threshold = maxDragRef.current * 0.72;
+    if (dragX >= threshold && maxDragRef.current > 0) {
+      setDragX(maxDragRef.current);
+      setIsCompleted(true);
+      onSuccess();
+    } else {
+      setDragX(0);
+    }
+  };
+
+  const handleAutoSlide = () => {
+    if (isCompleted || isSubmitting || isDragging) return;
+    updateMaxDrag();
+    if (maxDragRef.current > 0) {
+      setDragX(maxDragRef.current);
+      setIsCompleted(true);
+      setTimeout(() => {
+        onSuccess();
+      }, 250);
+    }
+  };
+
+  const dragPercent = maxDragRef.current > 0 ? dragX / maxDragRef.current : 0;
+
+  return (
+    <div
+      ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      className={`relative w-full h-[58px] sm:h-[62px] rounded-full bg-[#1c352c] p-1.5 select-none overflow-hidden shadow-[0_8px_25px_rgba(28,53,44,0.25)] flex items-center touch-none transition-all cursor-grab active:cursor-grabbing ${
+        isDragging ? "shadow-[0_10px_30px_rgba(28,53,44,0.4)] ring-2 ring-[#c99b53]/50" : ""
+      }`}
+    >
+      {/* Background fill track that expands as you slide */}
+      <div
+        className="absolute left-0 top-0 bottom-0 bg-[#26483b] rounded-full pointer-events-none"
+        style={{
+          width: `${dragX + 50}px`,
+          transition: isDragging ? "none" : "width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1)",
+        }}
+      />
+
+      {/* Center Label Text */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none px-12 transition-opacity duration-200"
+        style={{ opacity: isCompleted || isSubmitting ? 0 : Math.max(0.1, 1 - dragPercent * 1.6) }}
+      >
+        <span className="font-bold tracking-[0.14em] uppercase text-[12px] sm:text-[14px] text-[#faf6ee] text-center truncate">
+          SLIDE TO PAY {money(amount)}
+        </span>
+      </div>
+
+      {/* Completed / Submitting state text */}
+      {(isCompleted || isSubmitting) && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-12 animate-in fade-in duration-200">
+          <span className="font-bold tracking-[0.14em] uppercase text-[12px] sm:text-[13px] text-[#c99b53] text-center">
+            PROCESSING PAYMENT...
+          </span>
+        </div>
+      )}
+
+      {/* Draggable Knob */}
+      <div
+        style={{
+          transform: `translateX(${dragX}px)`,
+          transition: isDragging ? "none" : "transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1)",
+        }}
+        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#c99b53] text-[#1c352c] flex items-center justify-center shadow-lg relative z-10 shrink-0 transition-colors ${
+          isCompleted ? "bg-emerald-500 text-white" : "hover:bg-[#d6a95f]"
+        }`}
+      >
+        {isCompleted || isSubmitting ? (
+          <Check className="w-5 h-5 stroke-[2.5] animate-in zoom-in duration-200" />
+        ) : (
+          <ChevronsRight
+            className={`w-5 h-5 stroke-[2.5] transition-transform ${
+              isDragging ? "scale-115" : "animate-pulse"
+            }`}
+          />
+        )}
+      </div>
+
+      {/* Click / Tap fallback trigger */}
+      {!isCompleted && !isDragging && (
+        <button
+          type="button"
+          onClick={handleAutoSlide}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          aria-label={`Slide to pay ${money(amount)}`}
+          tabIndex={-1}
+        />
+      )}
+    </div>
+  );
+}
+
 export function Checkout() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -123,6 +285,7 @@ export function Checkout() {
   const [addressType, setAddressType] = useState<"home" | "work" | "other">("home");
   const [isGift, setIsGift] = useState(true);
   const [saveInfo, setSaveInfo] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   // Saved Addresses State & Custom Dropdown State
@@ -181,11 +344,13 @@ export function Checkout() {
     (n, l) => n + getProduct(l.slug).price * l.quantity,
     0
   );
+  const discountPercent = useCommerceStore((s) => s.discountPercent);
+  const promoDiscount = discountPercent > 0 ? Math.round(subtotal * (discountPercent / 100)) : 0;
   const shipping = subtotal >= 2999 ? 0 : 149;
   const originalAmount = subtotal + 500;
   const loyaltyDiscount = useLoyaltyCoins ? 100 : 0;
-  const totalSavings = 500 + loyaltyDiscount;
-  const finalPayable = Math.max(0, subtotal + shipping - loyaltyDiscount);
+  const totalSavings = 500 + loyaltyDiscount + promoDiscount;
+  const finalPayable = Math.max(0, subtotal + shipping - loyaltyDiscount - promoDiscount);
   const emiPerMonth = Math.round(finalPayable / 12);
   const totalPieces = cart.reduce((n, l) => n + l.quantity, 0);
   const itemsSummary = cart.map((l) => getProduct(l.slug).name).join(", ");
@@ -283,6 +448,22 @@ export function Checkout() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
+  };
+
+  const handleSlideSuccess = () => {
+    setIsSubmitting(true);
+    handleSubmit(
+      (data) => {
+        onFinalSubmit(data);
+      },
+      (errors) => {
+        setIsSubmitting(false);
+        const firstErr = Object.values(errors)[0];
+        if (firstErr?.message) {
+          toast.error(firstErr.message as string);
+        }
+      }
+    )();
   };
 
   const onFinalSubmit = (data: CheckoutData) => {
@@ -681,16 +862,16 @@ export function Checkout() {
                     </div>
 
                     {/* Gift Order Toggle Card */}
-                    <div className="bg-[#fbf7f0] border border-[#ebe0cc] rounded-2xl p-4 flex items-center justify-between gap-4 mb-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-[#f3e6cf] flex items-center justify-center shrink-0 text-[#8e6f3e] mt-0.5">
-                          <Gift className="w-5 h-5" />
+                    <div className="bg-[#fbf7f0] border border-[#ebe0cc] rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 sm:gap-4 mb-4">
+                      <div className="flex items-start gap-2.5 sm:gap-3 min-w-0 flex-1">
+                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#f3e6cf] flex items-center justify-center shrink-0 text-[#8e6f3e] mt-0.5">
+                          <Gift className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                         </div>
-                        <div>
-                          <h3 className="text-[14px] font-semibold text-[#1b1a17]">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-[13px] sm:text-[14px] font-semibold text-[#1b1a17] leading-tight">
                             This order is a gift
                           </h3>
-                          <p className="text-[12px] text-stone">
+                          <p className="text-[11px] sm:text-[12px] text-stone mt-0.5 leading-snug">
                             Prices hidden on the slip, with a handwritten note
                           </p>
                         </div>
@@ -699,8 +880,10 @@ export function Checkout() {
                       {/* Animated Toggle Switch */}
                       <button
                         type="button"
+                        role="switch"
+                        aria-checked={isGift}
                         onClick={() => setIsGift(!isGift)}
-                        className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer focus:outline-none p-0.5 ${isGift ? "bg-[#1b2b24]" : "bg-[#ded6c7]"
+                        className={`w-12 h-6 min-w-[48px] shrink-0 rounded-full transition-colors relative cursor-pointer focus:outline-none p-0.5 ${isGift ? "bg-[#1b2b24]" : "bg-[#ded6c7]"
                           }`}
                         aria-label="Toggle gift order"
                       >
@@ -983,16 +1166,16 @@ export function Checkout() {
                   </div>
 
                   {/* 5. Loyalty Coins Card */}
-                  <div className="bg-[#faf6ee] rounded-[22px] border border-[#e8dfcf] p-4 sm:p-5 flex items-center justify-between shadow-[0_2px_10px_rgba(27,26,23,0.02)]">
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-10 h-10 rounded-full bg-[#b8863b] text-white flex items-center justify-center font-bold text-[15px] shrink-0 shadow-sm">
+                  <div className="bg-[#faf6ee] rounded-[22px] border border-[#e8dfcf] p-3.5 sm:p-5 flex items-center justify-between gap-3 sm:gap-4 shadow-[0_2px_10px_rgba(27,26,23,0.02)]">
+                    <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#b8863b] text-white flex items-center justify-center font-bold text-[14px] sm:text-[15px] shrink-0 shadow-sm">
                         ₹
                       </div>
-                      <div>
-                        <div className="text-[14px] font-semibold text-ink leading-snug">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[13.5px] sm:text-[14px] font-semibold text-ink leading-snug">
                           Use 100 Loyalty Coins
                         </div>
-                        <div className="text-[12px] text-stone mt-0.5">
+                        <div className="text-[11.5px] sm:text-[12px] text-stone mt-0.5">
                           Save ₹100 · Up to 20% of order
                         </div>
                       </div>
@@ -1000,8 +1183,10 @@ export function Checkout() {
 
                     <button
                       type="button"
+                      role="switch"
+                      aria-checked={useLoyaltyCoins}
                       onClick={() => setUseLoyaltyCoins(!useLoyaltyCoins)}
-                      className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer p-0.5 ${useLoyaltyCoins ? "bg-[#1c352c]" : "bg-[#ded6c7]"
+                      className={`w-12 h-6 min-w-[48px] shrink-0 rounded-full transition-colors relative cursor-pointer p-0.5 ${useLoyaltyCoins ? "bg-[#1c352c]" : "bg-[#ded6c7]"
                         }`}
                       aria-label="Toggle loyalty coins"
                     >
@@ -1083,32 +1268,20 @@ export function Checkout() {
 
                   {/* 7. Trust Badges Row */}
                   <div className="flex items-center justify-center gap-4 sm:gap-6 text-[11.5px] text-[#6b6459] font-medium py-1">
-                    <div className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-stone" />
-                      <span>256-bit secure</span>
-                    </div>
+
                     <div className="flex items-center gap-1.5">
                       <Award className="w-3.5 h-3.5 text-stone" />
                       <span>BIS hallmarked</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <RotateCcw className="w-3.5 h-3.5 text-stone" />
-                      <span>30-day returns</span>
-                    </div>
+
                   </div>
 
                   {/* 8. Slide To Pay CTA Button */}
-                  <button
-                    type="submit"
-                    className="w-full h-[58px] sm:h-[62px] rounded-full bg-[#1c352c] hover:bg-[#142821] text-white p-2 pl-2.5 pr-6 flex items-center justify-between shadow-[0_8px_25px_rgba(28,53,44,0.25)] transition-all cursor-pointer group active:scale-[0.99]"
-                  >
-                    <div className="w-11 h-11 rounded-full bg-[#c99b53] group-hover:bg-[#d6a95f] text-[#1c352c] flex items-center justify-center shadow-md transition-transform group-hover:translate-x-1 shrink-0">
-                      <ChevronsRight className="w-5 h-5 stroke-[2.5]" />
-                    </div>
-                    <span className="flex-1 text-center font-bold tracking-[0.14em] uppercase text-[13px] sm:text-[14px] text-[#faf6ee]">
-                      SLIDE TO PAY {money(finalPayable)}
-                    </span>
-                  </button>
+                  <SlideToPayButton
+                    amount={finalPayable}
+                    onSuccess={handleSlideSuccess}
+                    isSubmitting={isSubmitting}
+                  />
                 </div>
               )}
 

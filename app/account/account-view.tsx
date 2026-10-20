@@ -24,6 +24,14 @@ import {
   Clock,
   Sparkles,
   Trash2,
+  KeyRound,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  ArrowRight,
+  Gift,
+  Award,
+  Crown,
 } from "lucide-react";
 import { toast } from "sonner";
 import { showAddedToBagToast, showWishlistToast } from "@/components/ui/app-toast";
@@ -85,9 +93,9 @@ function WishlistTabContent() {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-2 gap-[16px]">
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
         {list.map((p) => (
-          <div key={p.slug} className="bg-white border border-border rounded-[16px] p-3.5 shadow-xs flex flex-col gap-3">
+          <div key={p.slug} className="bg-white border border-border/80 rounded-[12px] sm:rounded-[16px] p-2.5 sm:p-3.5 shadow-xs flex flex-col gap-2.5 sm:gap-3 min-w-0">
             <div className="aspect-[3/4] w-full rounded-[8px] overflow-hidden bg-sand relative">
               <a href={`/product/${p.slug}`} className="block w-full h-full">
                 <ProductVisual cell={p.cell} name={p.name} image={p.image} />
@@ -97,24 +105,24 @@ function WishlistTabContent() {
                 onClick={() => setProductToDelete(p)}
                 aria-label="Remove item"
                 title="Remove from wishlist"
-                className="absolute right-2.5 top-2.5 w-8 h-8 rounded-full bg-ivory/90 hover:bg-white text-stone hover:text-red-600 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
+                className="absolute right-2 top-2 sm:right-2.5 sm:top-2.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-ivory/90 hover:bg-white text-stone hover:text-red-600 shadow-sm flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="flex flex-col flex-1">
-              <h4 className="text-[14px] font-medium text-ink line-clamp-1 mb-1">
+            <div className="flex flex-col flex-1 min-w-0">
+              <h4 className="text-[13px] sm:text-[14px] font-medium text-ink line-clamp-1 mb-1">
                 <a href={`/product/${p.slug}`} className="hover:text-gold transition-colors">{p.name}</a>
               </h4>
-              <p className="text-[12px] text-stone mb-2">{money(p.price)}</p>
-              <div className="flex gap-2 mt-auto p-0 sm:pt-2 border-t border-border/60">
+              <p className="text-[11px] sm:text-[12px] text-stone mb-2">{money(p.price)}</p>
+              <div className="flex items-center gap-1.5 sm:gap-2 mt-auto pt-2 border-t border-border/60 w-full min-w-0">
                 <button
                   type="button"
                   onClick={() => {
                     add(p.slug);
                     showAddedToBagToast(p);
                   }}
-                  className="btn-primary gap-0 flex-1 h-[34px]  text-[8px] sm:text-[10px] uppercase tracking-wider whitespace-nowrap font-semibold rounded-[4px]"
+                  className="flex-1 min-w-0 h-[34px] sm:h-[36px] px-1 sm:px-2 bg-ink hover:bg-gold text-ivory text-[9.5px] sm:text-[11px] uppercase tracking-[0.06em] sm:tracking-[0.1em] font-medium rounded-[4px] transition-colors duration-200 flex items-center justify-center whitespace-nowrap cursor-pointer shadow-xs"
                 >
                   Add to Bag
                 </button>
@@ -123,7 +131,7 @@ function WishlistTabContent() {
                   onClick={() => setProductToDelete(p)}
                   aria-label="Delete item"
                   title="Remove from wishlist"
-                  className="w-[34px] h-[46px] border border-border rounded-[4px] flex items-center justify-center text-stone hover:text-red-600 hover:border-red-400 hover:bg-red-50 transition-colors cursor-pointer"
+                  className="w-[32px] sm:w-[36px] h-[34px] sm:h-[36px] border border-border/80 hover:border-red-400 hover:bg-red-50 text-stone hover:text-red-600 rounded-[4px] flex items-center justify-center transition-colors shrink-0 cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -134,17 +142,15 @@ function WishlistTabContent() {
       </div>
 
       <AlertDialog open={!!productToDelete} onOpenChange={(open) => !open && setProductToDelete(null)}>
-        <AlertDialogContent className="sm:max-w-[420px] rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
-          <AlertDialogHeader className="flex flex-col items-center text-center">
-            <div className="w-13 h-13 rounded-full bg-sand/80 border border-[#DDD5C7] text-ink flex items-center justify-center mb-2.5 shadow-2xs">
-              <Trash2 className="w-5 h-5 text-ink/80 stroke-[1.75]" />
-            </div>
-            <AlertDialogTitle className="font-serif text-[22px] sm:text-[24px] text-ink font-normal tracking-tight">
-              Remove from Wishlist?
+        <AlertDialogContent className="w-[calc(100%-24px)] max-w-[400px] sm:max-w-[420px] rounded-[20px] sm:rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-5 sm:p-7 shadow-2xl">
+          <AlertDialogHeader className="flex flex-col items-center text-center sm:items-center sm:text-center sm:place-items-center w-full">
+            <AlertDialogTitle className="flex items-center justify-center gap-2 sm:gap-2.5 font-serif text-[19px] sm:text-[24px] text-ink font-normal tracking-tight text-center">
+              <Trash2 className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-ink/80 stroke-[1.75] shrink-0" />
+              <span>Remove from Wishlist?</span>
             </AlertDialogTitle>
             {productToDelete && (
-              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[16px] p-3 flex items-center gap-3.5 text-left shadow-2xs">
-                <div className="w-14 h-14 rounded-[10px] overflow-hidden bg-sand shrink-0 border border-border/70">
+              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[14px] sm:rounded-[16px] p-2.5 sm:p-3 flex items-center gap-3 text-left shadow-2xs">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[8px] sm:rounded-[10px] overflow-hidden bg-sand shrink-0 border border-border/70">
                   <img src={productToDelete.image} alt={productToDelete.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -153,20 +159,20 @@ function WishlistTabContent() {
                 </div>
               </div>
             )}
-            <AlertDialogDescription className="text-[13px] text-stone mt-2.5 leading-relaxed text-center">
+            <AlertDialogDescription className="text-[12px] sm:text-[13px] text-stone mt-2.5 leading-relaxed text-center sm:text-center">
               Are you sure you want to remove this piece from your saved wishlist?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex flex-col-reverse gap-2.5 mt-5 w-full shrink-0">
-            <AlertDialogCancel className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full border border-border/90 bg-transparent hover:bg-sand/50 text-ink text-[11px] uppercase tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center">
-              Cancel
-            </AlertDialogCancel>
+          <AlertDialogFooter className="mt-5 flex w-full flex-row gap-2.5 sm:gap-3 sm:flex-row sm:justify-stretch">
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center"
+              className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md bg-ink text-ivory hover:bg-black text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
               Remove
             </AlertDialogAction>
+            <AlertDialogCancel className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md border border-[#DDD5C7] bg-transparent text-ink hover:bg-[#F0EBE3] text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center whitespace-nowrap">
+              Cancel
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -422,151 +428,156 @@ function AddressesTabContent() {
 
       {/* Add / Edit Address Dialog */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
-          <DialogHeader className="text-left mb-2">
-            <DialogTitle className="font-serif text-[24px] text-ink">
+        <DialogContent className="w-[calc(100%-20px)] sm:w-full max-w-[500px] h-[90vh] sm:h-auto sm:max-h-[88vh] flex flex-col gap-0 rounded-[20px] sm:rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-5 sm:p-7 shadow-2xl overflow-hidden">
+          {/* Pinned Header */}
+          <DialogHeader className="text-left shrink-0 pb-3 border-b border-border/70 pr-8">
+            <DialogTitle className="font-serif text-[22px] sm:text-[26px] text-ink font-normal tracking-tight">
               {editingAddress ? "Edit Address" : "Add New Address"}
             </DialogTitle>
-            <DialogDescription className="text-[13px] text-stone mt-1">
+            <DialogDescription className="text-[12px] sm:text-[13px] text-stone mt-0.5">
               Enter your shipping details for seamless delivery and checkout.
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-2">
-            {/* Address Type selection */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Address Type</label>
-              <div className="flex gap-2">
-                {(["Home", "Work", "Other"] as const).map((t) => (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setFormData((prev) => ({ ...prev, type: t }))}
-                    className={`h-[36px] px-5 rounded-full text-[11px] uppercase tracking-[0.12em] font-semibold transition-all cursor-pointer ${formData.type === t
-                      ? "bg-ink text-ivory shadow-xs"
-                      : "bg-white border border-border text-ink hover:bg-sand/40"
-                      }`}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Name and Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Form with scrollable body and pinned actions */}
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 mt-0">
+            {/* Scrollable Fields */}
+            <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 py-3.5 flex flex-col gap-3.5 overscroll-contain">
+              {/* Address Type selection */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Full Name *</label>
+                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Address Type</label>
+                <div className="flex gap-2">
+                  {(["Home", "Work", "Other"] as const).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setFormData((prev) => ({ ...prev, type: t }))}
+                      className={`h-[36px] px-5 rounded-full text-[11px] uppercase tracking-[0.12em] font-semibold transition-all cursor-pointer ${formData.type === t
+                        ? "bg-ink text-ivory shadow-xs"
+                        : "bg-white border border-border text-ink hover:bg-sand/40"
+                        }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Name and Phone */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                    placeholder="e.g. Anjali Nair"
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Mobile Number *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                    placeholder="e.g. +91 98765 43210"
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+              </div>
+
+              {/* Street Address */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Street Address / House No. *</label>
                 <input
                   type="text"
                   required
-                  value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g. Anjali Nair"
+                  value={formData.street}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, street: e.target.value }))}
+                  placeholder="e.g. 123 Luxury Lane, Apt 4B"
                   className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
                 />
               </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Mobile Number *</label>
+
+              {/* City & State */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">City *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.city}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
+                    placeholder="e.g. New Delhi"
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">State *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.state}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, state: e.target.value }))}
+                    placeholder="e.g. Delhi"
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+              </div>
+
+              {/* PIN Code & Country */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">PIN Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.pincode}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, pincode: e.target.value }))}
+                    placeholder="e.g. 110001"
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Country</label>
+                  <input
+                    type="text"
+                    value={formData.country}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, country: e.target.value }))}
+                    className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  />
+                </div>
+              </div>
+
+              {/* Set as Default Checkbox */}
+              <label className="flex items-center gap-2.5 pt-1 cursor-pointer select-none">
                 <input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                  placeholder="e.g. +91 98765 43210"
-                  className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
+                  type="checkbox"
+                  checked={formData.isDefault}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, isDefault: e.target.checked }))}
+                  className="w-4 h-4 rounded text-ink accent-ink focus:ring-gold cursor-pointer"
                 />
-              </div>
+                <span className="text-[12px] sm:text-[13px] text-ink font-medium">Make this my default shipping address</span>
+              </label>
             </div>
 
-            {/* Street Address */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Street Address / House No. *</label>
-              <input
-                type="text"
-                required
-                value={formData.street}
-                onChange={(e) => setFormData((prev) => ({ ...prev, street: e.target.value }))}
-                placeholder="e.g. 123 Luxury Lane, Apt 4B"
-                className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
-              />
-            </div>
-
-            {/* City & State */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">City *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.city}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
-                  placeholder="e.g. New Delhi"
-                  className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">State *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.state}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, state: e.target.value }))}
-                  placeholder="e.g. Delhi"
-                  className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
-                />
-              </div>
-            </div>
-
-            {/* PIN Code & Country */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">PIN Code *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.pincode}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, pincode: e.target.value }))}
-                  placeholder="e.g. 110001"
-                  className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
-                />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-stone">Country</label>
-                <input
-                  type="text"
-                  value={formData.country}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, country: e.target.value }))}
-                  className="h-[44px] border border-border px-3.5 bg-white text-ink focus:border-gold outline-none rounded-[10px] text-[13px]"
-                />
-              </div>
-            </div>
-
-            {/* Set as Default Checkbox */}
-            <label className="flex items-center gap-2.5 mt-1 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={formData.isDefault}
-                onChange={(e) => setFormData((prev) => ({ ...prev, isDefault: e.target.checked }))}
-                className="w-4 h-4 rounded text-ink accent-ink focus:ring-gold cursor-pointer"
-              />
-              <span className="text-[13px] text-ink font-medium">Make this my default shipping address</span>
-            </label>
-
-            {/* Actions */}
-            <div className="flex flex-col-reverse sm:flex-row gap-3 mt-5 pt-3 border-t border-border/80 shrink-0">
+            {/* Pinned Bottom Actions */}
+            <div className="shrink-0 pt-3 border-t border-border/80 flex flex-row gap-2.5 sm:gap-3 bg-[#FAF7F2]">
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="w-full sm:flex-1 h-[48px] min-h-[48px] shrink-0 rounded-full border border-border/90 bg-transparent hover:bg-sand/40 text-ink text-[11px] uppercase tracking-[0.14em] font-semibold transition-all cursor-pointer flex items-center justify-center"
+                className="flex-1 h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] rounded-md border border-[#DDD5C7] bg-transparent hover:bg-[#F0EBE3] text-ink text-[11px] uppercase tracking-[0.14em] font-semibold transition-all cursor-pointer flex items-center justify-center whitespace-nowrap"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="w-full sm:flex-1 h-[48px] min-h-[48px] shrink-0 rounded-full bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.14em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center"
+                className="flex-1 h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] rounded-md bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.14em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center whitespace-nowrap"
               >
-                {editingAddress ? "Update Address" : "Save Address"}
+                {editingAddress ? "Update" : "Save Address"}
               </button>
             </div>
           </form>
@@ -575,16 +586,14 @@ function AddressesTabContent() {
 
       {/* Delete Address Confirmation Dialog */}
       <AlertDialog open={!!addressToDelete} onOpenChange={(open) => !open && setAddressToDelete(null)}>
-        <AlertDialogContent className="sm:max-w-[420px] rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
-          <AlertDialogHeader className="flex flex-col items-center text-center">
-            <div className="w-13 h-13 rounded-full bg-sand/80 border border-[#DDD5C7] text-ink flex items-center justify-center mb-2.5 shadow-2xs">
-              <Trash2 className="w-5 h-5 text-ink/80 stroke-[1.75]" />
-            </div>
-            <AlertDialogTitle className="font-serif text-[22px] sm:text-[24px] text-ink font-normal tracking-tight">
-              Delete Address?
+        <AlertDialogContent className="w-[calc(100%-24px)] max-w-[400px] sm:max-w-[420px] rounded-[20px] sm:rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-5 sm:p-7 shadow-2xl">
+          <AlertDialogHeader className="flex flex-col items-center text-center sm:items-center sm:text-center sm:place-items-center w-full">
+            <AlertDialogTitle className="flex items-center justify-center gap-2 sm:gap-2.5 font-serif text-[19px] sm:text-[24px] text-ink font-normal tracking-tight text-center">
+              <Trash2 className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-ink/80 stroke-[1.75] shrink-0" />
+              <span>Delete Address?</span>
             </AlertDialogTitle>
             {addressToDelete && (
-              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[16px] p-3.5 text-left shadow-2xs">
+              <div className="mt-3.5 w-full bg-white/95 border border-[#E5E0D8] rounded-[14px] sm:rounded-[16px] p-3 text-left shadow-2xs">
                 <p className="text-[13px] font-semibold text-ink">{addressToDelete.type} Address</p>
                 <p className="text-[12px] text-stone mt-1 leading-relaxed">
                   {addressToDelete.name}<br />
@@ -593,20 +602,20 @@ function AddressesTabContent() {
                 </p>
               </div>
             )}
-            <AlertDialogDescription className="text-[13px] text-stone mt-2.5 leading-relaxed text-center">
+            <AlertDialogDescription className="text-[12px] sm:text-[13px] text-stone mt-2.5 leading-relaxed text-center sm:text-center">
               Are you sure you want to remove this saved address? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="flex flex-col-reverse gap-2.5 mt-5 w-full shrink-0">
-            <AlertDialogCancel className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full border border-border/90 bg-transparent hover:bg-sand/50 text-ink text-[11px] uppercase tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center">
-              Cancel
-            </AlertDialogCancel>
+          <AlertDialogFooter className="mt-5 flex w-full flex-row gap-2.5 sm:gap-3 sm:flex-row sm:justify-stretch">
             <AlertDialogAction
               onClick={handleConfirmDelete}
-              className="w-full h-[48px] min-h-[48px] shrink-0 rounded-full bg-ink hover:bg-black text-ivory text-[11px] uppercase tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center"
+              className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md bg-ink text-ivory hover:bg-black text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center whitespace-nowrap"
             >
-              Delete Address
+              Delete
             </AlertDialogAction>
+            <AlertDialogCancel className="h-11 sm:h-12 min-h-[44px] sm:min-h-[48px] flex-1 rounded-md border border-[#DDD5C7] bg-transparent text-ink hover:bg-[#F0EBE3] text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold transition-all cursor-pointer flex items-center justify-center whitespace-nowrap">
+              Cancel
+            </AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -614,7 +623,7 @@ function AddressesTabContent() {
   );
 }
 
-function SettingsTabContent() {
+function SettingsTabContent({ userEmail = "anjali@example.com" }: { userEmail?: string }) {
   const router = useRouter();
   const [preferences, setPreferences] = useState({
     emailNotifications: true,
@@ -624,11 +633,26 @@ function SettingsTabContent() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isSignoutEverywhereDialogOpen, setIsSignoutEverywhereDialogOpen] = useState(false);
 
+  // Password Management State
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [passwordLastUpdated, setPasswordLastUpdated] = useState<string | null>(null);
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem("woxly_user_preferences");
       if (saved) {
         setPreferences(JSON.parse(saved));
+      }
+      const lastUpdated = localStorage.getItem("woxly_password_last_updated");
+      if (lastUpdated) {
+        setPasswordLastUpdated(lastUpdated);
       }
     } catch { }
   }, []);
@@ -652,9 +676,86 @@ function SettingsTabContent() {
       localStorage.removeItem("woxly_user_profile");
       localStorage.removeItem("woxly_saved_addresses");
       localStorage.removeItem("woxly_user_preferences");
+      localStorage.removeItem("woxly_user_password");
+      localStorage.removeItem("woxly_password_last_updated");
     } catch { }
     toast.error("Your account has been deleted");
     router.replace("/login");
+  };
+
+  const getPasswordStrength = (pwd: string) => {
+    if (!pwd) return { score: 0, label: "", color: "", textColor: "" };
+    let score = 0;
+    if (pwd.length >= 8) score += 1;
+    if (pwd.length >= 12) score += 1;
+    if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score += 1;
+    if (/\d/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+
+    if (score <= 2) return { score: 1, label: "Weak", color: "bg-amber-500", textColor: "text-amber-600" };
+    if (score <= 4) return { score: 2, label: "Good", color: "bg-gold", textColor: "text-gold" };
+    return { score: 3, label: "Strong", color: "bg-emerald-600", textColor: "text-emerald-700" };
+  };
+
+  const strength = getPasswordStrength(newPassword);
+  const hasMinLength = newPassword.length >= 8;
+  const hasNumberOrSymbol = /[\d!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+  const passwordsMatch = confirmPassword.length > 0 && confirmPassword === newPassword;
+  const passwordsMismatch = confirmPassword.length > 0 && confirmPassword !== newPassword;
+
+  const handleUpdatePassword = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!currentPassword.trim()) {
+      toast.error("Please enter your current password");
+      return;
+    }
+
+    const savedPassword = localStorage.getItem("woxly_user_password") || "password123";
+    if (currentPassword !== savedPassword) {
+      toast.error("Current password does not match our records.");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      toast.error("New password must be at least 8 characters long.");
+      return;
+    }
+
+    if (newPassword === currentPassword) {
+      toast.error("New password must be different from current password.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match.");
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    setTimeout(() => {
+      try {
+        localStorage.setItem("woxly_user_password", newPassword);
+        const nowStr = new Date().toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+        localStorage.setItem("woxly_password_last_updated", nowStr);
+        setPasswordLastUpdated(nowStr);
+      } catch { }
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setIsUpdatingPassword(false);
+      toast.success("Password updated successfully! Your account is secure.");
+    }, 600);
+  };
+
+  const handleSendResetLink = () => {
+    setIsForgotPasswordOpen(false);
+    toast.success(`Password reset instructions sent to ${userEmail}`);
   };
 
   return (
@@ -662,6 +763,221 @@ function SettingsTabContent() {
       <div>
         <h2 className="text-[32px] font-serif text-ink tracking-tight">Settings</h2>
         <p className="text-[13px] text-stone mt-1">Manage security, notifications, and account options.</p>
+      </div>
+
+      {/* Security & Password Card */}
+      <div className="bg-white border border-border/80 rounded-[24px] p-5 sm:p-8 shadow-xs flex flex-col gap-5 sm:gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border/60">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-sand/70 border border-border/80 flex items-center justify-center text-ink shrink-0">
+              <KeyRound className="w-4 h-4 stroke-[1.75]" />
+            </div>
+            <div>
+              <h3 className="text-[17px] sm:text-[18px] font-medium text-ink">Change Password</h3>
+              <p className="text-[12px] sm:text-[13px] text-stone mt-0.5">
+                Update your password to keep your account safe and secure.
+              </p>
+            </div>
+          </div>
+          {passwordLastUpdated && (
+            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sand/50 text-[10.5px] sm:text-[11px] font-medium text-stone border border-border/60">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+              Updated {passwordLastUpdated}
+            </span>
+          )}
+        </div>
+
+        <form onSubmit={handleUpdatePassword} className="flex flex-col gap-4 sm:gap-5">
+          {/* Current Password */}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <label className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-ink">
+                Current Password <span className="text-red-500">*</span>
+              </label>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsForgotPasswordOpen(true);
+                }}
+                className="text-[11px] font-medium text-stone hover:text-gold transition-colors underline underline-offset-4 cursor-pointer"
+              >
+                Forgot password?
+              </button>
+            </div>
+            <div className="relative">
+              <input
+                type={showCurrentPassword ? "text" : "password"}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Enter current password"
+                required
+                autoComplete="current-password"
+                className="h-[46px] sm:h-[48px] w-full border border-border/80 pl-4 pr-11 bg-[#FCFBF8] text-ink placeholder:text-stone/60 focus:bg-white focus:border-gold outline-none rounded-[12px] text-[13.5px] sm:text-[14px] transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone/70 hover:text-ink transition-colors p-1 cursor-pointer"
+              >
+                {showCurrentPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* New Password & Confirm Password grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {/* New Password */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-ink">
+                New Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="At least 8 characters"
+                  required
+                  autoComplete="new-password"
+                  className="h-[46px] sm:h-[48px] w-full border border-border/80 pl-4 pr-11 bg-[#FCFBF8] text-ink placeholder:text-stone/60 focus:bg-white focus:border-gold outline-none rounded-[12px] text-[13.5px] sm:text-[14px] transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone/70 hover:text-ink transition-colors p-1 cursor-pointer"
+                >
+                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm New Password */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.14em] text-ink">
+                Confirm New Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Re-enter new password"
+                  required
+                  autoComplete="new-password"
+                  className={`h-[46px] sm:h-[48px] w-full border pl-4 pr-11 bg-[#FCFBF8] text-ink placeholder:text-stone/60 focus:bg-white focus:border-gold outline-none rounded-[12px] text-[13.5px] sm:text-[14px] transition-all ${passwordsMismatch
+                    ? "border-red-400 focus:border-red-500"
+                    : passwordsMatch
+                      ? "border-emerald-500/80 focus:border-emerald-600"
+                      : "border-border/80"
+                    }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone/70 hover:text-ink transition-colors p-1 cursor-pointer"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Password Validation & Strength Feedback */}
+          {newPassword.length > 0 && (
+            <div className="bg-[#FAF7F2] border border-border/70 rounded-[14px] p-3.5 sm:p-4 flex flex-col gap-3">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="font-semibold uppercase tracking-[0.1em] text-stone">Password Strength</span>
+                <span className={`font-semibold uppercase tracking-[0.1em] ${strength.textColor}`}>
+                  {strength.label}
+                </span>
+              </div>
+              <div className="w-full bg-border/60 h-1.5 rounded-full overflow-hidden flex gap-1">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${strength.score >= 1 ? strength.color : "bg-transparent"
+                    } ${strength.score === 1 ? "w-1/3" : strength.score === 2 ? "w-2/3" : "w-full"}`}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-[11.5px]">
+                <div className="flex items-center gap-1.5">
+                  <Check
+                    className={`w-3.5 h-3.5 stroke-[2.5] ${hasMinLength ? "text-emerald-700" : "text-stone/40"
+                      }`}
+                  />
+                  <span className={hasMinLength ? "text-ink font-medium" : "text-stone"}>
+                    At least 8 characters
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Check
+                    className={`w-3.5 h-3.5 stroke-[2.5] ${hasNumberOrSymbol ? "text-emerald-700" : "text-stone/40"
+                      }`}
+                  />
+                  <span className={hasNumberOrSymbol ? "text-ink font-medium" : "text-stone"}>
+                    Includes number or symbol
+                  </span>
+                </div>
+                {confirmPassword.length > 0 && (
+                  <div className="flex items-center gap-1.5 col-span-1 sm:col-span-2">
+                    <Check
+                      className={`w-3.5 h-3.5 stroke-[2.5] ${passwordsMatch ? "text-emerald-700" : "text-stone/40"
+                        }`}
+                    />
+                    <span
+                      className={
+                        passwordsMatch
+                          ? "text-emerald-700 font-medium"
+                          : "text-red-500 font-medium"
+                      }
+                    >
+                      {passwordsMatch ? "Passwords match" : "Passwords do not match"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Action buttons */}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
+            <button
+              type="submit"
+              disabled={isUpdatingPassword || (newPassword.length > 0 && (!hasMinLength || (confirmPassword.length > 0 && !passwordsMatch)))}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-[44px] px-7 rounded-full bg-ink hover:bg-gold text-white text-[11px] uppercase tracking-[0.14em] font-semibold transition-all shadow-xs cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isUpdatingPassword ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span>UPDATING...</span>
+                </>
+              ) : (
+                <>
+                  <LockKeyhole className="w-3.5 h-3.5" />
+                  <span>UPDATE PASSWORD</span>
+                </>
+              )}
+            </button>
+
+            {(currentPassword || newPassword || confirmPassword) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCurrentPassword("");
+                  setNewPassword("");
+                  setConfirmPassword("");
+                }}
+                className="w-full sm:w-auto h-[44px] px-5 rounded-full border border-border/80 hover:bg-sand/40 text-stone hover:text-ink text-[11px] uppercase tracking-[0.14em] font-semibold transition-colors cursor-pointer"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </form>
       </div>
 
       {/* Notifications Card */}
@@ -837,6 +1153,48 @@ function SettingsTabContent() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Forgot Password Dialog */}
+      <Dialog open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen}>
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full max-w-[420px] rounded-[24px] border border-[#E5E0D8] bg-[#FAF7F2] p-6 sm:p-7 shadow-2xl">
+          <DialogHeader className="flex flex-col items-center text-center">
+            <div className="w-12 h-12 rounded-full bg-sand/80 border border-[#DDD5C7] text-ink flex items-center justify-center mb-2.5 shadow-2xs">
+              <KeyRound className="w-5 h-5 text-ink/80 stroke-[1.75]" />
+            </div>
+            <DialogTitle className="font-serif text-[22px] sm:text-[24px] text-ink font-normal tracking-tight">
+              Reset Your Password
+            </DialogTitle>
+            <DialogDescription className="text-[13px] text-stone mt-2 leading-relaxed text-center">
+              We will send a secure password reset link to your registered email address.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="my-4 p-3.5 bg-white border border-border/80 rounded-[14px] flex items-center justify-between">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.12em] font-bold text-stone">Registered Email</p>
+              <p className="text-[13px] font-semibold text-ink truncate mt-0.5">{userEmail}</p>
+            </div>
+            <span className="text-[10px] uppercase font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+              Verified
+            </span>
+          </div>
+          <div className="flex flex-col gap-2.5 w-full">
+            <button
+              type="button"
+              onClick={handleSendResetLink}
+              className="w-full h-[46px] rounded-full bg-ink hover:bg-gold text-white text-[11px] uppercase tracking-[0.14em] font-semibold transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>SEND RESET LINK</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsForgotPasswordOpen(false)}
+              className="w-full h-[46px] rounded-full border border-border/90 bg-transparent hover:bg-sand/50 text-ink text-[11px] uppercase tracking-[0.14em] font-semibold transition-all cursor-pointer flex items-center justify-center"
+            >
+              Cancel
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -847,6 +1205,7 @@ export function Account() {
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "overview");
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(searchParams.get("id"));
   const orders = useCommerceStore((s) => s.orders);
+  const [isPerksModalOpen, setIsPerksModalOpen] = useState(false);
 
   const [profile, setProfile] = useState({
     firstName: "Anjali",
@@ -914,25 +1273,206 @@ export function Account() {
               </button>
             </div>
 
-            {/* Loyalty Card */}
-            <div className="bg-[#1C3A32] rounded-[20px] p-6 text-white shadow-sm relative overflow-hidden">
-              <div className="flex justify-between items-start mb-5">
-                <span className="text-[9px] uppercase tracking-[0.15em] text-white/70 font-medium">
-                  Woxly Circle · Points
-                </span>
-                <Gem className="w-5 h-5 text-white/80" />
-              </div>
-              <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-[36px] font-serif text-[#E5D5A4] leading-none">2,480</span>
-                <span className="text-[13px] text-white/80 font-medium">points</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="h-[2px] bg-white/10 rounded-full w-full overflow-hidden">
-                  <div className="h-full bg-[#E5D5A4] w-[100%] rounded-full"></div>
+            {/* Woxly Circle Points Banner Card */}
+            <div
+              onClick={() => setIsPerksModalOpen(true)}
+              className="relative overflow-hidden rounded-[20px] border border-[#C29B4D] shadow-[0_8px_24px_rgba(11,36,27,0.22)] bg-[#0B241B] p-5 sm:p-6 flex items-center justify-between cursor-pointer group transition-all duration-300 hover:border-[#D4AF37] hover:shadow-[0_10px_30px_rgba(11,36,27,0.32)]"
+            >
+              {/* Background Jewelry Image on the Right */}
+              <div
+                className="absolute inset-y-0 right-0 w-[55%] sm:w-[50%] bg-cover bg-right pointer-events-none transition-transform duration-700 group-hover:scale-105"
+                style={{
+                  backgroundImage: "url('/images/circle-points-bg.jpg')",
+                }}
+              />
+
+              {/* Gradient overlay blending seamlessly from deep emerald to the image */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B241B] via-[#0B241B]/85 to-transparent pointer-events-none" />
+
+              {/* Left Content */}
+              <div className="relative z-10 flex flex-col justify-center">
+                {/* Eyebrow: WOXLY CIRCLE / POINTS */}
+                <div className="flex flex-col gap-0.5 mb-2.5 sm:mb-3">
+                  <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-medium text-[#E8DCC4]/90">
+                    Woxly Circle
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-medium text-[#E8DCC4]/80">
+                    Points
+                  </span>
                 </div>
 
+                {/* Balance & Diamond Unit */}
+                <div className="flex items-center gap-3 sm:gap-3.5">
+                  <span className="text-[24px] sm:text-[40px] font-sans text-[#F4E6C3] leading-none tracking-tight">
+                    2,480
+                  </span>
+
+                  <div className="h-7 w-[1px] bg-white/20" />
+
+                  <div className="flex flex-col items-center justify-center leading-none">
+                    <Gem className="w-4 h-4 text-[#E5D5A4] stroke-[1.6] mb-0.5" />
+                    <span className="text-[11.5px] sm:text-[12px] font-serif italic text-[#E5D5A4] leading-none">
+                      points
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Chevron Button */}
+              <div className="relative z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0D241C]/80 border border-[#C29B4D]/70 flex items-center justify-center text-[#E5D5A4] group-hover:scale-110 group-hover:bg-[#0D241C] group-hover:border-[#D4AF37] transition-all shadow-md shrink-0 ml-auto">
+                <ChevronRight className="w-4 h-4 stroke-[2]" />
               </div>
             </div>
+
+            {/* WOXLY Circle Perks & Privileges Luxury Modal */}
+            <Dialog open={isPerksModalOpen} onOpenChange={setIsPerksModalOpen}>
+              <DialogContent className="max-w-[500px] p-0 overflow-hidden rounded-[26px] bg-[#FAF7F2] border border-[#D4AF37]/35 shadow-[0_24px_64px_rgba(11,36,27,0.35)] gap-0">
+                {/* 1. Luxury Hero Header with Beaded Gold Necklace Background */}
+                <div className="relative overflow-hidden bg-gradient-to-br from-[#071F17] via-[#0E2C22] to-[#081C15] p-6 text-white border-b border-[#C29B4D]/30">
+                  {/* Background Jewelry Image on the Right */}
+                  <div
+                    className="absolute inset-y-0 right-0 w-[55%] bg-cover bg-right pointer-events-none opacity-45"
+                    style={{
+                      backgroundImage: "url('/images/circle-points-bg.jpg')",
+                    }}
+                  />
+                  {/* Gradient mask */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#071F17] via-[#0E2C22]/90 to-transparent pointer-events-none" />
+
+                  <div className="relative z-10 flex flex-col">
+                    {/* VIP Eyebrow Badge */}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1  mb-5 text-[9.5px] uppercase tracking-[0.2em] font-semibold text-[#F3E5C2] w-fit mb-2.5 backdrop-blur-xs">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E5D5A4] animate-pulse" />
+                      <span>WOXLY CIRCLE · GOLD VIP</span>
+                    </div>
+
+                    <DialogTitle className="text-[24px] sm:text-[27px] font-serif text-white m-0 leading-tight">
+                      Privileges & Rewards
+                    </DialogTitle>
+                    <DialogDescription className="text-[12px] text-white/75 mt-1 leading-relaxed max-w-sm">
+                      Earn 1 reward point for every ₹20 spent. Redeem points directly for instant deduction at checkout.
+                    </DialogDescription>
+
+                    {/* Integrated Points & Cash Value Card */}
+                    <div className="mt-4 p-4 rounded-[18px] bg-black/35 border border-[#D4AF37]/35 backdrop-blur-md flex items-center justify-between">
+                      <div>
+                        <span className="text-[9.5px] uppercase tracking-[0.16em] text-white/60 font-medium block">
+                          Available Points
+                        </span>
+                        <div className="flex items-baseline gap-1.5 mt-0.5">
+                          <span className="text-[32px] sm:text-[36px] font-serif font-normal bg-gradient-to-r from-[#FFF6DF] via-[#F4E6C3] to-[#C99B53] bg-clip-text text-transparent leading-none">
+                            2,480
+                          </span>
+                          <span className="text-[12px] text-[#E5D5A4] font-medium">pts</span>
+                        </div>
+                      </div>
+
+                      <div className="text-right flex flex-col items-end">
+                        <span className="text-[9.5px] uppercase tracking-[0.16em] text-white/60 font-medium block">
+                          Instant Cash Value
+                        </span>
+                        <div className="inline-flex items-center gap-1 mt-1 px-3 py-1  text-emerald-300 text-[13px] font-bold shadow-xs">
+                          <span>₹2,480</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Progress to Next Tier */}
+                    <div className="mt-3 flex flex-col gap-1.5">
+                      <div className="flex justify-between items-center text-[10.5px]">
+                        <span className="text-white/75 font-medium">Next Tier: Platinum Member</span>
+                        <span className="text-[#F3E5C2] font-semibold">520 pts to unlock</span>
+                      </div>
+                      <div className="h-[4px] bg-white/15 rounded-full w-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-[#C29B4D] via-[#E5D5A4] to-[#FFF6DF] w-[82%] rounded-full shadow-[0_0_8px_rgba(229,213,164,0.7)]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Modal Body: Active Member Benefits */}
+                <div className="p-5 sm:p-6 flex flex-col gap-3.5 max-h-[50vh] overflow-y-auto custom-scrollbar">
+
+                  <div className="flex flex-col gap-2.5">
+                    {[
+                      {
+                        icon: ShieldCheck,
+                        title: "Complimentary Insured Courier",
+                        desc: "Free tracked express courier with tamper-evident packaging on all orders.",
+                        tag: "Always Active",
+                      },
+                      {
+                        icon: Award,
+                        title: "5% Direct Cashback Points",
+                        desc: "Auto-credited to your account on all 18K solid gold, diamonds, and sterling silver.",
+                        tag: "5 pts / ₹100",
+                      },
+                      {
+                        icon: Gift,
+                        title: "Complimentary Velvet Travel Pouch",
+                        desc: "Signature WOXLY luxury jewelry presentation case & velvet pouch included with every piece.",
+                        tag: "Included",
+                      },
+                      {
+                        icon: Clock,
+                        title: "Exclusive High Jewellery Previews",
+                        desc: "48-hour early VIP access to limited-edition drops and private salon collections.",
+                        tag: "VIP Access",
+                      },
+                    ].map((b, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-start gap-3 p-3 rounded-[16px] bg-white border border-[#E5E0D8] shadow-2xs hover:border-[#C29B4D]/50 transition-colors"
+                      >
+                        <div className="w-9 h-9 rounded-full bg-[#0E2C22]/8 text-[#0E2C22] flex items-center justify-center shrink-0 mt-0.5 border border-[#0E2C22]/10">
+                          <b.icon className="w-4.5 h-4.5 stroke-[1.75]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <h4 className="text-[13px] font-sans text-ink m-0 leading-tight">
+                              {b.title}
+                            </h4>
+                            <span className="text-[9px] font-semibold text-stone bg-sand/60 px-2 py-0.5 rounded-full shrink-0">
+                              {b.tag}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-stone m-0 mt-1 leading-relaxed">
+                            {b.desc}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Reassurance Notice */}
+                  <div className="p-3 rounded-[14px] bg-[#FAF3E3] border border-[#E5D5A4]/60 flex items-center gap-2.5 text-[11px] text-[#634E27]">
+                    <span>
+                      <strong>How to Redeem:</strong> Your ₹2,480 points can be applied with a single click during checkout for instant savings.
+                    </span>
+                  </div>
+                </div>
+
+                {/* 3. Modal Actions Footer */}
+                <div className="p-4 sm:p-5 pt-0 bg-[#FAF7F2] flex items-center gap-2.5">
+                  <Link
+                    href="/shop"
+                    onClick={() => setIsPerksModalOpen(false)}
+                    className="flex-1 h-[46px] rounded-full bg-ink hover:bg-gold text-white text-[11px] uppercase tracking-[0.16em] font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                  >
+                    <span>Explore Collection</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsPerksModalOpen(false)}
+                    className="px-5 h-[46px] rounded-full border border-[#D5CEC2] hover:bg-sand/40 text-ink text-[11px] uppercase tracking-[0.14em] font-semibold transition-all cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {/* Account Menu */}
             <div className="flex flex-col gap-3">
@@ -1509,7 +2049,7 @@ export function Account() {
             )}
 
             {activeTab === "settings" && (
-              <SettingsTabContent />
+              <SettingsTabContent userEmail={profile.email} />
             )}
 
             {activeTab === "sizes" && (

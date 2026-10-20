@@ -34,6 +34,7 @@ export default function HomePage() {
   const bestSellersScrollRef = useAutoScroll({ speed: 3000 });
 
   const [bestSellerTab, setBestSellerTab] = useState<BestSellerGroup>("women");
+  const [activeBanner, setActiveBanner] = useState(0);
 
   const filteredBestSellers = products.filter(
     (product) =>
@@ -47,7 +48,9 @@ export default function HomePage() {
 
     const goToMiddleSet = () => {
       const firstMiddleBanner = rail.children[banners.length] as HTMLElement | undefined;
-      if (firstMiddleBanner) rail.scrollLeft = firstMiddleBanner.offsetLeft;
+      if (firstMiddleBanner) {
+        rail.scrollLeft = firstMiddleBanner.offsetLeft - (rail.clientWidth - firstMiddleBanner.clientWidth) / 2;
+      }
     };
 
     goToMiddleSet();
@@ -69,6 +72,42 @@ export default function HomePage() {
     } else if (rail.scrollLeft >= firstTrailingBanner.offsetLeft - 32) {
       rail.scrollLeft -= firstTrailingBanner.offsetLeft - firstMiddleBanner.offsetLeft;
     }
+
+    // Calculate which banner is currently closest to the center of the viewport
+    const railCenter = rail.scrollLeft + rail.clientWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < rail.children.length; i++) {
+      const child = rail.children[i] as HTMLElement;
+      if (!child) continue;
+      const childCenter = child.offsetLeft + child.clientWidth / 2;
+      const distance = Math.abs(railCenter - childCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
+    }
+
+    const currentBanner = closestIndex % banners.length;
+    setActiveBanner(currentBanner);
+  }
+
+  function scrollToIndex(index: number) {
+    const rail = bannerRailRef.current;
+    if (!rail) return;
+
+    const targetIndex = banners.length + index;
+    const target = rail.children[targetIndex] as HTMLElement | undefined;
+
+    if (target) {
+      const targetLeft = target.offsetLeft - (rail.clientWidth - target.clientWidth) / 2;
+      rail.scrollTo({
+        left: targetLeft,
+        behavior: "smooth",
+      });
+      setActiveBanner(index);
+    }
   }
 
   function moveBanner(direction: 1 | -1) {
@@ -82,33 +121,18 @@ export default function HomePage() {
 
   return (
     <Shell>
-      {/* ── Hero ── */}
-      <section className="w-full flex flex-col items-center justify-center gap-1 overflow-hidden group py-0 md:py-8 mt-2 md:mt-0">
-        <Image
-          src="/images/banners/image.png"
-          alt="WOXLY new season jewellery campaign"
-          width={425}
-          height={260}
-          priority
-          className="object-cover object-center rounded-2xl px-2 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-105 motion-safe:duration-1000 max-[960px]:object-[60%_center]"
-        />
 
-
-      </section>
       {/* ── Banner Carousel ── */}
       <section aria-label="Featured collections" className="w-full py-5 md:py-8">
-        <div className="mb-3 flex items-center justify-between px-5 md:px-8">
-
-        </div>
         <div
-          className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-5 md:px-8 hide-scrollbar"
-          onScroll={handleBannerScroll}
           ref={bannerRailRef}
+          onScroll={handleBannerScroll}
+          className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 md:px-8"
         >
           {loopedBanners.map((src, i) => (
             <div
-              key={i}
-              className="flex-none w-[90vw] md:w-[600px] snap-center overflow-hidden rounded-2xl"
+              key={`${src}-${i}`}
+              className="w-[90vw] flex-none snap-center overflow-hidden rounded-2xl md:w-[600px]"
             >
               <Image
                 src={src}
@@ -116,12 +140,57 @@ export default function HomePage() {
                 width={600}
                 height={350}
                 priority={i === 0}
-                className="w-full h-auto object-cover rounded-2xl"
+                sizes="(max-width: 768px) 90vw, 600px"
+                className="h-auto w-full rounded-2xl object-cover"
               />
             </div>
           ))}
         </div>
+
+        {/* Premium carousel indicators */}
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {banners.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              aria-label={`Go to collection ${index + 1}`}
+              aria-current={activeBanner === index ? "true" : undefined}
+              onClick={() => scrollToIndex(index)}
+              className={`h-2 rounded-full transition-all duration-300 ease-out cursor-pointer p-0 border-0 ${
+                activeBanner === index
+                  ? "w-8 bg-[#153D32]"
+                  : "w-2 bg-[#D5C5A5] hover:bg-[#B8955A]"
+              }`}
+            />
+          ))}
+        </div>
       </section>
+      <section className="w-full px-3 py-2">
+        <div className="flex flex-col gap-2">
+
+          {/* Under 50K Banner */}
+          <Image
+            src="/images/banners/image copy 7.png"
+            alt="Under 50K jewellery collection"
+            width={800}
+            height={600}
+            sizes="(max-width: 768px) 100vw, 800px"
+            className="h-[250px] w-full rounded-xl object-cover object-center sm:h-[320px]"
+          />
+
+          {/* Earrings Banner */}
+          <Image
+            src="/images/banners/image copy 8.png"
+            alt="Elegant gold earrings collection"
+            width={800}
+            height={450}
+            sizes="(max-width: 768px) 100vw, 800px"
+            className="h-[180px] w-full rounded-xl object-cover object-center sm:h-[260px]"
+          />
+
+        </div>
+      </section>
+
 
       {/* ── Shop by category ── */}
       <section className="py-[26px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto" id="collection">
@@ -147,6 +216,45 @@ export default function HomePage() {
               </div>
             </a>
           ))}
+        </div>
+      </section>
+
+      {/* ── Hero ── */}
+      <section className="w-full flex flex-col items-center justify-center gap-1 overflow-hidden group py-0 md:py-8 mt-2 md:mt-0">
+        <Image
+          src="/images/banners/image copy 9.png"
+          alt="WOXLY new season jewellery campaign"
+          width={425}
+          height={260}
+          priority
+          className="object-cover object-center rounded-2xl px-2 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-105 motion-safe:duration-1000 max-[960px]:object-[60%_center]"
+        />
+
+
+      </section>
+      <section className="mt-2 w-full md:mt-0">
+        <div className="flex w-full flex-row justify-center gap-x-1 overflow-hidden px-1">
+
+          {/* Banner 1 */}
+          <Image
+            src="/images/banners/image copy 10.png"
+            alt="WOXLY jewellery collection"
+            width={600}
+            height={420}
+            sizes="50vw"
+            className="h-[150px] w-1/2 min-w-0 rounded-xl object-cover object-center sm:h-[300px] md:h-[360px]"
+          />
+
+          {/* Banner 2 */}
+          <Image
+            src="/images/banners/image copy 11.png"
+            alt="WOXLY new season jewellery campaign"
+            width={600}
+            height={420}
+            sizes="50vw"
+            className="h-[150px] w-1/2 min-w-0 rounded-xl object-cover object-center sm:h-[300px] md:h-[360px]"
+          />
+
         </div>
       </section>
 

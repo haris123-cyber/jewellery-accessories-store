@@ -13,10 +13,7 @@ export function CartPage() {
 
   return (
     <Shell>
-      <div className="px-[16px] md:px-[4vw] pb-[40px] md:pb-[64px] pt-[40px] md:pt-[100px] text-center">
-        <p className="m-0 mb-[6px] uppercase tracking-[0.14em] text-[10px] font-medium text-stone">Your selection</p>
-        <h1 className="m-0 font-serif text-[40px] md:text-[64px] leading-[1.1] text-ink">Shopping Bag</h1>
-      </div>
+
 
       {lines.length ? (
         <main className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-[48px] lg:gap-[64px] px-[16px] md:px-[4vw] pb-[96px] max-w-[1400px] mx-auto">
