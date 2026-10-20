@@ -12,3 +12,6 @@ export { SummerOffers } from "./SummerOffers";
 export { HomeBanners } from "./HomeBanners";
 export { HomeBanners2 } from "./HomeBanners2";
 export { AsSeenOn } from "./AsSeenOn";
+export { HeroBannerCarousel } from "./HeroBannerCarousel";
+export { SearchModal, searchCatalogProducts } from "./SearchModal";
+export { HomeSearch } from "./HomeSearch";

@@ -28,6 +28,7 @@ import {
 import { useCommerceStore } from "@/store/commerce-store";
 import { CartDrawer } from "./cart-drawer";
 import { AnnouncementBar } from "./announcement-bar";
+import { SearchModal } from "@/components/shared/SearchModal";
 
 export function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -35,6 +36,7 @@ export function Navbar() {
   const [menu, setMenu] = useState(false);
   const cart = useCommerceStore((s) => s.cart);
   const setCartOpen = useCommerceStore((s) => s.setCartOpen);
+  const setSearchOpen = useCommerceStore((s) => s.setSearchOpen);
   const router = useRouter();
   const count = mounted ? cart.reduce((n, l) => n + l.quantity, 0) : 0;
 
@@ -42,7 +44,7 @@ export function Navbar() {
     <>
       <AnnouncementBar />
       <header className="sticky top-0 z-50 h-[80px] grid grid-cols-[1fr_auto_1fr] items-center px-[24px] border-b border-border bg-ivory/95 backdrop-blur-md max-[960px]:grid-cols-[auto_1fr_auto] max-[960px]:px-[16px] max-[960px]:h-[64px]">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <button
             className="btn-icon border-transparent bg-transparent hidden max-[960px]:inline-flex"
             onClick={() => setMenu(true)}
@@ -52,18 +54,41 @@ export function Navbar() {
             <Menu />
           </button>
 
+          {/* Desktop Search Trigger Bar */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="hidden min-[961px]:flex items-center gap-2.5 px-4 py-2 rounded-full border border-stone/20 bg-white/70 hover:bg-white hover:border-gold/60 text-stone hover:text-ink transition-all text-xs font-light tracking-wide cursor-pointer shadow-2xs"
+            aria-label="Search collection"
+          >
+            <Search className="w-3.5 h-3.5 text-gold shrink-0" strokeWidth={2} />
+            <span className="text-stone/80 text-[12px]">Search jewellery...</span>
+            <kbd className="ml-2 px-1.5 py-0.5 rounded text-[10px] bg-stone/10 text-stone font-mono">⌘K</kbd>
+          </button>
         </div>
+
         <a className="font-serif text-[28px] font-medium leading-none tracking-[0.3em] text-ink max-[960px]:justify-self-center max-[960px]:text-[24px]" href="/">
           WOXLY
         </a>
+
         <div className="justify-self-end flex items-center gap-[12px] max-[960px]:gap-[8px]">
+          {/* Mobile Search Icon */}
+          <button
+            type="button"
+            className="btn-icon min-[961px]:hidden"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search collection"
+            suppressHydrationWarning
+          >
+            <Search className="w-5 h-5" />
+          </button>
 
           <a
-            className="btn-icon hidden max-[960px]:inline-flex"
+            className="btn-icon"
             href="/account"
             aria-label="Account"
           >
-            <UserRound />
+            <UserRound className="w-5 h-5" />
           </a>
 
           <button
@@ -78,7 +103,7 @@ export function Navbar() {
             aria-label={`Cart with ${count} items`}
             suppressHydrationWarning
           >
-            <ShoppingBag />
+            <ShoppingBag className="w-5 h-5" />
             {count > 0 && (
               <span className="absolute top-[2px] right-[2px] min-w-[16px] h-[16px] flex items-center justify-center rounded-full bg-gold-soft text-ink text-[10px] font-medium border border-ivory">
                 {count}
@@ -88,6 +113,7 @@ export function Navbar() {
         </div>
       </header>
       <MobileNavbar menu={menu} setMenu={setMenu} />
+      <SearchModal />
       <CartDrawer />
     </>
   );
@@ -101,6 +127,8 @@ export function MobileNavbar({
   menu: boolean;
   setMenu: (v: boolean) => void;
 }) {
+  const setSearchOpen = useCommerceStore((s) => s.setSearchOpen);
+
   const navItems = [
     { label: "Home", href: "/", icon: House },
     { label: "Shop ", href: "/shop", icon: Gem },
@@ -167,6 +195,21 @@ export function MobileNavbar({
 
         {/* Scrollable navigation */}
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain no-scrollbar px-5 pb-5 pt-5">
+          {/* Quick Search in Mobile Drawer */}
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={() => {
+                setMenu(false);
+                setSearchOpen(true);
+              }}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full border border-[#E6D8C5] bg-white text-stone text-xs hover:border-gold transition-colors cursor-pointer shadow-2xs"
+            >
+              <Search className="w-4 h-4 text-gold shrink-0" strokeWidth={2} />
+              <span className="text-stone/80 font-serif text-[14px]">Search jewellery, gifts...</span>
+            </button>
+          </div>
+
           <p className="mb-3 px-2 text-[10px] font-medium uppercase tracking-[0.25em] text-[#65736A]">
             General
           </p>

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { showAddedToBagToast } from "@/components/ui/added-to-bag-toast";
-import { Plus, PlusSquare, ShoppingBag, Star, StarHalf } from "lucide-react";
+import { Plus, PlusSquare, ShoppingBag, Star, StarHalf, BadgePercent } from "lucide-react";
 import { money, type Product } from "@/lib/catalog";
 import { useCommerceStore } from "@/store/commerce-store";
 import { ProductVisual } from "./ProductVisual";
@@ -32,8 +32,8 @@ export function ProductCard({
       transition={{ delay: Math.min(index * 0.035, 0.2) }}
     >
       {discount > 0 ? (
-        <span className="absolute left-1/2 -top-2 z-20 -translate-x-1/2 bg-red-700 text-white -translate-y-[25%] whitespace-nowrap rounded-[6px] border border-ink/10 bg-blush px-4 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-ink shadow-[0_4px_12px_rgba(27,26,23,.12)]">
-          Limited Offer
+        <span className="absolute left-1/2 -top-2 z-20 flex gap-2 -translate-x-1/2 bg-red-700 text-white -translate-y-[25%] whitespace-nowrap rounded-[6px] border border-ink/10 bg-blush px-4 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-ink shadow-[0_4px_12px_rgba(27,26,23,.12)]">
+          <BadgePercent className="w-4 h-4 text-white" /> Limited Offer
         </span>
       ) : null}
       <a href={`/product/${product.slug}`} className="block mb-4 font-sans relative overflow-hidden rounded-[4px]">
@@ -45,7 +45,7 @@ export function ProductCard({
         />
 
         {/* Badges */}
-        <div className="absolute left-3 top-3 z-10 flex flex-col gap-1.5 items-start">
+        <div className="absolute left-3 top-5 z-10 flex flex-col gap-1.5 items-start">
           {product.badge && (
             <span className="bg-gold-soft text-ink text-[11px] uppercase tracking-[0.14em] font-medium px-2 py-1 rounded-[2px]">
               {product.badge}

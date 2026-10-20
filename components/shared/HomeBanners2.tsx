@@ -3,7 +3,7 @@ export function HomeBanners2() {
     <section className="py-[56px] md:py-[96px] px-[16px] md:px-[24px] max-w-[1280px] mx-auto flex flex-col gap-[56px] md:gap-[96px]">
       {/* Lookbook 2 columns */}
       <div className="flex flex-col">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
           <div>
             <p className="m-0 mb-2 text-stone text-[12px] uppercase tracking-[0.14em] text-center font-medium">The Lookbook</p>
             <h2 className="m-0 text-ink text-center">The magic begins here</h2>
@@ -28,7 +28,7 @@ export function HomeBanners2() {
       </div>
 
       {/* Type 3: Full overlay text (The Thread style) */}
-      <a href="/shop" className="relative w-full aspect-[5/5] md:aspect-[21/9] overflow-hidden group block rounded-b-2xl ">
+      <a href="/shop" className="relative w-full aspect-[5/5] md:aspect-[21/9] overflow-hidden group block rounded-b-2xl sm:-mt-22 ">
         <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=1200&auto=format&fit=crop" alt="The Thread" className="absolute inset-0 w-full h-full object-cover transition-transform rounded-b-2xl duration-300 ease-out group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-ink/30 transition-colors group-hover:bg-ink/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-ivory text-center p-[24px] md:p-[48px]">

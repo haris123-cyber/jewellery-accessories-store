@@ -11,6 +11,7 @@ type CommerceState = {
   wishlist: string[]; 
   orders: Order[];
   cartOpen: boolean; 
+  searchOpen: boolean;
   promoCode: string | null;
   discountPercent: number;
   add: (slug: string, quantity?: number) => void; 
@@ -18,6 +19,7 @@ type CommerceState = {
   setQuantity: (slug: string, quantity: number) => void; 
   toggleWishlist: (slug: string) => void; 
   setCartOpen: (open: boolean) => void; 
+  setSearchOpen: (open: boolean) => void;
   clearCart: () => void;
   applyPromo: (code: string) => { success: boolean; message: string; discountPercent?: number };
   removePromo: () => void;
@@ -25,7 +27,7 @@ type CommerceState = {
 };
 
 export const useCommerceStore = create<CommerceState>()(persist((set) => ({
-  cart: [], wishlist: [], orders: [], cartOpen: false,
+  cart: [], wishlist: [], orders: [], cartOpen: false, searchOpen: false,
   promoCode: null,
   discountPercent: 0,
   add: (slug, qty = 1) => set((state) => {
@@ -41,6 +43,7 @@ export const useCommerceStore = create<CommerceState>()(persist((set) => ({
   setQuantity: (slug, quantity) => set((state) => ({ cart: state.cart.map((line) => line.slug === slug ? { ...line, quantity: Math.max(1, quantity) } : line) })),
   toggleWishlist: (slug) => set((state) => ({ wishlist: state.wishlist.includes(slug) ? state.wishlist.filter((item) => item !== slug) : [...state.wishlist, slug] })),
   setCartOpen: (cartOpen) => set({ cartOpen }), 
+  setSearchOpen: (searchOpen) => set({ searchOpen }),
   clearCart: () => set({ cart: [], promoCode: null, discountPercent: 0 }),
   applyPromo: (rawCode) => {
     const code = rawCode.trim().toUpperCase();

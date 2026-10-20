@@ -67,14 +67,23 @@ import {
   Filters,
   OrderSummary,
   Empty,
+  searchCatalogProducts,
 } from "@/components/shared";
+import { useSearchParams } from "next/navigation";
 import { Header, Footer, Shell, CartDrawer } from "@/components/layout";
 
 export function SearchPage() {
-  const [q, setQ] = useState("");
-  const list = q
-    ? products.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()))
-    : products.slice(0, 8);
+  const searchParams = useSearchParams();
+  const [q, setQ] = useState(searchParams?.get("q") || "");
+
+  useEffect(() => {
+    const param = searchParams?.get("q");
+    if (param !== null && param !== undefined) {
+      setQ(param);
+    }
+  }, [searchParams]);
+
+  const list = q ? searchCatalogProducts(q, products) : products.slice(0, 8);
   return (
     <Shell>
       <main className="px-[4vw] py-[9vw] max-[560px]:px-4 max-[560px]:py-[70px]">
